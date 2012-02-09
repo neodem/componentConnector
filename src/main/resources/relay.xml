@@ -1,0 +1,10 @@
+<componentDefs>
+	<componentDef name="relay" pins="12">
+		<pin number="1" name="IN" />
+		<pin number="5" name="VCC" />
+		<pin number="6" name="ON" />
+		<pin number="7" name="OFF" />
+		<pin number="8" name="GND" />
+		<pin number="12" name="IN" />
+	</componentDef>
+</componentDefs>
