@@ -30,10 +30,10 @@ public class FromLocated {
 	private FileConnector c = new DefaultFileConnector();
 
 	private ComponentSet makeSet() {
-		URL url = FromLocated.class.getClassLoader().getResource("4inMultiLocated.xml");
+		URL url = FromLocated.class.getClassLoader().getResource("Full-Located.xml");
 		File testSet = new File(url.getPath());
 
-		url = FromLocated.class.getClassLoader().getResource("connectables.xml");
+		url = FromLocated.class.getClassLoader().getResource("connectables-Full.xml");
 		File defs = new File(url.getPath());
 		
 		return c.read(defs, testSet);
@@ -59,7 +59,7 @@ public class FromLocated {
 				log.info("found better solution : " + best);
 				c.writeToFile(out, set);
 			}
-			//so.optimize(set);
+			so.optimize(set);
 		}
 	}
 

@@ -29,10 +29,10 @@ public class FullRunFromRandom {
 	private FileConnector c = new DefaultFileConnector();
 
 	private ComponentSet makeSet() {
-		URL url = FullRunFromRandom.class.getClassLoader().getResource("4inMulti.xml");
+		URL url = FullRunFromRandom.class.getClassLoader().getResource("Full.xml");
 		File testSet = new File(url.getPath());
 
-		url = FullRunFromRandom.class.getClassLoader().getResource("connectables.xml");
+		url = FullRunFromRandom.class.getClassLoader().getResource("connectables-Full.xml");
 		File defs = new File(url.getPath());
 		
 		return c.read(defs, testSet);
