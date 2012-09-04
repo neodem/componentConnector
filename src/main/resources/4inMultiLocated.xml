@@ -1,25 +1,25 @@
 <componentSet rows="10" cols="2">
-	<components autoLocate="true">
-		<component type="relay" name="and3a" />
-		<component type="relay" name="and3b" />
-		<component type="relay" name="and3c" />
-		<component type="relay" name="inv3b" />
-		<component type="relay" name="inv3c" />
-		<component type="relay" name="and4a" />
-		<component type="relay" name="and4b" />
-		<component type="relay" name="and4c" />
-		<component type="relay" name="inv4b" />
-		<component type="relay" name="and5a" />
-		<component type="relay" name="and5b" />
-		<component type="relay" name="and5c" />
-		<component type="relay" name="inv5c" />
-		<component type="relay" name="and6a" />
-		<component type="relay" name="and6b" />
-		<component type="relay" name="and6c" />
-		<component type="relay" name="or3a" />
-		<component type="relay" name="or3b" />
-		<component type="relay" name="or3c" />
-		<component type="relay" name="or3d" />
+	<components autoLocate="false">
+		<component type="relay" name="and5c" row="0" col="0"/>
+		<component type="relay" name="or3c"  row="1" col="0"/>
+		<component type="relay" name="and5a" row="2" col="0"/>
+		<component type="relay" name="and5b" row="3" col="0"/>
+		<component type="relay" name="inv4b" row="4" col="0"/>
+		<component type="relay" name="and4b" row="5" col="0"/>
+		<component type="relay" name="and4a" row="6" col="0"/>
+		<component type="relay" name="inv3b" row="7" col="0"/>
+		<component type="relay" name="and3b" row="8" col="0"/>
+		<component type="relay" name="and3a" row="9" col="0"/>
+		<component type="relay" name="inv5c" row="0" col="1"/>
+		<component type="relay" name="or3d"  row="1" col="1"/>
+		<component type="relay" name="and6c" row="2" col="1"/>
+		<component type="relay" name="and6b" row="3" col="1"/>
+		<component type="relay" name="and6a" row="4" col="1"/>
+		<component type="relay" name="and4c" row="5" col="1"/>
+		<component type="relay" name="inv3c" row="6" col="1"/>
+		<component type="relay" name="or3a"  row="7" col="1"/>
+		<component type="relay" name="and3c" row="8" col="1"/>
+		<component type="relay" name="or3b"  row="9" col="1"/>
 	</components>
 	<connectables>
 		<connectable name="power" type="power" />

@@ -10,10 +10,10 @@ public class GraphicalRightSideConnection extends GraphicalConnection {
 		
 		if (from) {
 			// 'from' connections (ie. inbound)
-			setLine("-" + other.getName() + ":" + otherPin + "->");
+			setLine("-" + other.getName() + ":" + otherPin);
 		} else {
 			// these are 'to' connections (ie. outbound)
-			setLine("<-" + other.getName() + ":" + otherPin + "-");
+			setLine("-" + other.getName() + ":" + otherPin);
 		}
 		
 	}

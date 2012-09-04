@@ -1,8 +1,8 @@
 package com.neodem.componentConnector.graphics;
 
+import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.Pin;
-import com.neodem.componentConnector.model.component.Component;
 import com.neodem.graphics.text.model.GraphicsObject;
 import com.neodem.graphics.text.model.SingleLineGraphicsObject;
 
@@ -11,7 +11,7 @@ public abstract class GraphicalConnection extends SingleLineGraphicsObject imple
 	/**
 	 * this is where the connection is going to (or coming from)
 	 */
-	protected Component other;
+	protected Connectable other;
 
 	/**
 	 * this is the Pin where the connection is coming from (or going to)
@@ -31,7 +31,7 @@ public abstract class GraphicalConnection extends SingleLineGraphicsObject imple
 	 * @param parent
 	 *            the parent component we are attaching this item to
 	 */
-	public GraphicalConnection(Connection c, Component parent) {
+	public GraphicalConnection(Connection c, Connectable parent) {
 		other = c.getOther(parent);
 		otherPin = c.getPin(other);
 		if (parent.equals(c.getTo())) {

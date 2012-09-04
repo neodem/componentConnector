@@ -13,7 +13,7 @@ public class Pin {
 
 	@Override
 	public String toString() {
-		return "" + pinNumber + ":" + label;
+		return "" + label  + "(" + pinNumber + ")";
 	}
 
 	/**

@@ -21,66 +21,99 @@
 		<component type="relay" name="or3c" />
 		<component type="relay" name="or3d" />
 	</components>
+	<connectables>
+		<connectable name="power" type="power" />
+		<connectable name="data" type="data" />
+		<connectable name="control" type="control" />
+	</connectables>
 	<connections>
-		<!-- GND to ground for all -->
+		<!-- or 3 -->
+		<connection from="power" fromPin="VCC" to="or3a" toPin="IN" />
+		<connection from="power" fromPin="GND" to="or3a" toPin="GND" />
+		
+		<connection from="power" fromPin="VCC" to="or3b" toPin="IN" />
+		<connection from="power" fromPin="GND" to="or3b" toPin="GND" />
+		
+		<connection from="power" fromPin="VCC" to="or3c" toPin="IN" />
+		<connection from="power" fromPin="GND" to="or3c" toPin="GND" />
+		
+		<connection from="power" fromPin="VCC" to="or3c" toPin="IN" />
+		<connection from="power" fromPin="GND" to="or3d" toPin="GND" />
 
 		<!-- and 3 -->
-		<!-- 5v to and3a IN -->
+		<connection from="data" fromPin="A" to="and3a" toPin="VCC" />
+		<connection from="power" fromPin="VCC" to="and3a" toPin="IN" />
+		<connection from="power" fromPin="GND" to="and3a" toPin="GND" />
 
-		<!-- A input to and3a VCC -->
 		<connection from="inv3b" fromPin="OFF" to="and3b" toPin="VCC" />
-		<connection from="inv3c" fromPin="OFF" to="and3c" toPin="VCC" />
-
 		<connection from="and3a" fromPin="ON" to="and3b" toPin="IN" />
+		<connection from="power" fromPin="GND" to="and3b" toPin="GND" />
+
+		<connection from="inv3c" fromPin="OFF" to="and3c" toPin="VCC" />
 		<connection from="and3b" fromPin="ON" to="and3c" toPin="IN" />
+		<connection from="power" fromPin="GND" to="and3c" toPin="GND" />
 
 		<connection from="and3c" fromPin="ON" to="or3a" toPin="VCC" />
-	
+
 		<!-- and 4 -->
-		<!-- 5v to and4a IN -->
-		
-		<!-- B input to and4a VCC -->
+		<connection from="data" fromPin="B" to="and4a" toPin="VCC" />
+		<connection from="power" fromPin="VCC" to="and4a" toPin="IN" />
+		<connection from="power" fromPin="GND" to="and4a" toPin="GND" />
+
 		<connection from="inv4b" fromPin="OFF" to="and4b" toPin="VCC" />
-		<connection from="inv3c" fromPin="VCC" to="and4c" toPin="VCC" />
-		
 		<connection from="and4a" fromPin="ON" to="and4b" toPin="IN" />
+		<connection from="power" fromPin="GND" to="and4b" toPin="GND" />
+
+		<connection from="inv3c" fromPin="VCC" to="and4c" toPin="VCC" />
 		<connection from="and4b" fromPin="ON" to="and4c" toPin="IN" />
+		<connection from="power" fromPin="GND" to="and4c" toPin="GND" />
 
 		<connection from="and4c" fromPin="ON" to="or3b" toPin="VCC" />
-		
+
 		<!-- and 5 -->
-		<!-- 5v to and5a IN -->
+		<connection from="data" fromPin="C" to="and5a" toPin="VCC" />
+		<connection from="power" fromPin="VCC" to="and5a" toPin="IN" />
+		<connection from="power" fromPin="GND" to="and5a" toPin="GND" />
 
-		<!-- C input to and5a VCC -->
 		<connection from="inv4b" fromPin="VCC" to="and5b" toPin="VCC" />
-		<connection from="inv5c" fromPin="OFF" to="and5c" toPin="VCC" />
-
 		<connection from="and5a" fromPin="ON" to="and5b" toPin="IN" />
+		<connection from="power" fromPin="GND" to="and5b" toPin="GND" />
+
+		<connection from="inv5c" fromPin="OFF" to="and5c" toPin="VCC" />
 		<connection from="and5b" fromPin="ON" to="and5c" toPin="IN" />
-		
+		<connection from="power" fromPin="GND" to="and5c" toPin="GND" />
+
 		<connection from="and5c" fromPin="ON" to="or3c" toPin="VCC" />
 
 		<!-- and 6 -->
-		<!-- 5v to and6a IN -->
-		
-		<!-- D input to and6a VCC -->
+		<connection from="data" fromPin="D" to="and6a" toPin="VCC" />
+		<connection from="power" fromPin="VCC" to="and6a" toPin="IN" />
+		<connection from="power" fromPin="GND" to="and6a" toPin="GND" />
+
 		<connection from="and5b" fromPin="VCC" to="and6b" toPin="VCC" />
-		<connection from="inv5c" fromPin="VCC" to="and6c" toPin="VCC" />
-		
 		<connection from="and6a" fromPin="ON" to="and6b" toPin="IN" />
+		<connection from="power" fromPin="GND" to="and6b" toPin="GND" />
+
+		<connection from="inv5c" fromPin="VCC" to="and6c" toPin="VCC" />
 		<connection from="and6b" fromPin="ON" to="and6c" toPin="IN" />
-		
+		<connection from="power" fromPin="GND" to="and6c" toPin="GND" />
+
 		<connection from="and6c" fromPin="ON" to="or3d" toPin="VCC" />
 
 		<!-- inv 3 inputs -->
-		<!-- S1 input into inv3b VCC -->
-		<!-- S0 input into inv3c VCC -->
-	
+		<connection from="control" fromPin="S1" to="inv3b" toPin="VCC" />
+		<connection from="power" fromPin="GND" to="inv3b" toPin="GND" />
+		
+		<connection from="control" fromPin="S0" to="inv3c" toPin="VCC" />
+		<connection from="power" fromPin="GND" to="inv3c" toPin="GND" />
+
 		<!-- inv 4 inputs -->
 		<connection from="inv3b" fromPin="VCC" to="inv4b" toPin="VCC" />
-		
+		<connection from="power" fromPin="GND" to="inv4b" toPin="GND" />
+
 		<!-- inv 5 inputs -->
 		<connection from="inv3c" fromPin="VCC" to="inv5c" toPin="VCC" />
+		<connection from="power" fromPin="GND" to="inv5c" toPin="GND" />
 
 	</connections>
 </componentSet>

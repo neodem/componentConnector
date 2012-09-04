@@ -1,7 +1,8 @@
 package com.neodem.componentConnector.tools;
 
+import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
-import com.neodem.componentConnector.model.component.Component;
+import com.neodem.componentConnector.model.Locatable;
 
 /**
  * @author vfumo
@@ -10,56 +11,68 @@ import com.neodem.componentConnector.model.component.Component;
 public class ConnectionTools {
 
 	public static boolean onSameRow(Connection c) {
-		Component from = c.getFrom();
-		Component to = c.getTo();
+		Connectable from = c.getFrom();
+		Connectable to = c.getTo();
+		
+		if((from instanceof Locatable) && (to instanceof Locatable)){
+			int fromY = ((Locatable)from).getyLoc();
+			int toY = ((Locatable)to).getyLoc();
 
-		int fromY = from.getyLoc();
-		int toY = to.getyLoc();
-
-		// same row?
-		if (fromY == toY) {
-			return true;
+			// same row?
+			if (fromY == toY) {
+				return true;
+			}
 		}
+
 		return false;
 	}
 
 	public static boolean inSameColumn(Connection c) {
-		Component from = c.getFrom();
-		Component to = c.getTo();
+		Connectable from = c.getFrom();
+		Connectable to = c.getTo();
+		
+		if((from instanceof Locatable) && (to instanceof Locatable)){
+			int fromX = ((Locatable)from).getxLoc();
+			int toX = ((Locatable)to).getxLoc();
 
-		int fromX = from.getxLoc();
-		int toX = to.getxLoc();
-
-		// same column?
-		if (fromX == toX) {
-			return true;
+			// same col?
+			if (fromX == toX) {
+				return true;
+			}
 		}
+		
 		return false;
 	}
 
 	public static boolean nextToEachOtherHorizontally(Connection c) {
-		Component from = c.getFrom();
-		Component to = c.getTo();
+		Connectable from = c.getFrom();
+		Connectable to = c.getTo();
+		
+		if((from instanceof Locatable) && (to instanceof Locatable)){
+			int fromX = ((Locatable)from).getxLoc();
+			int toX = ((Locatable)to).getxLoc();
 
-		int fromX = from.getxLoc();
-		int toX = to.getxLoc();
-
-		if ((fromX - toX == 1) || (toX - fromX == 1)) {
-			return true;
+			if ((fromX - toX == 1) || (toX - fromX == 1)) {
+				return true;
+			}
 		}
+
 		return false;
 	}
 
 	public static boolean nextToEachOtherVeritcally(Connection c) {
-		Component from = c.getFrom();
-		Component to = c.getTo();
+		Connectable from = c.getFrom();
+		Connectable to = c.getTo();
+		
+		if((from instanceof Locatable) && (to instanceof Locatable)){
+			int fromY = ((Locatable)from).getyLoc();
+			int toY = ((Locatable)to).getyLoc();
 
-		int fromY = from.getyLoc();
-		int toY = to.getyLoc();
-
-		if ((fromY - toY == 1) || (toY - fromY == 1)) {
-			return true;
+			if ((fromY - toY == 1) || (toY - fromY == 1)) {
+				return true;
+			}
 		}
+
 		return false;
 	}
 
@@ -76,13 +89,16 @@ public class ConnectionTools {
 	}
 
 	private static int calcToXMinusFromX(Connection c) {
-		Component from = c.getFrom();
-		Component to = c.getTo();
-
-		int fromX = from.getxLoc();
-		int toX = to.getxLoc();
-
-		return toX - fromX;
+		Connectable from = c.getFrom();
+		Connectable to = c.getTo();
+		
+		if((from instanceof Locatable) && (to instanceof Locatable)){
+			int fromX = ((Locatable)from).getxLoc();
+			int toX = ((Locatable)to).getxLoc();
+			return toX - fromX;
+		}
+		
+		return 0;
 	}
 
 }

@@ -193,7 +193,9 @@ public class ComponentSet {
 		b.append(totalSize);
 		b.append('\n');
 
-		for (Connection c : connections) {
+		List<Connection> conList = getAllConnectionsSortedByLargest(this);
+		
+		for (Connection c : conList) {
 			addConnectionToBuffer(b, c);
 		}
 

@@ -1,5 +1,6 @@
 package com.neodem.componentConnector.solver.optimizers;
 
+import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.component.Component;
 import com.neodem.componentConnector.model.sets.ComponentSet;
@@ -28,33 +29,39 @@ public class ConnectionRotator implements ConnectionOptimizer {
 	public int optimize(Connection c, ComponentSet set) {
 		int initialTotalDistance = set.getTotalSize();
 
-		Component to = c.getTo();
-		Component from = c.getFrom();
+		Connectable toCon = c.getTo();
+		Connectable fromCon = c.getFrom();
 
-		// -- try to fix the largest by rotating one or the other
+		if ((toCon instanceof Component) && (fromCon instanceof Component)) {
+			
+			Component to = (Component)toCon;
+			Component from = (Component)fromCon;
 
-		// try rotating the to relay
-		to.invert();
-		int newTotal = set.recalculate();
-		if (newTotal >= initialTotalDistance) {
-			// rollback
+			// -- try to fix the largest by rotating one or the other
+
+			// try rotating the to relay
 			to.invert();
-		} else {
-			return newTotal;
-		}
+			int newTotal = set.recalculate();
+			if (newTotal >= initialTotalDistance) {
+				// rollback
+				to.invert();
+			} else {
+				return newTotal;
+			}
 
-		// try rotating the from relay
-		from.invert();
-		newTotal = set.recalculate();
-		if (newTotal >= initialTotalDistance) {
-			// rollback
+			// try rotating the from relay
 			from.invert();
-		} else {
-			return newTotal;
-		}
+			newTotal = set.recalculate();
+			if (newTotal >= initialTotalDistance) {
+				// rollback
+				from.invert();
+			} else {
+				return newTotal;
+			}
 
-		// no changes
-		set.recalculate();
+			// no changes
+			set.recalculate();
+		}
 		return initialTotalDistance;
 	}
 

@@ -11,7 +11,7 @@ import com.neodem.componentConnector.graphics.CrudeConsoleDisplay;
 import com.neodem.componentConnector.graphics.Display;
 import com.neodem.componentConnector.io.DefaultFileConnector;
 import com.neodem.componentConnector.io.FileConnector;
-import com.neodem.componentConnector.main.FullRun;
+import com.neodem.componentConnector.main.FullRunFromRandom;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 
 public class TestFullSet {
@@ -21,10 +21,10 @@ public class TestFullSet {
 
 	@Before
 	public void setUp() throws Exception {
-		URL url = FullRun.class.getClassLoader().getResource("4inMulti.xml");
+		URL url = FullRunFromRandom.class.getClassLoader().getResource("4inMulti.xml");
 		File testSet = new File(url.getPath());
 
-		url = FullRun.class.getClassLoader().getResource("relay.xml");
+		url = FullRunFromRandom.class.getClassLoader().getResource("connectables.xml");
 		File defs = new File(url.getPath());
 
 		FileConnector c = new DefaultFileConnector();

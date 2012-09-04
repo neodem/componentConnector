@@ -32,7 +32,7 @@ public class GraphicalComponent implements GraphicsObject {
 
 	private int height = DEFAULT_HEIGHT;
 	private int width = COMPONENT_WIDTH;
-	
+
 	private int pinsPerSide = 0;
 	boolean inverted = false;
 
@@ -43,7 +43,7 @@ public class GraphicalComponent implements GraphicsObject {
 
 	public GraphicalComponent(Component c) {
 		parent = c;
-		pinsPerSide = c.getNumberofPins()/2;
+		pinsPerSide = c.getNumberofPins() / 2;
 		height = pinsPerSide + 2;
 		inverted = c.isInverted();
 	}
@@ -63,33 +63,40 @@ public class GraphicalComponent implements GraphicsObject {
 
 			// --- make the line
 
-			// generate top or bottom
-			if (lineIndex == 0 || lineIndex == (height - 1)) {
-				line = ConsoleTools.spaces(SIDE_WIDTH) + ConsoleTools.chars(COMPONENT_WIDTH, '-') + ConsoleTools.spaces(SIDE_WIDTH);
-			} else {
-				// this is a middle line
-				int middleIndex = lineIndex -1;
-				
-				String middleText = null;
-				if (middleIndex == 1) {
-					middleText = parent.getName();
-				} else if (middleIndex == 2) {
-					middleText = makeInfoString(parent);
-				}
-
-				String middleContent = makeMiddleContent(middleIndex, middleText);
-				String leftContent = makeLeftContent(middleIndex);
-				String rightContent = makeRightContent(middleIndex);
-				
-				line = leftContent + middleContent + rightContent;
-			}
+			line = makeLine(lineIndex);
 
 			// add line
 			lines.add(line);
 		}
 	}
 
-	private String makeRightContent(int lineIndex) {
+	protected String makeLine(int lineIndex) {
+		String line;
+		// generate top or bottom
+		if (lineIndex == 0 || lineIndex == (height - 1)) {
+			line = ConsoleTools.spaces(SIDE_WIDTH) + ConsoleTools.chars(COMPONENT_WIDTH, '-')
+					+ ConsoleTools.spaces(SIDE_WIDTH);
+		} else {
+			// this is a middle line
+			int middleIndex = lineIndex - 1;
+
+			String middleText = null;
+			if (middleIndex == 1) {
+				middleText = parent.getName();
+			} else if (middleIndex == 2) {
+				middleText = makeInfoString(parent);
+			}
+
+			String middleContent = makeMiddleContent(middleIndex, middleText);
+			String leftContent = makeLeftContent(middleIndex);
+			String rightContent = makeRightContent(middleIndex);
+
+			line = leftContent + middleContent + rightContent;
+		}
+		return line;
+	}
+
+	protected String makeRightContent(int lineIndex) {
 		String rightContent = "";
 		GraphicalConnection con = rightConnections.get(lineIndex);
 		if (con != null) {
@@ -100,7 +107,7 @@ public class GraphicalComponent implements GraphicsObject {
 		return rightContent;
 	}
 
-	private String makeLeftContent(int lineIndex) {
+	protected String makeLeftContent(int lineIndex) {
 		String leftContent = "";
 		GraphicalConnection con = leftConnections.get(lineIndex);
 		if (con != null) {
@@ -114,33 +121,34 @@ public class GraphicalComponent implements GraphicsObject {
 	/**
 	 * make a string with spacing and the correct pin numbers :
 	 * 
-	 * |12  content   1|
+	 * |12 content 1|
+	 * 
 	 * @param middleLineCounter
 	 * @return
 	 */
-	private String makeMiddleContent(int middleIndex, String content) {
+	protected String makeMiddleContent(int middleIndex, String content) {
 		String leftSide = "|" + getLeftPinNumber(middleIndex) + " ";
 		String rightSide = " " + getRightPinNumber(middleIndex) + "|";
-		
+
 		int spaceAvailable = COMPONENT_WIDTH - leftSide.length() - rightSide.length();
-		if(spaceAvailable < 0) {
+		if (spaceAvailable < 0) {
 			throw new RuntimeException("um.. ");
 		}
-		
+
 		String middle = ConsoleTools.centerInto(content, spaceAvailable, ' ');
-	
+
 		return leftSide + middle + rightSide;
 	}
 
 	private String getRightPinNumber(int middleIndex) {
-		if(inverted) {
-			return "" + ((pinsPerSide*2) - middleIndex);
+		if (inverted) {
+			return "" + ((pinsPerSide * 2) - middleIndex);
 		}
 		return "" + (pinsPerSide - middleIndex);
 	}
 
 	private String getLeftPinNumber(int middleIndex) {
-		if(inverted) {
+		if (inverted) {
 			return "" + (middleIndex + 1);
 		}
 		return "" + (pinsPerSide + middleIndex + 1);
@@ -155,28 +163,17 @@ public class GraphicalComponent implements GraphicsObject {
 		// determine connection side
 		Side connectionSide = ComponentTools.getSideForPin(parent, pin);
 
-		// if we're inverted we swap the side the connection occurs on
-		// and change the index of where we put the connection
-		if (inverted) {
-			connectionSide = connectionSide.other();
-		}
-
 		GraphicalConnection con = null;
 		if (connectionSide == Left) {
+			con = new GraphicalLeftSideConnection(c, parent);
 			if (inverted) {
-				con = new GraphicalRightSideConnection(c, parent);
 				con.invert();
-			} else {
-				con = new GraphicalLeftSideConnection(c, parent);
 			}
-
 			leftConnections.put(index, con);
 		} else {
+			con = new GraphicalRightSideConnection(c, parent);
 			if (inverted) {
-				con = new GraphicalLeftSideConnection(c, parent);
 				con.invert();
-			} else {
-				con = new GraphicalRightSideConnection(c, parent);
 			}
 			rightConnections.put(index, con);
 		}

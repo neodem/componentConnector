@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.neodem.componentConnector.model.component.Component;
-
 /**
  * Connection between two relay objects
  * 
@@ -14,8 +12,8 @@ import com.neodem.componentConnector.model.component.Component;
  */
 public class Connection {
 
-	protected Component to;
-	protected Component from;
+	protected Connectable to;
+	protected Connectable from;
 	
 	// pins we can connect to (sometimes there are dup pins on a component (sometimes on diff sides!))
 	private Set<Pin> toPins;
@@ -25,7 +23,7 @@ public class Connection {
 	protected Pin toPin;
 	protected Pin fromPin;
 	
-	public Connection(Component fromComp, Collection<Pin> fromPins, Component toComp, Collection<Pin> toPins) {
+	public Connection(Connectable fromComp, Collection<Pin> fromPins, Connectable toComp, Collection<Pin> toPins) {
 		this.from = fromComp;
 		this.to = toComp;
 		
@@ -44,13 +42,6 @@ public class Connection {
 		}
 	}
 	
-//	public Connection(Component from, Pin fromPin, Component to, Pin toPin) {
-//		this.from = from;
-//		this.to = to;
-//		this.fromPin = fromPin;
-//		this.toPin = toPin;
-//	}
-
 	public boolean isValid() {
 		return to != null && from != null && toPin != null && fromPin != null;
 	}
@@ -61,7 +52,7 @@ public class Connection {
 	 * @param c
 	 * @return
 	 */
-	public boolean uses(Component c) {
+	public boolean uses(Connectable c) {
 		if (to.equals(c) || from.equals(c)) {
 			return true;
 		}
@@ -72,12 +63,12 @@ public class Connection {
 	 * return the pin for the given component. If the component is not part of the
 	 * connection return null
 	 */
-	public Pin getPin(Component c) {
-		if (to.equals(c)) {
+	public Pin getPin(Connectable other) {
+		if (to.equals(other)) {
 			return toPin;
 		}
 
-		if (from.equals(c)) {
+		if (from.equals(other)) {
 			return fromPin;
 		}
 
@@ -90,7 +81,7 @@ public class Connection {
 	 * @param c
 	 * @return
 	 */
-	public Component getOther(Component c) {
+	public Connectable getOther(Connectable c) {
 		if (to.equals(c)) {
 			return from;
 		}
@@ -185,11 +176,11 @@ public class Connection {
 		return true;
 	}
 
-	public Component getTo() {
+	public Connectable getTo() {
 		return to;
 	}
 
-	public Component getFrom() {
+	public Connectable getFrom() {
 		return from;
 	}
 

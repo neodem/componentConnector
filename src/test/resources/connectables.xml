@@ -1,0 +1,24 @@
+<connectableDefs>
+	<connectableDef id="relay" type="component" pins="12">
+		<pin number="1" name="IN" />
+		<pin number="5" name="VCC" />
+		<pin number="6" name="ON" />
+		<pin number="7" name="OFF" />
+		<pin number="8" name="GND" />
+		<pin number="12" name="IN" />
+	</connectableDef>
+	<connectableDef id="power" type="endpoint" pins="2">
+		<pin number="1" name="VCC" />
+		<pin number="2" name="GND" />
+	</connectableDef>	
+	<connectableDef id="data" type="endpoint" pins="4">
+		<pin number="1" name="A" />
+		<pin number="2" name="B" />
+		<pin number="3" name="C" />
+		<pin number="4" name="D" />
+	</connectableDef>	
+	<connectableDef id="control" type="endpoint" pins="2">
+		<pin number="1" name="S0" />
+		<pin number="2" name="S1" />
+	</connectableDef>	
+</connectableDefs>

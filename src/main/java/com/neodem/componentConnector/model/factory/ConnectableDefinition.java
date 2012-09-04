@@ -1,26 +1,30 @@
-package com.neodem.componentConnector.model.component;
+package com.neodem.componentConnector.model.factory;
 
 import java.util.Collection;
 import java.util.HashSet;
 
 import com.neodem.componentConnector.model.Pin;
 
-public class ComponentDefinition {
 
-	private String typeName;
+public class ConnectableDefinition {
+
+	private String id;
 	
 	/**
 	 * the number of pins on the component
 	 */
 	private int pinSize;
 	
+	private String type;
+	
 	/**
 	 * the pins 
 	 */
 	private Collection<Pin> pins;
 
-	public ComponentDefinition(String typeName, int size) {
-		this.typeName = typeName;
+	public ConnectableDefinition(String id, String type, int size) {
+		this.id = id;
+		this.type = type;
 		this.pinSize = size;
 		pins = new HashSet<Pin>(size);
 	}
@@ -31,18 +35,10 @@ public class ComponentDefinition {
 	}
 
 	/**
-	 * @return the typeName
+	 * @return the id
 	 */
-	public String getTypeName() {
-		return typeName;
-	}
-
-	/**
-	 * @param typeName
-	 *            the typeName to set
-	 */
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
+	public String getId() {
+		return id;
 	}
 
 	/**
@@ -53,11 +49,10 @@ public class ComponentDefinition {
 	}
 
 	/**
-	 * @param pinSize
-	 *            the pinSize to set
+	 * @return the type
 	 */
-	public void setPinSize(int pinSize) {
-		this.pinSize = pinSize;
+	public String getType() {
+		return type;
 	}
 
 	/**
@@ -68,10 +63,10 @@ public class ComponentDefinition {
 	}
 
 	/**
-	 * @param pins
-	 *            the pins to set
+	 * @param pins the pins to set
 	 */
 	public void setPins(Collection<Pin> pins) {
 		this.pins = pins;
 	}
+
 }

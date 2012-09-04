@@ -1,4 +1,4 @@
-package com.neodem.componentConnector.model.component;
+package com.neodem.componentConnector.model.sets;
 
 import static com.neodem.componentConnector.model.Side.Left;
 import static com.neodem.componentConnector.model.Side.Right;

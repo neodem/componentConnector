@@ -1,11 +1,13 @@
 package com.neodem.componentConnector.tools;
 
+import static com.neodem.componentConnector.model.Side.Left;
+import static com.neodem.componentConnector.model.Side.Right;
+
+import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
+import com.neodem.componentConnector.model.Locatable;
 import com.neodem.componentConnector.model.Pin;
 import com.neodem.componentConnector.model.Side;
-import com.neodem.componentConnector.model.component.Component;
-
-import static com.neodem.componentConnector.model.Side.*;
 
 /**
  * @author vfumo
@@ -29,47 +31,65 @@ public class DefaultCalculator implements Calculator {
 	 * @return
 	 */
 	protected int calculateAbsoluteDistance(Connection c) {
-		int absoluteHDistance = distance(c.getTo().getxLoc(), c.getFrom().getxLoc());
-		int absoluteVDistance = distance(c.getTo().getyLoc(), c.getFrom().getyLoc());
+		Connectable from = c.getFrom();
+		Connectable to = c.getTo();
 
-		int offset = 0;
+		if ((from instanceof Locatable) && (to instanceof Locatable)) {
+			int fromY = ((Locatable) from).getyLoc();
+			int toY = ((Locatable) to).getyLoc();
 
-		if (ConnectionTools.onSameRow(c)) {
-			offset--;
+			int fromX = ((Locatable) from).getxLoc();
+			int toX = ((Locatable) to).getxLoc();
+
+			int absoluteHDistance = distance(toX, fromX);
+			int absoluteVDistance = distance(toY, fromY);
+
+			int offset = 0;
+
+			if (ConnectionTools.onSameRow(c)) {
+				offset--;
+			}
+
+			if (ConnectionTools.inSameColumn(c)) {
+				offset--;
+			}
+
+			return absoluteHDistance + absoluteVDistance + offset;
 		}
 
-		if (ConnectionTools.inSameColumn(c)) {
-			offset--;
-		}
-
-		return absoluteHDistance + absoluteVDistance + offset;
+		return 0;
 	}
 
 	protected int calculateRotationalDistance(Connection c) {
-		Component from = c.getFrom();
-		Component to = c.getTo();
+		Connectable from = c.getFrom();
+		Connectable to = c.getTo();
 
 		Pin fromPin = c.getFromPin();
 		Pin toPin = c.getToPin();
 
-		Side fromSide = ComponentTools.getSideForPin(from, fromPin);
-		if (from.isInverted()) {
-			fromSide = fromSide.other();
-		}
+		if ((from instanceof Locatable) && (to instanceof Locatable)) {
 
-		Side toSide = ComponentTools.getSideForPin(to, toPin);
-		if (to.isInverted()) {
-			toSide = toSide.other();
-		}
+			Side fromSide = ComponentTools.getSideForPin(from, fromPin);
+			if (((Locatable) from).isInverted()) {
+				fromSide = fromSide.other();
+			}
 
-		if (ConnectionTools.toLeftOfFrom(c)) {
-			return toLeftOfFrom(fromSide, toSide);
-		} else if (ConnectionTools.toRightOfFrom(c)) {
-			return toRightOfFrom(fromSide, toSide);
-		}
+			Side toSide = ComponentTools.getSideForPin(to, toPin);
+			if (((Locatable) to).isInverted()) {
+				toSide = toSide.other();
+			}
 
-		// we are horizontally aligned
-		return aligned(fromSide, toSide);
+			if (ConnectionTools.toLeftOfFrom(c)) {
+				return toLeftOfFrom(fromSide, toSide);
+			} else if (ConnectionTools.toRightOfFrom(c)) {
+				return toRightOfFrom(fromSide, toSide);
+			}
+
+			// we are horizontally aligned
+			return aligned(fromSide, toSide);
+		}
+		
+		return 0;
 	}
 
 	/**

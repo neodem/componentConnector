@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.component.Component;
 import com.neodem.componentConnector.model.sets.AutoAddComponentSet;
@@ -74,8 +75,8 @@ public class RandomizingSetOptimizer implements SetOptimizer {
 
 		// add connections to the new set
 		for (Connection c : originalConnections) {
-			Component oFrom = c.getFrom();
-			Component oTo = c.getTo();
+			Connectable oFrom = c.getFrom();
+			Connectable oTo = c.getTo();
 
 			Component from = newSet.getComponent(oFrom.getName());
 			Component to = newSet.getComponent(oTo.getName());
