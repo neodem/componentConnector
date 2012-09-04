@@ -36,65 +36,111 @@
 		<component type="relay" name="inv6c" />
 	</components>
 	<connections>
-		<!-- GND to ground for all -->
+		<!-- NOTE on gate types -->
+		<!-- OR gates have 2 ins (A and B) and 2 outs that tie together -->
+		<!-- XOR gates have 2 ins (A and B) and 1 out, and 2 internal connections -->
+		<!-- AND gates have 2 ins (A and B) and 1 out, and one internal connection -->
+		<!-- on all relays, GND to ground -->
+		
+		<!-- OR1 -->
+		<!--  5v to or1a IN -->
+		<!--  GND to or1a GND -->
+		<!--  5v to or1b IN -->
+		<!--  GND to or1b GND -->
+
+		<connection from="and1b" fromPin="ON" to="or1a" toPin="VCC"/>
+		<connection from="and2b" fromPin="ON" to="or1b" toPin="VCC"/>
+		
+		<!-- OR2 -->
+		<!--  5v to or2a IN -->
+		<!--  GND to or2a GND -->
+		<!--  5v to or2b IN -->
+		<!--  GND to or2b GND -->
+
+		<!-- A input to or2a VCC -->
+		<connection from="xor3b" fromPin="IN" to="or2b" toPin="VCC"/>
+
+		<!-- OR3 -->
+		<!--  5v to or3a IN -->
+		<!--  GND to or3a GND -->
+		<!--  5v to or3b IN -->
+		<!--  GND to or3b GND -->
+		<!--  5v to or3b IN -->
+		<!--  GND to or3b GND -->
+
+		<connection from="and3c" fromPin="ON" to="or3a" toPin="VCC"/>
+		<connection from="and4c" fromPin="ON" to="or3b" toPin="VCC"/>
+		<connection from="and5c" fromPin="ON" to="or3c" toPin="VCC"/>
+		<connection from="and6c" fromPin="ON" to="or3d" toPin="VCC"/>
+
+		<!-- XOR1 -->
+		<!--  5v  to xor1a IN -->
+		<!--  GND to xor1a GND -->
+		<!--  GND to xor1b GND -->
+		
+		<connection from="xor1a" fromPin="ON"  to="xor1b" toPin="OFF"/>
+		<connection from="xor1a" fromPin="OFF" to="xor1b" toPin="ON"/>
+
+		<!-- A input to xor1a VCC -->
+		<connection from="xor3b" fromPin="IN" to="xor1b" toPin="VCC"/>
+		
+		<!-- XOR2 -->
+		<!--  5v  to xor2a IN -->
+		<!--  GND to xor2a GND -->
+		<!--  GND to xor2b GND -->
+		
+		<connection from="xor2a" fromPin="ON"  to="xor2b" toPin="OFF"/>
+		<connection from="xor2a" fromPin="OFF" to="xor2b" toPin="ON"/>
+
+		<!-- Carry In to xor1a VCC -->
+		<connection from="xor1b" fromPin="IN" to="xor2b" toPin="VCC"/>
+		
+		<!-- XOR3 -->
+		<!--  5v  to xor3a IN -->
+		<!--  GND to xor3a GND -->
+		<!--  GND to xor3b GND -->
+		
+		<connection from="xor3a" fromPin="ON"  to="xor3b" toPin="OFF"/>
+		<connection from="xor3a" fromPin="OFF" to="xor3b" toPin="ON"/>
+
+		<!-- B to xor3a VCC -->
+		<!-- Binv to xor3b VCC -->
+		
+		<!-- AND1 -->
+		<!--  5v  to and1a IN -->
+		<!--  GND to and1a GND -->
+		<!--  GND to and1b GND -->
+
+		<connection from="and1a" fromPin="ON" to="and1b" toPin="IN" />
+		
+		<connection from="xor1b" fromPin="IN" to="and1a" toPin="VCC" />
+		<!-- Carry In to and1a VCC -->
+	
+		<!-- AND2 -->
+		<!--  5v  to and2a IN -->
+		<!--  GND to and2a GND -->
+		<!--  GND to and2b GND -->
+		
+		<connection from="and2a" fromPin="ON" to="and2b" toPin="IN" />
+
+		<!-- A input to and2a VCC -->
+		<connection from="xor3b" fromPin="IN" to="and2b" toPin="VCC" />
 
 		<!-- and 3 -->
 		<!-- 5v to and3a IN -->
-
-		<!-- A input to and3a VCC -->
-		<connection from="inv3b" fromPin="OFF" to="and3b" toPin="VCC" />
-		<connection from="inv3c" fromPin="OFF" to="and3c" toPin="VCC" />
-
+		<!--  GND to and3a GND -->
+		<!--  GND to and3b GND -->
+		<!--  GND to and3c GND -->
+		
 		<connection from="and3a" fromPin="ON" to="and3b" toPin="IN" />
 		<connection from="and3b" fromPin="ON" to="and3c" toPin="IN" />
 
-		<connection from="and3c" fromPin="ON" to="or3a" toPin="VCC" />
+		<connection from="or2a" fromPin="ON"   to="and3a" toPin="VCC" />
+		<connection from="or2b" fromPin="ON"   to="and3a" toPin="VCC" />
+		<connection from="inv3b" fromPin="OFF" to="and3b" toPin="VCC" />
+		<!-- S1 to and3c VCC -->
 
-		<!-- and 4 -->
-		<!-- 5v to and4a IN -->
 
-		<!-- B input to and4a VCC -->
-		<connection from="inv4b" fromPin="OFF" to="and4b" toPin="VCC" />
-		<connection from="inv3c" fromPin="VCC" to="and4c" toPin="VCC" />
-
-		<connection from="and4a" fromPin="ON" to="and4b" toPin="IN" />
-		<connection from="and4b" fromPin="ON" to="and4c" toPin="IN" />
-
-		<connection from="and4c" fromPin="ON" to="or3b" toPin="VCC" />
-
-		<!-- and 5 -->
-		<!-- 5v to and5a IN -->
-
-		<!-- C input to and5a VCC -->
-		<connection from="inv4b" fromPin="VCC" to="and5b" toPin="VCC" />
-		<connection from="inv5c" fromPin="OFF" to="and5c" toPin="VCC" />
-
-		<connection from="and5a" fromPin="ON" to="and5b" toPin="IN" />
-		<connection from="and5b" fromPin="ON" to="and5c" toPin="IN" />
-
-		<connection from="and5c" fromPin="ON" to="or3c" toPin="VCC" />
-
-		<!-- and 6 -->
-		<!-- 5v to and6a IN -->
-
-		<!-- D input to and6a VCC -->
-		<connection from="and5b" fromPin="VCC" to="and6b" toPin="VCC" />
-		<connection from="inv5c" fromPin="VCC" to="and6c" toPin="VCC" />
-
-		<connection from="and6a" fromPin="ON" to="and6b" toPin="IN" />
-		<connection from="and6b" fromPin="ON" to="and6c" toPin="IN" />
-
-		<connection from="and6c" fromPin="ON" to="or3d" toPin="VCC" />
-
-		<!-- inv 3 inputs -->
-		<!-- S1 input into inv3b VCC -->
-		<!-- S0 input into inv3c VCC -->
-
-		<!-- inv 4 inputs -->
-		<connection from="inv3b" fromPin="VCC" to="inv4b" toPin="VCC" />
-
-		<!-- inv 5 inputs -->
-		<connection from="inv3c" fromPin="VCC" to="inv5c" toPin="VCC" />
 
 	</connections>
 </componentSet>
