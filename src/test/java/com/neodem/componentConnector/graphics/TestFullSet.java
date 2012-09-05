@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import com.neodem.componentConnector.io.FileConnector;
 import com.neodem.componentConnector.io.PrettyPrintOutputFileConnector;
-import com.neodem.componentConnector.main.FullRunFromRandom;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 
 public class TestFullSet {
@@ -19,7 +18,7 @@ public class TestFullSet {
 
 	@Before
 	public void setUp() throws Exception {
-		ClassLoader classLoader = FullRunFromRandom.class.getClassLoader();
+		ClassLoader classLoader = TestFullSet.class.getClassLoader();
 		
 		URL url = classLoader.getResource("Full-components.xml");
 		File componentsFile = new File(url.getPath());

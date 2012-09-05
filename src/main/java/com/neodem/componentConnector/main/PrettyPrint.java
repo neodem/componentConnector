@@ -14,7 +14,7 @@ import com.neodem.componentConnector.model.sets.ComponentSet;
 public class PrettyPrint {
 	
 	public PrettyPrint() {
-		ClassLoader classLoader = FullRunFromRandom.class.getClassLoader();
+		ClassLoader classLoader = FullRunRandom.class.getClassLoader();
 		
 		URL url = classLoader.getResource("Full-Located-components.xml");
 		File componentsFile = new File(url.getPath());

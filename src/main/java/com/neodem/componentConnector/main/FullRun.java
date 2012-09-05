@@ -17,24 +17,22 @@ import com.neodem.componentConnector.solver.optimizers.ConnectionMover;
 import com.neodem.componentConnector.solver.optimizers.ConnectionOptimizer;
 import com.neodem.componentConnector.solver.optimizers.ConnectionRotator;
 import com.neodem.componentConnector.solver.optimizers.RandomizingSetOptimizer;
+import com.neodem.componentConnector.solver.optimizers.SetOptimizer;
 
 /**
  * @author vfumo
  * 
  */
-public class FullRunFromRandom {
+public class FullRun {
 	
-	protected static final Log log = LogFactory.getLog(FullRunFromRandom.class);
+	protected static final Log log = LogFactory.getLog(FullRun.class);
 	
 	private FileConnector c = new DefaultFileConnector();
 
-	private ComponentSet makeSet() {	
-		ClassLoader classLoader = FullRunFromRandom.class.getClassLoader();
+	private ComponentSet makeSet(File componentsFile) {
+		ClassLoader classLoader = FullRun.class.getClassLoader();
 		
-		URL url = classLoader.getResource("Full-components.xml");
-		File componentsFile = new File(url.getPath());
-
-		url = classLoader.getResource("Full-connectables.xml");
+		URL url = classLoader.getResource("Full-connectables.xml");
 		File connectablesFile = new File(url.getPath());
 
 		url = classLoader.getResource("Full-connections.xml");
@@ -44,23 +42,30 @@ public class FullRunFromRandom {
 	}
 
 	private Solver s;
+	private SetOptimizer so = new RandomizingSetOptimizer(8000);
 
-	public FullRunFromRandom() {
+	public FullRun() {
 		initSolver();
 		
-		File out = new File("best.xml");
+		ClassLoader classLoader = FullRun.class.getClassLoader();
 		
-		// run continuously, printing out each 'best' solution
+		URL url = classLoader.getResource("Full-components.xml");
+		File componentsFile = new File(url.getPath());
+		
+		ComponentSet set = makeSet(componentsFile);
+		
+		componentsFile = new File("best.xml");
 		int best = 1000;
 		while (true) {
-			ComponentSet set = makeSet();
 			s.solve(set);
 			int size = set.getTotalSize();
 			if (size < best) {
 				best = size;
 				log.info("found better solution : " + best);
-				c.writeToFile(out, set);
+				c.writeToFile(componentsFile, set);
+				set = makeSet(componentsFile);
 			}
+			so.optimize(set);
 		}
 	}
 
@@ -68,10 +73,10 @@ public class FullRunFromRandom {
 		ConnectionOptimizer r = new ConnectionRotator();
 		ConnectionOptimizer m = new ConnectionMover();
 		ConnectionOptimizer pt = new ConnectionAlternatePinTrier();
-		s = new MutiplePathMultiplePassConnectionSolver(Arrays.asList(r, m, pt), new RandomizingSetOptimizer(2000));
+		s = new MutiplePathMultiplePassConnectionSolver(Arrays.asList(r, m, pt));
 	}
 
 	public static void main(String[] args) {
-		new FullRunFromRandom();
+		new FullRun();
 	}
 }
