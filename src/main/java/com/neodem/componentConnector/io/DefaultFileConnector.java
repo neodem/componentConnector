@@ -130,9 +130,9 @@ public class DefaultFileConnector implements FileConnector {
 			}
 
 		} catch (ParsingException ex) {
-			System.err.println("Cafe con Leche is malformed today. How embarrassing!");
+			System.err.println("malformed XML file : " + ex.getMessage());
 		} catch (IOException ex) {
-			System.err.println("Could not connect to Cafe con Leche. The site may be down.");
+			System.err.println("io error : " + ex.getMessage());
 		}
 		return set;
 	}
