@@ -13,8 +13,8 @@ import com.neodem.componentConnector.AbstractBaseRelayLocatorTest;
 import com.neodem.componentConnector.model.Component;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
-import com.neodem.componentConnector.solver.optimizers.ConnectionOptimizer;
-import com.neodem.componentConnector.solver.optimizers.ConnectionRotator;
+import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
+import com.neodem.componentConnector.solver.optimizers.connection.ConectionInverter;
 
 /**
  * @author vfumo
@@ -26,7 +26,7 @@ public class ConnectionRotatorTest extends AbstractBaseRelayLocatorTest {
 
 	@Before
 	public void setUp() throws Exception {
-		o = new ConnectionRotator();
+		o = new ConectionInverter();
 	}
 
 	@After

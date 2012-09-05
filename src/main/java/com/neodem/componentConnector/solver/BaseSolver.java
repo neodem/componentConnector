@@ -6,8 +6,8 @@ import org.apache.commons.logging.Log;
 
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
-import com.neodem.componentConnector.solver.optimizers.ConnectionOptimizer;
-import com.neodem.componentConnector.solver.optimizers.SetOptimizer;
+import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
+import com.neodem.componentConnector.solver.optimizers.set.SetOptimizer;
 import com.neodem.componentConnector.tools.Calculator;
 import com.neodem.componentConnector.tools.DefaultCalculator;
 
@@ -15,7 +15,7 @@ import com.neodem.componentConnector.tools.DefaultCalculator;
  * @author vfumo
  * 
  */
-public abstract class BaseConnectionSolver implements Solver {
+public abstract class BaseSolver implements Solver {
 
 	protected abstract Log getLog();
 
@@ -23,24 +23,32 @@ public abstract class BaseConnectionSolver implements Solver {
 	protected SetOptimizer setOptimizer;
 	private static final Calculator calc = new DefaultCalculator();
 
-	public BaseConnectionSolver(List<ConnectionOptimizer> connectionOptimizers) {
+	public BaseSolver(List<ConnectionOptimizer> connectionOptimizers) {
 		this.connectionOptimizers = connectionOptimizers;
 	}
 
-	public BaseConnectionSolver(List<ConnectionOptimizer> connectionOptimizers, SetOptimizer setOptimizer) {
+	public BaseSolver(List<ConnectionOptimizer> connectionOptimizers, SetOptimizer setOptimizer) {
 		this.connectionOptimizers = connectionOptimizers;
 		this.setOptimizer = setOptimizer;
 	}
 
-	public final int solve(ComponentSet set) {
+	public final ComponentSet solve(ComponentSet set) {
+		getLog().debug("solve() : " + set.getTotalSize());
+		
 		if (setOptimizer != null) {
-			setOptimizer.optimize(set);
+			int before = set.getTotalSize();
+			set = setOptimizer.optimize(set);
+			getLog().debug("setOptimizer Applied. Was : " + before + " is now : " + set.getTotalSize());
 		}
 
-		return solveConnection(set);
+		ComponentSet solved = solveConnection(set);
+
+		getLog().debug("solve() complete : " + solved.getTotalSize());
+		
+		return solved;
 	}
 
-	public abstract int solveConnection(ComponentSet set);
+	public abstract ComponentSet solveConnection(ComponentSet set);
 
 	/**
 	 * recursively attempt to optimize the given connection until no progress is
@@ -53,7 +61,7 @@ public abstract class BaseConnectionSolver implements Solver {
 	 */
 	protected int optimizeConnection(Connection c, ComponentSet set, int startSize) {
 
-		getLog().debug("optimizeConnection : " + c + " = " + startSize);
+		//getLog().debug("optimizeConnection : " + c + " : " + startSize);
 
 		if (calc.calculateDistance(c) == 0) {
 			// no need, we're already optimized as best as we can

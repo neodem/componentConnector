@@ -3,11 +3,14 @@ package com.neodem.componentConnector.tools;
 import static com.neodem.componentConnector.model.Side.Left;
 import static com.neodem.componentConnector.model.Side.Right;
 
+import java.util.Collection;
+
 import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.Locatable;
 import com.neodem.componentConnector.model.Pin;
 import com.neodem.componentConnector.model.Side;
+import com.neodem.componentConnector.model.sets.ComponentSet;
 
 /**
  * @author vfumo
@@ -20,6 +23,17 @@ public class DefaultCalculator implements Calculator {
 		int rotateDistance = calculateRotationalDistance(c);
 
 		return absDistance + rotateDistance;
+	}
+	
+	public int calculateSetSize(ComponentSet set) {
+		Collection<Connection> cons = set.getAllConnections();
+		int distance = 0;
+
+		for (Connection c : cons) {
+			distance += calculateDistance(c);
+		}
+
+		return distance;
 	}
 
 	/**

@@ -7,14 +7,16 @@ import org.apache.commons.logging.LogFactory;
 
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
-import com.neodem.componentConnector.solver.optimizers.ConnectionOptimizer;
-import com.neodem.componentConnector.solver.optimizers.SetOptimizer;
+import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
+import com.neodem.componentConnector.solver.optimizers.set.SetOptimizer;
 
 /**
+ * Will find the single largest connection and optimize it
+ * 
  * @author vfumo
  * 
  */
-public class SinglePassConnectionSolver extends BaseConnectionSolver implements Solver {
+public class SinglePassConnectionSolver extends BaseSolver implements Solver {
 
 	private static final Log log = LogFactory.getLog(SinglePassConnectionSolver.class);
 
@@ -31,15 +33,17 @@ public class SinglePassConnectionSolver extends BaseConnectionSolver implements 
 		super(connectionOptimizers, setOptimizer);
 	}
 
-	public int solveConnection(ComponentSet set) {
+	public ComponentSet solveConnection(ComponentSet set) {
 		int startSize = set.getTotalSize();
 		Connection largest = ComponentSet.findTheLargestConnection(set);
 
 		if (largest == null) {
-			return startSize;
+			return set;
 		}
 
-		return optimizeConnection(largest, set, startSize);
+		optimizeConnection(largest, set, startSize);
+		
+		return set;
 	}
 
 }

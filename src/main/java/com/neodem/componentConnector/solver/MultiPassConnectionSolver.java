@@ -7,17 +7,17 @@ import org.apache.commons.logging.LogFactory;
 
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
-import com.neodem.componentConnector.solver.optimizers.ConnectionOptimizer;
-import com.neodem.componentConnector.solver.optimizers.SetOptimizer;
+import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
+import com.neodem.componentConnector.solver.optimizers.set.SetOptimizer;
 
 /**
- * Will make many passes and find the largest connection and try to make it
- * smaller by rotation.
+ * Will find the largest connection and try to optimize it. If it succeeds,
+ * it will try again.
  * 
  * @author vfumo
  * 
  */
-public class MultiPassConnectionSolver extends SinglePassConnectionSolver implements Solver {
+public class MultiPassConnectionSolver extends BaseSolver implements Solver {
 
 	private static final Log log = LogFactory.getLog(MultiPassConnectionSolver.class);
 
@@ -38,7 +38,7 @@ public class MultiPassConnectionSolver extends SinglePassConnectionSolver implem
 	 * this version will keep trying new largest connections until no progress
 	 * is made
 	 */
-	public int solveConnection(ComponentSet set) {
+	public ComponentSet solveConnection(ComponentSet set) {
 		int best = set.getTotalSize();
 		while (true) {
 			Connection largest = ComponentSet.findTheLargestConnection(set);
@@ -47,7 +47,7 @@ public class MultiPassConnectionSolver extends SinglePassConnectionSolver implem
 			if (optimizedSize < best) {
 				best = optimizedSize;
 			} else {
-				return optimizedSize;
+				return set;
 			}
 		}
 	}

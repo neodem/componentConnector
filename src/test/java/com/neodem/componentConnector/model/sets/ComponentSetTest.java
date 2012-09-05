@@ -23,6 +23,108 @@ import com.neodem.componentConnector.model.sets.ComponentSet;
  * 
  */
 public class ComponentSetTest extends AbstractBaseRelayLocatorTest {
+	
+//	@Test
+//	public void copyShouldCorrectlyCopyASet() {
+//		AutoAddComponentSet set1 = new AutoAddComponentSet(20, 20);
+//		AutoAddComponentSet set2 = new AutoAddComponentSet(20, 20);
+//
+//		Component r1 = relayFactory.make("r1", 0, 0);
+//		Component r2 = relayFactory.make("r2", 10, 0);
+//		Component r3 = relayFactory.make("r3", 10, 10);
+//
+//		set1.addConnection(makeConnection(r1, Right, r2, Right));
+//		set1.addConnection(makeConnection(r1, Right, r3, Right));
+//		
+//		Component r4 = relayFactory.make("r1", 1, 1);
+//		Component r5 = relayFactory.make("r2", 5, 7);
+//		Component r6 = relayFactory.make("r3", 3, 2);
+//		
+//		set2.addConnection(makeConnection(r4, Right, r5, Right));
+//		set2.addConnection(makeConnection(r4, Right, r6, Right));
+//		
+//		int size2 = set2.getTotalSize();
+//		
+//		assertThat(set1.getTotalSize(), not(equalTo(size2)));
+//		
+//		set1.copyFrom(set2);
+//		
+//		assertThat(set1.getTotalSize(), equalTo(size2));
+//	}
+	
+	@Test
+	public void emptySetShouldAddComponentAndHaveItNotChangeSize() {
+		ComponentSet set = new ComponentSet(10, 10);
+		
+		assertThat(set.getTotalSize(), equalTo(0));
+		
+		Component r1 = relayFactory.make("r1", 0, 0);
+		
+		set.addComponent(r1);
+		assertThat(set.getTotalSize(), equalTo(0));
+	}
+	
+	@Test
+	public void setShouldUpdateItsSizeWhenWeAddAConnection() {
+		ComponentSet set = new ComponentSet(10, 10);
+		assertThat(set.getTotalSize(), equalTo(0));
+		
+		Component r1 = relayFactory.make("r1", 0, 0);
+		Component r2 = relayFactory.make("r2", 10, 0);
+
+		set.addConnection(makeConnection(r1, Right, r2, Right));
+		assertThat(set.getTotalSize(), equalTo(10));
+	}
+	
+	@Test
+	public void setShouldUpdateItsSizeWhenWeAddMultipleConnections() {
+		ComponentSet set = new ComponentSet(10, 10);
+		assertThat(set.getTotalSize(), equalTo(0));
+		
+		Component r1 = relayFactory.make("r1", 0, 0);
+		Component r2 = relayFactory.make("r2", 10, 0);
+		
+		set.addConnection(makeConnection(r1, Right, r2, Right));
+		assertThat(set.getTotalSize(), equalTo(10));
+		
+		Component r3 = relayFactory.make("r3", 10, 10);
+		set.addConnection(makeConnection(r1, Right, r3, Right));
+		assertThat(set.getTotalSize(), equalTo(31));
+	}
+	
+	@Test
+	public void recalculateShouldReturnSameAsTotalSizeIfNoChanges() {
+		ComponentSet set = new ComponentSet(10, 10);
+		assertThat(set.getTotalSize(), equalTo(0));
+		
+		Component r1 = relayFactory.make("r1", 0, 0);
+		Component r2 = relayFactory.make("r2", 10, 0);
+		
+		set.addConnection(makeConnection(r1, Right, r2, Right));
+		assertThat(set.getTotalSize(), equalTo(10));
+		
+		set.recalculate();
+		assertThat(set.getTotalSize(), equalTo(10));
+	}
+	
+	@Test
+	public void recalculateShouldReturnSameAsTotalSizeIfAConnectionAdded() {
+		ComponentSet set = new ComponentSet(10, 10);
+		assertThat(set.getTotalSize(), equalTo(0));
+		
+		Component r1 = relayFactory.make("r1", 0, 0);
+		Component r2 = relayFactory.make("r2", 10, 0);
+		
+		set.addConnection(makeConnection(r1, Right, r2, Right));
+		assertThat(set.getTotalSize(), equalTo(10));
+		
+		Component r3 = relayFactory.make("r3", 10, 10);
+		set.addConnection(makeConnection(r1, Right, r3, Right));
+		assertThat(set.getTotalSize(), equalTo(31));
+		
+		set.recalculate();
+		assertThat(set.getTotalSize(), equalTo(31));
+	}
 
 	@Test
 	public void testGetAllConnections() {

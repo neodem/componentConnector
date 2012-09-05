@@ -13,6 +13,7 @@ import java.util.Set;
 import com.neodem.componentConnector.model.Component;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.Endpoint;
+import com.neodem.componentConnector.model.Locatable;
 import com.neodem.componentConnector.model.Location;
 import com.neodem.componentConnector.tools.Calculator;
 import com.neodem.componentConnector.tools.DefaultCalculator;
@@ -38,14 +39,14 @@ public class ComponentSet {
 	private Map<Location, Component> componentPositions = new HashMap<Location, Component>();
 
 	private Collection<Connection> connections = new HashSet<Connection>();
-	
+
 	private static Calculator calc = new DefaultCalculator();
 
 	public ComponentSet(int sizeX, int sizeY) {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 	}
-	
+
 	public void addEndpoint(Endpoint endpoint) {
 		endpoints.add(endpoint);
 	}
@@ -86,22 +87,26 @@ public class ComponentSet {
 		return result;
 	}
 
-	/**
-	 * a very strange operation.. this assumes that 'other' has the same # of
-	 * relays with the same names. It will copy the location and rotation of the
-	 * relays from 'other' into this one
-	 * 
-	 * @param other
-	 */
-	public void copyRelayStates(ComponentSet other) {
-		Collection<Component> others = other.getAllComponents();
-		for (Component otherRelay : others) {
-			Component ourRelay = components.get(otherRelay.getName());
-			ourRelay.setLocation(otherRelay.getLocation());
-			ourRelay.setInverted(otherRelay.isInverted());
-		}
-		recalculate();
-	}
+	// /**
+	// * a very strange operation.. this assumes that 'other' has the same # of
+	// * relays with the same names. It will copy the location and rotation of
+	// the
+	// * relays from 'other' into this one
+	// *
+	// * @param other
+	// */
+	// public void copyFrom(ComponentSet other) {
+	// if (other != this) {
+	// // throw new UnsupportedOperationException("not working right");
+	// Map<String, Component> otherComponents = other.getComponents();
+	// for (Component otherComponent : otherComponents.values()) {
+	// Component ourComponent = components.get(otherComponent.getName());
+	// ourComponent.setLocation(otherComponent.getLocation());
+	// ourComponent.setInverted(otherComponent.isInverted());
+	// }
+	// recalculate();
+	// }
+	// }
 
 	/**
 	 * return a row of the relay set, ordered
@@ -205,7 +210,7 @@ public class ComponentSet {
 		b.append('\n');
 
 		List<Connection> conList = getAllConnectionsSortedByLargest(this);
-		
+
 		for (Connection c : conList) {
 			addConnectionToBuffer(b, c);
 		}
@@ -213,7 +218,12 @@ public class ComponentSet {
 		return b.toString();
 	}
 
-	public void shiftOneLeft(Component target) {
+	/**
+	 * shift the target component one to the left (if we can)
+	 * 
+	 * @param target
+	 */
+	public void shiftOneLeft(Locatable target) {
 		if (target == null) {
 			return;
 		}
@@ -223,11 +233,16 @@ public class ComponentSet {
 			return; // since we are all the way left
 		}
 
-		int xLocOther = xLoc - 1;
-		moveComponentX(target, xLoc, xLocOther);
+		int xLocNew = xLoc - 1;
+		moveComponentX(target, xLoc, xLocNew);
 	}
 
-	public void shiftOneRight(Component target) {
+	/**
+	 * shift the target component one to the right (if we can)
+	 * 
+	 * @param target
+	 */
+	public void shiftOneRight(Locatable target) {
 		if (target == null) {
 			return;
 		}
@@ -237,11 +252,16 @@ public class ComponentSet {
 			return; // since we are all the way right
 		}
 
-		int xLocOther = xLoc + 1;
-		moveComponentX(target, xLoc, xLocOther);
+		int xLocNew = xLoc + 1;
+		moveComponentX(target, xLoc, xLocNew);
 	}
 
-	public void shiftOneDown(Component target) {
+	/**
+	 * shift the target component one down (if we can)
+	 * 
+	 * @param target
+	 */
+	public void shiftOneDown(Locatable target) {
 		if (target == null) {
 			return;
 		}
@@ -251,11 +271,16 @@ public class ComponentSet {
 			return; // since we are all the way at the bottom already
 		}
 
-		int yLocOther = yLoc + 1;
-		moveComponentY(target, yLoc, yLocOther);
+		int yLocNew = yLoc + 1;
+		moveComponentY(target, yLoc, yLocNew);
 	}
 
-	public void shiftOneUp(Component target) {
+	/**
+	 * shift the target component one up (if we can)
+	 * 
+	 * @param target
+	 */
+	public void shiftOneUp(Locatable target) {
 		if (target == null) {
 			return;
 		}
@@ -265,11 +290,19 @@ public class ComponentSet {
 			return; // since we are all the way at the top already
 		}
 
-		int yLocOther = yLoc - 1;
-		moveComponentY(target, yLoc, yLocOther);
+		int yLocNew = yLoc - 1;
+		moveComponentY(target, yLoc, yLocNew);
 	}
 
-	private void moveComponentY(Component target, int fromY, int toY) {
+	/**
+	 * move the target component on the Y axis from one spot to another and if
+	 * that spot is occupied swap them.
+	 * 
+	 * @param target
+	 * @param fromY
+	 * @param toY
+	 */
+	private void moveComponentY(Locatable target, int fromY, int toY) {
 		target.setyLoc(toY);
 		int xLoc = target.getxLoc();
 
@@ -278,10 +311,19 @@ public class ComponentSet {
 			// we move the other into the old spot
 			other.setyLoc(fromY);
 		}
+		resetComponentPositions();
 		recalculate();
 	}
 
-	private void moveComponentX(Component target, int fromX, int toX) {
+	/**
+	 * move the target component on the X axis from one spot to another and if
+	 * that spot is occupied swap them.
+	 * 
+	 * @param target
+	 * @param fromY
+	 * @param toY
+	 */
+	private void moveComponentX(Locatable target, int fromX, int toX) {
 		target.setxLoc(toX);
 		int yLoc = target.getyLoc();
 
@@ -290,6 +332,7 @@ public class ComponentSet {
 			// we move the other into the old spot
 			other.setxLoc(fromX);
 		}
+		resetComponentPositions();
 		recalculate();
 	}
 
@@ -306,8 +349,7 @@ public class ComponentSet {
 		componentPositions.clear();
 	}
 
-	public int recalculate() {
-
+	private void resetComponentPositions() {
 		// update positions
 		componentPositions.clear();
 		for (Component r : components.values()) {
@@ -315,9 +357,10 @@ public class ComponentSet {
 			int y = r.getyLoc();
 			componentPositions.put(new Location(x, y), r);
 		}
+	}
 
-		// update total size
-		totalSize = calculateTotalDistance(this);
+	public int recalculate() {
+		totalSize = calc.calculateSetSize(this);
 		return totalSize;
 	}
 
@@ -399,24 +442,6 @@ public class ComponentSet {
 		return sizeY;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.neodem.relayLocator.tools.RelaySetTools#calculateTotalDistance(com
-	 * .neodem.relayLocator.model.RelaySet)
-	 */
-	public static int calculateTotalDistance(ComponentSet set) {
-		Collection<Connection> cons = set.getAllConnections();
-		int distance = 0;
-		
-		for (Connection c : cons) {
-			distance += calc.calculateDistance(c);
-		}
-
-		return distance;
-	}
-
 	public static Connection findTheLargestConnection(ComponentSet set) {
 		Collection<Connection> cons = set.getAllConnections();
 		Connection largest = null;
@@ -440,13 +465,17 @@ public class ComponentSet {
 		Collections.sort(conList, new Comparator<Connection>() {
 			public int compare(Connection c1, Connection c2) {
 				return calc.calculateDistance(c2) - calc.calculateDistance(c1);
-			}});
+			}
+		});
 		return conList;
 	}
-	
+
 	public Map<Location, Component> getComponentPositions() {
 		return componentPositions;
 	}
 
+	public Map<String, Component> getComponents() {
+		return components;
+	}
 
 }

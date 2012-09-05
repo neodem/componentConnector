@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<components autolocate="false" rows="10" cols="4">
+<components autoLocate="true" rows="10" cols="4">
     <component type="relay" name="or1a" row="0" col="2" inv="false"/>
     <component type="relay" name="inv6c" row="1" col="2" inv="true"/>
     <component type="relay" name="or2b" row="2" col="2" inv="true"/>

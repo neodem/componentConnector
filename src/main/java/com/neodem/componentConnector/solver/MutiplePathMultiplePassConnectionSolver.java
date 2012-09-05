@@ -7,14 +7,14 @@ import org.apache.commons.logging.LogFactory;
 
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
-import com.neodem.componentConnector.solver.optimizers.ConnectionOptimizer;
-import com.neodem.componentConnector.solver.optimizers.SetOptimizer;
+import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
+import com.neodem.componentConnector.solver.optimizers.set.SetOptimizer;
 
 /**
  * @author vfumo
  * 
  */
-public class MutiplePathMultiplePassConnectionSolver extends MultiPassConnectionSolver {
+public class MutiplePathMultiplePassConnectionSolver extends BaseSolver {
 
 	private static final Log log = LogFactory.getLog(MutiplePathMultiplePassConnectionSolver.class);
 
@@ -38,7 +38,7 @@ public class MutiplePathMultiplePassConnectionSolver extends MultiPassConnection
 	 * this version will run on all connections in the set over and over again
 	 * until we make no more progress
 	 */
-	public int solveConnection(ComponentSet set) {
+	public ComponentSet solveConnection(ComponentSet set) {
 		int best = set.getTotalSize();
 		while (true) {
 			List<Connection> largestList = ComponentSet.getAllConnectionsSortedByLargest(set);
@@ -51,7 +51,7 @@ public class MutiplePathMultiplePassConnectionSolver extends MultiPassConnection
 			if (current < best) {
 				best = current;
 			} else {
-				return current;
+				return set;
 			}
 		}
 	}

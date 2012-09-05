@@ -12,12 +12,10 @@ import com.neodem.componentConnector.io.FileConnector;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.solver.MutiplePathMultiplePassConnectionSolver;
 import com.neodem.componentConnector.solver.Solver;
-import com.neodem.componentConnector.solver.optimizers.ConnectionAlternatePinTrier;
-import com.neodem.componentConnector.solver.optimizers.ConnectionMover;
-import com.neodem.componentConnector.solver.optimizers.ConnectionOptimizer;
-import com.neodem.componentConnector.solver.optimizers.ConnectionRotator;
-import com.neodem.componentConnector.solver.optimizers.RandomizingSetOptimizer;
-import com.neodem.componentConnector.solver.optimizers.SetOptimizer;
+import com.neodem.componentConnector.solver.optimizers.connection.ConectionInverter;
+import com.neodem.componentConnector.solver.optimizers.connection.ConnectionAlternatePinTrier;
+import com.neodem.componentConnector.solver.optimizers.connection.ConnectionMover;
+import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
 
 /**
  * @author vfumo
@@ -42,7 +40,6 @@ public class FullRun {
 	}
 
 	private Solver s;
-	private SetOptimizer so = new RandomizingSetOptimizer(8000);
 
 	public FullRun() {
 		initSolver();
@@ -65,12 +62,11 @@ public class FullRun {
 				c.writeToFile(componentsFile, set);
 				set = makeSet(componentsFile);
 			}
-			so.optimize(set);
 		}
 	}
 
 	private void initSolver() {
-		ConnectionOptimizer r = new ConnectionRotator();
+		ConnectionOptimizer r = new ConectionInverter();
 		ConnectionOptimizer m = new ConnectionMover();
 		ConnectionOptimizer pt = new ConnectionAlternatePinTrier();
 		s = new MutiplePathMultiplePassConnectionSolver(Arrays.asList(r, m, pt));

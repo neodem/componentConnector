@@ -16,8 +16,8 @@ import com.neodem.componentConnector.model.Component;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.solver.MultiPassConnectionSolver;
 import com.neodem.componentConnector.solver.Solver;
-import com.neodem.componentConnector.solver.optimizers.ConnectionOptimizer;
-import com.neodem.componentConnector.solver.optimizers.ConnectionRotator;
+import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
+import com.neodem.componentConnector.solver.optimizers.connection.ConectionInverter;
 
 /**
  * @author vfumo
@@ -29,7 +29,7 @@ public class MultiPassWithRotatorTest extends AbstractBaseRelayLocatorTest {
 
 	@Before
 	public void setUp() throws Exception {
-		ConnectionOptimizer o = new ConnectionRotator();
+		ConnectionOptimizer o = new ConectionInverter();
 		solver = new MultiPassConnectionSolver(Arrays.asList(o));
 	}
 

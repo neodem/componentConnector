@@ -23,14 +23,15 @@ public class AutoAddComponentSet extends ComponentSet {
 		super(set);
 	}
 
-	public void addComponentAtRandomLocation(Component c) {
+	@Override
+	public void addComponent(Component c) {
 		advance();
 		if (full) {
 			throw new IndexOutOfBoundsException("you are full!");
 		}
 		c.setxLoc(nextXLoc);
 		c.setyLoc(nextYLoc);
-		this.addComponent(c);
+		super.addComponent(c);
 	}
 
 	protected void advance() {

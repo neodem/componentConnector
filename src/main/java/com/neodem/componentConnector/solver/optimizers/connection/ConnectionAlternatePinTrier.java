@@ -1,4 +1,4 @@
-package com.neodem.componentConnector.solver.optimizers;
+package com.neodem.componentConnector.solver.optimizers.connection;
 
 import java.util.Collection;
 
@@ -57,5 +57,4 @@ public class ConnectionAlternatePinTrier implements ConnectionOptimizer {
 		}
 		return best;
 	}
-
 }

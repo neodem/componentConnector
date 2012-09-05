@@ -189,4 +189,8 @@ public abstract class AbstractConnectable implements Connectable {
 	public String getId() {
 		return id;
 	}
+
+	public int getPinCount() {
+		return pinCount;
+	}
 }

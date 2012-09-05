@@ -19,6 +19,14 @@ public class Component extends AbstractLocatable implements Connectable, Locatab
 		super(name, id, pinCount, x, y);
 	}
 
+	/**
+	 * copy constructor
+	 * @param r
+	 */
+	public Component(Component r) {
+		super(r.getName(), r.getId(), r.getPinCount(), r.getxLoc(), r.getyLoc());
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

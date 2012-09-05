@@ -11,7 +11,7 @@ public interface Solver {
 	/**
 	 * 
 	 * @param set
-	 * @return the size of the set (total distance)
+	 * @return the solved set (or the oringal one if no better solution found)
 	 */
-	int solve(ComponentSet set);
+	ComponentSet solve(ComponentSet set);
 }

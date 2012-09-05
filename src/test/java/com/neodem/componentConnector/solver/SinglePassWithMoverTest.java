@@ -17,8 +17,8 @@ import com.neodem.componentConnector.model.Location;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.solver.SinglePassConnectionSolver;
 import com.neodem.componentConnector.solver.Solver;
-import com.neodem.componentConnector.solver.optimizers.ConnectionMover;
-import com.neodem.componentConnector.solver.optimizers.ConnectionOptimizer;
+import com.neodem.componentConnector.solver.optimizers.connection.ConnectionMover;
+import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
 
 /**
  * @author vfumo

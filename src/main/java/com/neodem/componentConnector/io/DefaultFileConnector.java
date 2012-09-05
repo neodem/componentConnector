@@ -139,7 +139,7 @@ public class DefaultFileConnector implements FileConnector {
 			if (connectable != null) {
 				connectables.put(name, connectable);
 				if (connectable instanceof Component) {
-					((AutoAddComponentSet) set).addComponentAtRandomLocation((Component) connectable);
+					((AutoAddComponentSet) set).addComponent((Component) connectable);
 				} else if (connectable instanceof Endpoint) {
 					set.addEndpoint((Endpoint) connectable);
 				}
@@ -186,7 +186,7 @@ public class DefaultFileConnector implements FileConnector {
 
 		// add Components
 		Element componentRoot = new Element("components");
-		componentRoot.addAttribute(new Attribute("autolocate", "false"));
+		componentRoot.addAttribute(new Attribute("autoLocate", "false"));
 		componentRoot.addAttribute(new Attribute("rows", Integer.toString(set.getSizeY())));
 		componentRoot.addAttribute(new Attribute("cols", Integer.toString(set.getSizeX())));
 
