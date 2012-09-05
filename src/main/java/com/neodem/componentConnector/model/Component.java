@@ -1,8 +1,5 @@
-package com.neodem.componentConnector.model.component;
+package com.neodem.componentConnector.model;
 
-import com.neodem.componentConnector.model.AbstractLocatable;
-import com.neodem.componentConnector.model.Connectable;
-import com.neodem.componentConnector.model.Locatable;
 
 
 /**
@@ -14,12 +11,12 @@ import com.neodem.componentConnector.model.Locatable;
  */
 public class Component extends AbstractLocatable implements Connectable, Locatable, Comparable<Component> {
 
-	public Component(String name, int pinCount) {
-		super(name, pinCount, 0, 0);
+	public Component(String name, String id, int pinCount) {
+		super(name, id, pinCount, 0, 0);
 	}
 
-	public Component(String name, int pinCount, int x, int y) {
-		super(name, pinCount, x, y);
+	public Component(String name, String id, int pinCount, int x, int y) {
+		super(name, id, pinCount, x, y);
 	}
 
 	/*

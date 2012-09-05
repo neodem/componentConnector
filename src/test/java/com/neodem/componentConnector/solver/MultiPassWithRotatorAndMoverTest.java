@@ -13,8 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.neodem.componentConnector.AbstractBaseRelayLocatorTest;
+import com.neodem.componentConnector.model.Component;
 import com.neodem.componentConnector.model.Location;
-import com.neodem.componentConnector.model.component.Component;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.solver.MultiPassConnectionSolver;
 import com.neodem.componentConnector.solver.Solver;

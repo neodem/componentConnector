@@ -3,7 +3,7 @@ package com.neodem.componentConnector.model.factory;
 import java.util.Collection;
 import java.util.HashSet;
 
-import com.neodem.componentConnector.model.component.Component;
+import com.neodem.componentConnector.model.Component;
 
 public class RelayFactory extends ConnectableFactory {
 	

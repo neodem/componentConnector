@@ -1,43 +1,40 @@
-<componentDefs>
-	<components autoLocate="true" rows="10" cols="4">
-		<component type="relay" name="or1a" />
-		<component type="relay" name="or1b" />
-		<component type="relay" name="or2a" />
-		<component type="relay" name="or2b" />
-		<component type="relay" name="or3a" />
-		<component type="relay" name="or3b" />
-		<component type="relay" name="or3c" />
-		<component type="relay" name="or3d" />
-		<component type="relay" name="xor1a" />
-		<component type="relay" name="xor1b" />
-		<component type="relay" name="xor2a" />
-		<component type="relay" name="xor2b" />
-		<component type="relay" name="xor3a" />
-		<component type="relay" name="xor3b" />
-		<component type="relay" name="and1a" />
-		<component type="relay" name="and1b" />
-		<component type="relay" name="and2a" />
-		<component type="relay" name="and2b" />
-		<component type="relay" name="and3a" />
-		<component type="relay" name="and3b" />
-		<component type="relay" name="and3c" />
-		<component type="relay" name="and4a" />
-		<component type="relay" name="and4b" />
-		<component type="relay" name="and4c" />
-		<component type="relay" name="and5a" />
-		<component type="relay" name="and5b" />
-		<component type="relay" name="and5c" />
-		<component type="relay" name="and6a" />
-		<component type="relay" name="and6b" />
-		<component type="relay" name="and6c" />
-		<component type="relay" name="inv3b" />
-		<component type="relay" name="inv5c" />
-		<component type="relay" name="inv6b" />
-		<component type="relay" name="inv6c" />
-	</components>
-	<connectables>
-		<connectable name="power" type="power" />
-		<connectable name="data" type="data" />
-		<connectable name="control" type="control" />
-	</connectables>	
-</componentDefs>
+
+<components autoLocate="true" rows="10" cols="4">
+	<component type="relay" name="or1a" />
+	<component type="relay" name="or1b" />
+	<component type="relay" name="or2a" />
+	<component type="relay" name="or2b" />
+	<component type="relay" name="or3a" />
+	<component type="relay" name="or3b" />
+	<component type="relay" name="or3c" />
+	<component type="relay" name="or3d" />
+	<component type="relay" name="xor1a" />
+	<component type="relay" name="xor1b" />
+	<component type="relay" name="xor2a" />
+	<component type="relay" name="xor2b" />
+	<component type="relay" name="xor3a" />
+	<component type="relay" name="xor3b" />
+	<component type="relay" name="and1a" />
+	<component type="relay" name="and1b" />
+	<component type="relay" name="and2a" />
+	<component type="relay" name="and2b" />
+	<component type="relay" name="and3a" />
+	<component type="relay" name="and3b" />
+	<component type="relay" name="and3c" />
+	<component type="relay" name="and4a" />
+	<component type="relay" name="and4b" />
+	<component type="relay" name="and4c" />
+	<component type="relay" name="and5a" />
+	<component type="relay" name="and5b" />
+	<component type="relay" name="and5c" />
+	<component type="relay" name="and6a" />
+	<component type="relay" name="and6b" />
+	<component type="relay" name="and6c" />
+	<component type="relay" name="inv3b" />
+	<component type="relay" name="inv5c" />
+	<component type="relay" name="inv6b" />
+	<component type="relay" name="inv6c" />
+	<component type="power" name="power" />
+	<component type="data" name="data" />
+	<component type="control" name="control" />
+</components>

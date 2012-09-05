@@ -13,17 +13,19 @@ public class AbstractLocatable extends AbstractConnectable implements Locatable 
 
 	private Location location;
 
-	public AbstractLocatable(String name, int pinCount) {
-		this(name, pinCount, 0, 0);
+	public AbstractLocatable(String name, String id, int pinCount) {
+		this(name, id, pinCount, 0, 0);
 	}
 
-	public AbstractLocatable(String name, int pinCount, int x, int y) {
-		super(name, pinCount);
+	public AbstractLocatable(String name, String id, int pinCount, int x, int y) {
+		super(name, id, pinCount);
 		location = new Location(x, y);
 		moveable = true;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -35,7 +37,9 @@ public class AbstractLocatable extends AbstractConnectable implements Locatable 
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -134,7 +138,7 @@ public class AbstractLocatable extends AbstractConnectable implements Locatable 
 	 */
 	@Override
 	public String toString() {
-		return "AbstractLocatable [name=" + getName() + ", inverted=" + isInverted() + ", moveable=" + moveable + ", location="
-				+ location + "]";
+		return "AbstractLocatable [name=" + getName() + ", inverted=" + isInverted() + ", moveable=" + moveable
+				+ ", location=" + location + "]";
 	}
 }

@@ -1,7 +1,7 @@
 package com.neodem.componentConnector.graphics;
 
+import com.neodem.componentConnector.model.Component;
 import com.neodem.componentConnector.model.Connection;
-import com.neodem.componentConnector.model.component.Component;
 
 public class GraphicalLeftSideConnection extends GraphicalConnection {
 

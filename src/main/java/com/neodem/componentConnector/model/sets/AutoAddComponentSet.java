@@ -1,6 +1,6 @@
 package com.neodem.componentConnector.model.sets;
 
-import com.neodem.componentConnector.model.component.Component;
+import com.neodem.componentConnector.model.Component;
 
 /**
  * gives the ability to add components at random locations

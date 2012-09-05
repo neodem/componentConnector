@@ -8,10 +8,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.neodem.componentConnector.model.Component;
 import com.neodem.componentConnector.model.Connection;
+import com.neodem.componentConnector.model.Endpoint;
 import com.neodem.componentConnector.model.Location;
-import com.neodem.componentConnector.model.component.Component;
 import com.neodem.componentConnector.tools.Calculator;
 import com.neodem.componentConnector.tools.DefaultCalculator;
 
@@ -27,6 +29,11 @@ public class ComponentSet {
 	private int totalSize;
 
 	private Map<String, Component> components = new HashMap<String, Component>();
+	private Set<Endpoint> endpoints = new HashSet<Endpoint>();
+
+	public Set<Endpoint> getEndpoints() {
+		return endpoints;
+	}
 
 	private Map<Location, Component> componentPositions = new HashMap<Location, Component>();
 
@@ -37,6 +44,10 @@ public class ComponentSet {
 	public ComponentSet(int sizeX, int sizeY) {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
+	}
+	
+	public void addEndpoint(Endpoint endpoint) {
+		endpoints.add(endpoint);
 	}
 
 	/**
@@ -432,4 +443,10 @@ public class ComponentSet {
 			}});
 		return conList;
 	}
+	
+	public Map<Location, Component> getComponentPositions() {
+		return componentPositions;
+	}
+
+
 }

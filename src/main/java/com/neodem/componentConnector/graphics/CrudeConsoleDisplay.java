@@ -3,8 +3,8 @@ package com.neodem.componentConnector.graphics;
 import java.util.Collection;
 import java.util.List;
 
+import com.neodem.componentConnector.model.Component;
 import com.neodem.componentConnector.model.Connection;
-import com.neodem.componentConnector.model.component.Component;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.graphics.text.model.DefaultGraphicsPanel;
 import com.neodem.graphics.text.model.DefaultGraphicsRow;

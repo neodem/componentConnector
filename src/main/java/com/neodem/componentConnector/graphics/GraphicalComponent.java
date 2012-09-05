@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.neodem.componentConnector.model.Component;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.Pin;
 import com.neodem.componentConnector.model.Side;
-import com.neodem.componentConnector.model.component.Component;
 import com.neodem.componentConnector.tools.ComponentTools;
 import com.neodem.graphics.text.model.ConsoleTools;
 import com.neodem.graphics.text.model.GraphicsObject;

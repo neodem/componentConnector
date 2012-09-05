@@ -3,12 +3,13 @@ package com.neodem.componentConnector.model;
 import java.util.Collection;
 import java.util.HashSet;
 
-import com.neodem.componentConnector.model.component.Component;
 
 
 public abstract class AbstractConnectable implements Connectable {
 
 	private String name;
+	
+	private String id;
 
 	private int pinCount;
 
@@ -19,8 +20,9 @@ public abstract class AbstractConnectable implements Connectable {
 	 */
 	private boolean inverted = false;
 	
-	public AbstractConnectable(String name, int pinCount) {
+	public AbstractConnectable(String name, String id, int pinCount) {
 		this.name = name;
+		this.id = id;
 		this.pinCount = pinCount;
 		this.inverted = false;
 	}
@@ -79,6 +81,7 @@ public abstract class AbstractConnectable implements Connectable {
 		int result = 1;
 		result = prime * result + (inverted ? 1231 : 1237);
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -181,5 +184,9 @@ public abstract class AbstractConnectable implements Connectable {
 	@Override
 	public String toString() {
 		return "Connectable [name=" + name + "]";
+	}
+
+	public String getId() {
+		return id;
 	}
 }

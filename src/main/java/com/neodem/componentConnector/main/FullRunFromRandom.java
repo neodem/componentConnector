@@ -48,7 +48,7 @@ public class FullRunFromRandom {
 	public FullRunFromRandom() {
 		initSolver();
 		
-		File out = new File("best.out");
+		File out = new File("best.xml");
 		
 		// run continuously, printing out each 'best' solution
 		int best = 1000;

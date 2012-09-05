@@ -1,8 +1,8 @@
 package com.neodem.componentConnector.solver.optimizers;
 
+import com.neodem.componentConnector.model.Component;
 import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
-import com.neodem.componentConnector.model.component.Component;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.tools.ConnectionTools;
 

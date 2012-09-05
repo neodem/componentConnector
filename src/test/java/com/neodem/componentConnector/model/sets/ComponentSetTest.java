@@ -13,8 +13,8 @@ import java.util.List;
 import org.junit.Test;
 
 import com.neodem.componentConnector.AbstractBaseRelayLocatorTest;
+import com.neodem.componentConnector.model.Component;
 import com.neodem.componentConnector.model.Connection;
-import com.neodem.componentConnector.model.component.Component;
 import com.neodem.componentConnector.model.sets.AutoAddComponentSet;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 

@@ -3,7 +3,8 @@ package com.neodem.componentConnector.graphics;
 import org.junit.Test;
 
 import com.neodem.componentConnector.AbstractBaseRelayLocatorTest;
-import com.neodem.componentConnector.model.component.Component;
+import com.neodem.componentConnector.model.Component;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 

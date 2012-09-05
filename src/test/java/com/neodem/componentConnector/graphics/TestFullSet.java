@@ -7,10 +7,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.neodem.componentConnector.graphics.CrudeConsoleDisplay;
-import com.neodem.componentConnector.graphics.Display;
-import com.neodem.componentConnector.io.DefaultFileConnector;
 import com.neodem.componentConnector.io.FileConnector;
+import com.neodem.componentConnector.io.PrettyPrintOutputFileConnector;
 import com.neodem.componentConnector.main.FullRunFromRandom;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 
@@ -32,7 +30,7 @@ public class TestFullSet {
 		url = classLoader.getResource("Full-connections.xml");
 		File connectionsFile = new File(url.getPath());
 
-		FileConnector c = new DefaultFileConnector();
+		FileConnector c = new PrettyPrintOutputFileConnector();
 		set = c.read(componentsFile, connectablesFile, connectionsFile);
 	}
 

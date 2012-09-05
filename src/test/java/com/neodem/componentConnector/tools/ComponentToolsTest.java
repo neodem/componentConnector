@@ -9,8 +9,8 @@ import static org.hamcrest.Matchers.equalTo;
 import org.junit.Test;
 
 import com.neodem.componentConnector.AbstractBaseRelayLocatorTest;
+import com.neodem.componentConnector.model.Component;
 import com.neodem.componentConnector.model.Pin;
-import com.neodem.componentConnector.model.component.Component;
 
 public class ComponentToolsTest extends AbstractBaseRelayLocatorTest {
 
