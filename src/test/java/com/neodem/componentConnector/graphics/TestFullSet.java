@@ -21,14 +21,19 @@ public class TestFullSet {
 
 	@Before
 	public void setUp() throws Exception {
-		URL url = FullRunFromRandom.class.getClassLoader().getResource("4inMulti.xml");
-		File testSet = new File(url.getPath());
+		ClassLoader classLoader = FullRunFromRandom.class.getClassLoader();
+		
+		URL url = classLoader.getResource("Full-components.xml");
+		File componentsFile = new File(url.getPath());
 
-		url = FullRunFromRandom.class.getClassLoader().getResource("connectables.xml");
-		File defs = new File(url.getPath());
+		url = classLoader.getResource("Full-connectables.xml");
+		File connectablesFile = new File(url.getPath());
+
+		url = classLoader.getResource("Full-connections.xml");
+		File connectionsFile = new File(url.getPath());
 
 		FileConnector c = new DefaultFileConnector();
-		set = c.read(defs, testSet);
+		set = c.read(componentsFile, connectablesFile, connectionsFile);
 	}
 
 	@After

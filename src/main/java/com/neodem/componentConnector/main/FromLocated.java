@@ -30,13 +30,18 @@ public class FromLocated {
 	private FileConnector c = new DefaultFileConnector();
 
 	private ComponentSet makeSet() {
-		URL url = FromLocated.class.getClassLoader().getResource("Full-Located.xml");
-		File testSet = new File(url.getPath());
-
-		url = FromLocated.class.getClassLoader().getResource("connectables-Full.xml");
-		File defs = new File(url.getPath());
+		ClassLoader classLoader = FullRunFromRandom.class.getClassLoader();
 		
-		return c.read(defs, testSet);
+		URL url = classLoader.getResource("Full-Located-components.xml");
+		File componentsFile = new File(url.getPath());
+
+		url = classLoader.getResource("Full-connectables.xml");
+		File connectablesFile = new File(url.getPath());
+
+		url = classLoader.getResource("Full-connections.xml");
+		File connectionsFile = new File(url.getPath());
+
+		return c.read(componentsFile, connectablesFile, connectionsFile);
 	}
 
 	private Solver s;

@@ -30,87 +30,88 @@ public class DefaultFileConnector implements FileConnector {
 
 	private ConnectableFactory factory;
 
-	/**
-	 * this only reads in files with relays with no locations attached
-	 */
-	public ComponentSet read(File defs, File setFile) {
-		loadFactory(defs);
-		return loadSet(setFile);
+	public ComponentSet read(File componentsDef, File connectablesDef,
+			File connectionsDef) {
+		loadConnectableFactory(connectablesDef);
+		return loadSet(componentsDef, connectionsDef);
 	}
 
-	protected void loadFactory(File connectableDefs) {
+	protected void loadConnectableFactory(File connectableDefs) {
 		Collection<ConnectableDefinition> defs = loadConnectableDefs(connectableDefs);
 		factory = new ConnectableFactory(defs);
 	}
 
-	protected ComponentSet loadSet(File setFile) {
+	protected ComponentSet loadSet(File componentsDef, File connectionsDef) {
 		ComponentSet set = null;
 		try {
-			Builder parser = new Builder();
-			Document doc = parser.build(setFile);
-			Element root = doc.getRootElement();
-
-			// init the set
-			int rows = Integer.parseInt(root.getAttributeValue("rows"));
-			int cols = Integer.parseInt(root.getAttributeValue("cols"));
 			
-
 			// for collecting all connectables
-			Map<String, Connectable> cons = new HashMap<String, Connectable>();
+			Map<String, Connectable> components = new HashMap<String, Connectable>();
+			
+			// open the components.xml file
+			Builder builder = new Builder();
+			Document doc = builder.build(componentsDef);
+			Element componentsRoot = doc.getRootElement();
+
+			Element componentParent = componentsRoot.getFirstChildElement("components");
+			
+			int rows = Integer.parseInt(componentParent.getAttributeValue("rows"));
+			int cols = Integer.parseInt(componentParent.getAttributeValue("cols"));
+			boolean autoLocate = Boolean.parseBoolean(componentParent.getAttributeValue("autoLocate"));
 
 			// add components
-			Element parent = root.getFirstChildElement("components");
-			String autoLocateString = parent.getAttributeValue("autoLocate");
-			boolean autoLocate = Boolean.parseBoolean(autoLocateString);
-			
-			Elements components = parent.getChildElements();
+			Elements componentElements = componentParent.getChildElements();
 			if(autoLocate) {
 				set = new AutoAddComponentSet(cols, rows);
-				for (int i = 0; i < components.size(); i++) {
-					Element componentElement = components.get(i);
+				for (int i = 0; i < componentElements.size(); i++) {
+					Element componentElement = componentElements.get(i);
 					String type = componentElement.getAttributeValue("type");
 					String name = componentElement.getAttributeValue("name");
 
 					Component component = (Component) factory.make(type, name);
 					if (component != null) {
 						((AutoAddComponentSet) set).addComponentAtRandomLocation(component);
-						cons.put(name, component);
+						components.put(name, component);
 					}
 				}
 			} else {
 				set = new ComponentSet(cols, rows);
-				for (int i = 0; i < components.size(); i++) {
-					Element componentElement = components.get(i);
+				for (int i = 0; i < componentElements.size(); i++) {
+					Element componentElement = componentElements.get(i);
 					String type = componentElement.getAttributeValue("type");
 					String name = componentElement.getAttributeValue("name");
 					int row = Integer.parseInt(componentElement.getAttributeValue("row"));
 					int col = Integer.parseInt(componentElement.getAttributeValue("col"));
+					boolean inverted = Boolean.parseBoolean(componentElement.getAttributeValue("inv"));
 
 					Component component = (Component) factory.make(type, name);
 					if (component != null) {
 						component.setxLoc(col);
 						component.setyLoc(row);
+						component.setInverted(inverted);
 						set.addComponent(component);
-						cons.put(name, component);
+						components.put(name, component);
 					}
 				}
 			}
 			
 			// add connectables
-			parent = root.getFirstChildElement("connectables");
-			Elements connectables = parent.getChildElements();
-			for (int i = 0; i < connectables.size(); i++) {
-				Element componentElement = connectables.get(i);
+			Element connectableParent = componentsRoot.getFirstChildElement("connectables");
+			Elements connectablesElements = connectableParent.getChildElements();
+			for (int i = 0; i < connectablesElements.size(); i++) {
+				Element componentElement = connectablesElements.get(i);
 				String type = componentElement.getAttributeValue("type");
 				String name = componentElement.getAttributeValue("name");
 
 				Connectable con = factory.make(type, name);
-				cons.put(name, con);
+				components.put(name, con);
 			}
+			
+			doc = builder.build(connectionsDef);
+			Element connectionsRoot = doc.getRootElement();
 
 			// add connections
-			Element cParent = root.getFirstChildElement("connections");
-			Elements connections = cParent.getChildElements();
+			Elements connections = connectionsRoot.getChildElements();
 			for (int i = 0; i < connections.size(); i++) {
 				Element c = connections.get(i);
 				String from = c.getAttributeValue("from");
@@ -118,8 +119,8 @@ public class DefaultFileConnector implements FileConnector {
 				String fromPinLabel = c.getAttributeValue("fromPin");
 				String toPinLabel = c.getAttributeValue("toPin");
 
-				Connectable fromComp = cons.get(from);
-				Connectable toComp = cons.get(to);
+				Connectable fromComp = components.get(from);
+				Connectable toComp = components.get(to);
 
 				Collection<Pin> fromPins = fromComp.getPins(fromPinLabel);
 				Collection<Pin> toPins = toComp.getPins(toPinLabel);
@@ -186,5 +187,7 @@ public class DefaultFileConnector implements FileConnector {
 			}
 		}
 	}
+
+
 
 }
