@@ -44,24 +44,28 @@ public class DefaultFileConnector implements FileConnector {
 	protected ComponentSet loadSet(File componentsDef, File connectionsDef) {
 		ComponentSet set = null;
 		try {
-			
+
 			// for collecting all connectables
 			Map<String, Connectable> components = new HashMap<String, Connectable>();
-			
+
 			// open the components.xml file
 			Builder builder = new Builder();
 			Document doc = builder.build(componentsDef);
 			Element componentsRoot = doc.getRootElement();
 
-			Element componentParent = componentsRoot.getFirstChildElement("components");
-			
-			int rows = Integer.parseInt(componentParent.getAttributeValue("rows"));
-			int cols = Integer.parseInt(componentParent.getAttributeValue("cols"));
-			boolean autoLocate = Boolean.parseBoolean(componentParent.getAttributeValue("autoLocate"));
+			Element componentParent = componentsRoot
+					.getFirstChildElement("components");
+
+			int rows = Integer.parseInt(componentParent
+					.getAttributeValue("rows"));
+			int cols = Integer.parseInt(componentParent
+					.getAttributeValue("cols"));
+			boolean autoLocate = Boolean.parseBoolean(componentParent
+					.getAttributeValue("autoLocate"));
 
 			// add components
 			Elements componentElements = componentParent.getChildElements();
-			if(autoLocate) {
+			if (autoLocate) {
 				set = new AutoAddComponentSet(cols, rows);
 				for (int i = 0; i < componentElements.size(); i++) {
 					Element componentElement = componentElements.get(i);
@@ -70,7 +74,8 @@ public class DefaultFileConnector implements FileConnector {
 
 					Component component = (Component) factory.make(type, name);
 					if (component != null) {
-						((AutoAddComponentSet) set).addComponentAtRandomLocation(component);
+						((AutoAddComponentSet) set)
+								.addComponentAtRandomLocation(component);
 						components.put(name, component);
 					}
 				}
@@ -80,9 +85,12 @@ public class DefaultFileConnector implements FileConnector {
 					Element componentElement = componentElements.get(i);
 					String type = componentElement.getAttributeValue("type");
 					String name = componentElement.getAttributeValue("name");
-					int row = Integer.parseInt(componentElement.getAttributeValue("row"));
-					int col = Integer.parseInt(componentElement.getAttributeValue("col"));
-					boolean inverted = Boolean.parseBoolean(componentElement.getAttributeValue("inv"));
+					int row = Integer.parseInt(componentElement
+							.getAttributeValue("row"));
+					int col = Integer.parseInt(componentElement
+							.getAttributeValue("col"));
+					boolean inverted = Boolean.parseBoolean(componentElement
+							.getAttributeValue("inv"));
 
 					Component component = (Component) factory.make(type, name);
 					if (component != null) {
@@ -94,10 +102,12 @@ public class DefaultFileConnector implements FileConnector {
 					}
 				}
 			}
-			
+
 			// add connectables
-			Element connectableParent = componentsRoot.getFirstChildElement("connectables");
-			Elements connectablesElements = connectableParent.getChildElements();
+			Element connectableParent = componentsRoot
+					.getFirstChildElement("connectables");
+			Elements connectablesElements = connectableParent
+					.getChildElements();
 			for (int i = 0; i < connectablesElements.size(); i++) {
 				Element componentElement = connectablesElements.get(i);
 				String type = componentElement.getAttributeValue("type");
@@ -106,7 +116,7 @@ public class DefaultFileConnector implements FileConnector {
 				Connectable con = factory.make(type, name);
 				components.put(name, con);
 			}
-			
+
 			doc = builder.build(connectionsDef);
 			Element connectionsRoot = doc.getRootElement();
 
@@ -125,7 +135,8 @@ public class DefaultFileConnector implements FileConnector {
 				Collection<Pin> fromPins = fromComp.getPins(fromPinLabel);
 				Collection<Pin> toPins = toComp.getPins(toPinLabel);
 
-				Connection con = new Connection(fromComp, fromPins, toComp, toPins);
+				Connection con = new Connection(fromComp, fromPins, toComp,
+						toPins);
 				set.addConnection(con);
 			}
 
@@ -137,7 +148,8 @@ public class DefaultFileConnector implements FileConnector {
 		return set;
 	}
 
-	private Collection<ConnectableDefinition> loadConnectableDefs(File connectableDefs) {
+	private Collection<ConnectableDefinition> loadConnectableDefs(
+			File connectableDefs) {
 		Collection<ConnectableDefinition> defs = new HashSet<ConnectableDefinition>();
 		try {
 			Builder parser = new Builder();
@@ -151,7 +163,8 @@ public class DefaultFileConnector implements FileConnector {
 				String pinCount = definition.getAttributeValue("pins");
 				String type = definition.getAttributeValue("type");
 
-				ConnectableDefinition d = new ConnectableDefinition(id, type, Integer.parseInt(pinCount));
+				ConnectableDefinition d = new ConnectableDefinition(id, type,
+						Integer.parseInt(pinCount));
 
 				Elements pins = definition.getChildElements();
 				for (int j = 0; j < pins.size(); j++) {
@@ -164,9 +177,11 @@ public class DefaultFileConnector implements FileConnector {
 				defs.add(d);
 			}
 		} catch (ParsingException ex) {
-			System.err.println("Cafe con Leche is malformed today. How embarrassing!");
+			System.err
+					.println("Cafe con Leche is malformed today. How embarrassing!");
 		} catch (IOException ex) {
-			System.err.println("Could not connect to Cafe con Leche. The site may be down.");
+			System.err
+					.println("Could not connect to Cafe con Leche. The site may be down.");
 		}
 		return defs;
 	}
@@ -187,7 +202,4 @@ public class DefaultFileConnector implements FileConnector {
 			}
 		}
 	}
-
-
-
 }
