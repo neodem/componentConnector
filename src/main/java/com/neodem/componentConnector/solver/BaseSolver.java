@@ -25,50 +25,36 @@ public abstract class BaseSolver implements Solver {
 		this.connectionOptimizers = connectionOptimizers;
 	}
 
-	public final ComponentSet solve(ComponentSet set) {
+	public final boolean solve(ComponentSet set) {
 		getLog().debug("solve() : " + set.getTotalSize());
 		
-		ComponentSet solved = solveConnection(set);
+		boolean changed = solveConnection(set);
 
-		getLog().debug("solve() complete : " + solved.getTotalSize());
+		getLog().debug("solve() complete : " + set.getTotalSize());
 		
-		return solved;
+		return changed;
 	}
 
-	public abstract ComponentSet solveConnection(ComponentSet set);
+	public abstract boolean solveConnection(ComponentSet set);
 
-	/**
-	 * recursively attempt to optimize the given connection until no progress is
-	 * made. Will only affect the inputted set if an optimization can be made.
-	 * 
-	 * @param c
-	 * @param set
-	 * @param target
-	 * @return
-	 */
-	protected int optimizeConnection(Connection c, ComponentSet set, int startSize) {
+	protected boolean optimizeConnection(Connection c, ComponentSet set) {
 
 		//getLog().debug("optimizeConnection : " + c + " : " + startSize);
 
 		if (calc.calculateDistance(c) == 0) {
 			// no need, we're already optimized as best as we can
-			return startSize;
+			return false;
 		}
 
 		// try to make the connection better by running all optimizers
+		boolean changed = false;
 		for (ConnectionOptimizer o : connectionOptimizers) {
-			o.optimize(c, set);
+			if(o.optimize(c, set) && !changed) {
+				changed = true;
+			}
 		}
 		
-		int optimizedTotalDistance = set.recalculate();
-
-		if (optimizedTotalDistance >= startSize) {
-			// no improvement
-			return startSize;
-		}
-
-		// try again
-		return optimizeConnection(c, set, optimizedTotalDistance);
+		return changed;
 	}
 
 	/**

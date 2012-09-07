@@ -17,7 +17,7 @@ public interface ConnectionOptimizer {
 	 *            the connection to optimize
 	 * @param set
 	 *            the entire set (for calculations of total effect of change)
-	 * @return the new total distance or the old one (if nothing changed)
+	 * @return true if something changed in the set
 	 */
-	public abstract int optimize(Connection c, ComponentSet set);
+	public abstract boolean optimize(Connection c, ComponentSet set);
 }

@@ -30,7 +30,7 @@ public class ConectionInverter implements ConnectionOptimizer {
 	 * @param set
 	 * @return the final size
 	 */
-	public int optimize(Connection c, ComponentSet set) {
+	public boolean optimize(Connection c, ComponentSet set) {
 		int initialTotalDistance = set.getTotalSize();
 
 		Connectable to = c.getTo();
@@ -46,7 +46,7 @@ public class ConectionInverter implements ConnectionOptimizer {
 			to.invert();
 		} else {
 			log.debug("inverted " + to +  " improved size from " + initialTotalDistance + " to " + newTotal);
-			return newTotal;
+			return true;
 		}
 
 		// try rotating the FROM Connectable
@@ -57,13 +57,13 @@ public class ConectionInverter implements ConnectionOptimizer {
 			from.invert();
 		} else {
 			log.debug("inverted " + from +  " improved size from " + initialTotalDistance + " to " + newTotal);
-			return newTotal;
+			return true;
 		}
 
 		// no changes
 		set.recalculate();
 		
-		return initialTotalDistance;
+		return false;
 	}
 
 }

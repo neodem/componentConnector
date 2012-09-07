@@ -28,17 +28,17 @@ public class SinglePassConnectionSolver extends BaseSolver implements Solver {
 		super(connectionOptimizers);
 	}
 
-	public ComponentSet solveConnection(ComponentSet set) {
-		int startSize = set.getTotalSize();
+	public boolean solveConnection(ComponentSet set) {
 		Connection largest = ComponentSet.findTheLargestConnection(set);
 
 		if (largest == null) {
-			return set;
+			return false;
 		}
-
-		optimizeConnection(largest, set, startSize);
 		
-		return set;
+		int i = 0;
+		while(optimizeConnection(largest, set)) i++;
+
+		return i != 0;
 	}
 
 }

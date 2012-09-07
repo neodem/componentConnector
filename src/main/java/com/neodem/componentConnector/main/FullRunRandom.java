@@ -10,7 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import com.neodem.componentConnector.io.DefaultFileConnector;
 import com.neodem.componentConnector.io.FileConnector;
 import com.neodem.componentConnector.model.sets.ComponentSet;
-import com.neodem.componentConnector.solver.MutiplePathMultiplePassConnectionSolver;
+import com.neodem.componentConnector.solver.MultiPassConnectionSolver;
 import com.neodem.componentConnector.solver.Solver;
 import com.neodem.componentConnector.solver.optimizers.connection.ConectionInverter;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionAlternatePinTrier;
@@ -18,7 +18,6 @@ import com.neodem.componentConnector.solver.optimizers.connection.ConnectionMove
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
 import com.neodem.componentConnector.solver.optimizers.set.FullShiftingSetOptimizer;
 import com.neodem.componentConnector.solver.optimizers.set.SetOptimizer;
-import com.neodem.componentConnector.solver.optimizers.set.RandomizingSetOptimizer;
 
 /**
  * @author vfumo
@@ -53,21 +52,17 @@ public class FullRunRandom {
 		File out = new File("best.xml");
 
 		// run continuously, printing out each 'best' solution
-		int best = 1000;
 		ComponentSet startingSet = makeSet();
+		log.info("Starting Size = " + startingSet.getTotalSize());
 
 		SetOptimizer so = new FullShiftingSetOptimizer();
-		ComponentSet solvedSet = so.optimize(startingSet);
+		ComponentSet set = so.optimize(startingSet);
 
-		while (true) {
-			log.info("Starting Size = " + solvedSet.getTotalSize());
-			solvedSet = s.solve(solvedSet);
-			int size = solvedSet.getTotalSize();
-			if (size < best) {
-				best = size;
-				log.info("found better solution : " + best);
-				c.writeToFile(out, solvedSet);
-			}
+		log.info("post Op Size = " + set.getTotalSize());
+
+		while (s.solve(set)) {
+			log.info("found better solution : " + set.getTotalSize());
+			c.writeToFile(out, set);
 		}
 	}
 
@@ -75,7 +70,7 @@ public class FullRunRandom {
 		ConnectionOptimizer r = new ConectionInverter();
 		ConnectionOptimizer m = new ConnectionMover();
 		ConnectionOptimizer pt = new ConnectionAlternatePinTrier();
-		s = new MutiplePathMultiplePassConnectionSolver(Arrays.asList(r, m, pt));
+		s = new MultiPassConnectionSolver(Arrays.asList(m, r, pt));
 	}
 
 	public static void main(String[] args) {

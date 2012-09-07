@@ -29,17 +29,17 @@ public class SuperShifter implements ConnectionOptimizer {
 	 * #optimize(com.neodem.componentConnector.model.Connection,
 	 * com.neodem.componentConnector.model.sets.ComponentSet)
 	 */
-	public int optimize(Connection c, ComponentSet set) {
+	public boolean optimize(Connection c, ComponentSet set) {
 		int initialTotalDistance = set.getTotalSize();
 
 		// -- check adjacency
 		if (ConnectionTools.onSameRow(c) && ConnectionTools.nextToEachOtherHorizontally(c)) {
 			// they are already adjacent horizontally so we can do nothing
-			return initialTotalDistance;
+			return false;
 		}
 		if (ConnectionTools.inSameColumn(c) && ConnectionTools.nextToEachOtherVeritcally(c)) {
 			// they are already adjacent vertically so we can do nothing
-			return initialTotalDistance;
+			return false;
 		}
 
 		Connectable toCon = c.getTo();
@@ -53,7 +53,7 @@ public class SuperShifter implements ConnectionOptimizer {
 			if (!to.isMoveable() && !from.isMoveable()) {
 				// we aren't allowed to move the components, so we can do
 				// nothing
-				return initialTotalDistance;
+				return false;
 			}
 
 			// pointer to the component we're moving
@@ -114,11 +114,11 @@ public class SuperShifter implements ConnectionOptimizer {
 			
 			if(xBest != -1) {
 				set.moveTo(mov, xBest, yBest);
-				return bestTotal;
+				return true;
 			}
 		}
 
-		return initialTotalDistance;
+		return false;
 	}
 
 }

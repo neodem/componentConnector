@@ -11,7 +11,7 @@ public interface Solver {
 	/**
 	 * 
 	 * @param set
-	 * @return the solved set (or the oringal one if no better solution found)
+	 * @return true if the set changed
 	 */
-	ComponentSet solve(ComponentSet set);
+	boolean solve(ComponentSet set);
 }

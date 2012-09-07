@@ -33,16 +33,23 @@ public class MultiPassConnectionSolver extends BaseSolver implements Solver {
 	 * this version will keep trying new largest connections until no progress
 	 * is made
 	 */
-	public ComponentSet solveConnection(ComponentSet set) {
+	public boolean solveConnection(ComponentSet set) {
 		int best = set.getTotalSize();
+		boolean changed = false;
 		while (true) {
 			Connection largest = ComponentSet.findTheLargestConnection(set);
 
-			int optimizedSize = optimizeConnection(largest, set, best);
+			if(optimizeConnection(largest, set)) {
+				changed = true;
+			} else {
+				return false;
+			}
+			
+			int optimizedSize = set.getTotalSize();
 			if (optimizedSize < best) {
 				best = optimizedSize;
 			} else {
-				return set;
+				return changed;
 			}
 		}
 	}

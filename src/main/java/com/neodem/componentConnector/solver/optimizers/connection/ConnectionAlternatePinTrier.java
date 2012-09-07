@@ -20,19 +20,23 @@ public class ConnectionAlternatePinTrier implements ConnectionOptimizer {
 	/* (non-Javadoc)
 	 * @see com.neodem.relayLocator.solver.optimizers.ConnectionOptimizer#optimize(com.neodem.relayLocator.model.Connection, com.neodem.relayLocator.model.sets.ComponentSet)
 	 */
-	public int optimize(Connection c, ComponentSet set) {
-		int initialTotalDistance = set.getTotalSize();
+	public boolean optimize(Connection c, ComponentSet set) {
+		int size = set.getTotalSize();
 		
 		Collection<Pin> fromPins = c.getFromPins();
-		int best = tryAltPins(c, set, initialTotalDistance, fromPins, "from");
+		boolean changed = tryAltPins(c, set, size, fromPins, "from", false);
+		
+		if(changed) {
+			size = set.getTotalSize();
+		}
 		
 		Collection<Pin> toPins = c.getToPins();
-		best = tryAltPins(c, set, best, toPins, "to");
+		changed = tryAltPins(c, set, size, toPins, "to", changed);
 		
-		return best;
+		return changed;
 	}
 
-	private int tryAltPins(Connection c, ComponentSet set, int initialTotalDistance, Collection<Pin> altPins, String id) {
+	private boolean tryAltPins(Connection c, ComponentSet set, int initialTotalDistance, Collection<Pin> altPins, String id, boolean changed) {
 		int best = initialTotalDistance;
 		if(altPins.size() > 1) {
 			
@@ -48,13 +52,16 @@ public class ConnectionAlternatePinTrier implements ConnectionOptimizer {
 				if (setSize >= best) {
 					// rollback
 					c.setPin(id, current);
+					set.recalculate();
+					return changed;
 				} else {
 					log.debug("switching from " + current + " to " + altPin + " since size = " + setSize);
 					current = altPin;
 					best = setSize; 
+					return true;
 				}
 			}
 		}
-		return best;
+		return changed;
 	}
 }

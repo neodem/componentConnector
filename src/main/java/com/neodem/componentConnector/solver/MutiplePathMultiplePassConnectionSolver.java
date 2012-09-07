@@ -33,21 +33,22 @@ public class MutiplePathMultiplePassConnectionSolver extends BaseSolver {
 	 * this version will run on all connections in the set over and over again
 	 * until we make no more progress
 	 */
-	public ComponentSet solveConnection(ComponentSet set) {
-		int best = set.getTotalSize();
-		while (true) {
-			List<Connection> largestList = ComponentSet.getAllConnectionsSortedByLargest(set);
-
-			for (Connection c : largestList) {
-				optimizeConnection(c, set, best);
-			}
-
-			int current = set.recalculate();
-			if (current < best) {
-				best = current;
-			} else {
-				return set;
-			}
-		}
+	public boolean solveConnection(ComponentSet set) {
+		return false;
+//		int best = set.getTotalSize();
+//		while (true) {
+//			List<Connection> largestList = ComponentSet.getAllConnectionsSortedByLargest(set);
+//
+//			for (Connection c : largestList) {
+//				optimizeConnection(c, set, best);
+//			}
+//
+//			int current = set.recalculate();
+//			if (current < best) {
+//				best = current;
+//			} else {
+//				return set;
+//			}
+//		}
 	}
 }
