@@ -7,7 +7,6 @@ import org.apache.commons.logging.Log;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
-import com.neodem.componentConnector.solver.optimizers.set.SetOptimizer;
 import com.neodem.componentConnector.tools.Calculator;
 import com.neodem.componentConnector.tools.DefaultCalculator;
 
@@ -20,27 +19,15 @@ public abstract class BaseSolver implements Solver {
 	protected abstract Log getLog();
 
 	protected List<ConnectionOptimizer> connectionOptimizers;
-	protected SetOptimizer setOptimizer;
 	private static final Calculator calc = new DefaultCalculator();
 
 	public BaseSolver(List<ConnectionOptimizer> connectionOptimizers) {
 		this.connectionOptimizers = connectionOptimizers;
 	}
 
-	public BaseSolver(List<ConnectionOptimizer> connectionOptimizers, SetOptimizer setOptimizer) {
-		this.connectionOptimizers = connectionOptimizers;
-		this.setOptimizer = setOptimizer;
-	}
-
 	public final ComponentSet solve(ComponentSet set) {
 		getLog().debug("solve() : " + set.getTotalSize());
 		
-		if (setOptimizer != null) {
-			int before = set.getTotalSize();
-			set = setOptimizer.optimize(set);
-			getLog().debug("setOptimizer Applied. Was : " + before + " is now : " + set.getTotalSize());
-		}
-
 		ComponentSet solved = solveConnection(set);
 
 		getLog().debug("solve() complete : " + solved.getTotalSize());

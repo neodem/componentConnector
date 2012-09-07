@@ -1,5 +1,11 @@
 package com.neodem.componentConnector.model;
 
+/**
+ * should be immutable since copy constructors and copy functions assume this.
+ * 
+ * @author vfumo
+ *
+ */
 public class Pin {
 	private int pinNumber;
 

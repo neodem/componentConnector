@@ -8,7 +8,6 @@ import org.apache.commons.logging.LogFactory;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
-import com.neodem.componentConnector.solver.optimizers.set.SetOptimizer;
 
 /**
  * Will find the single largest connection and optimize it
@@ -27,10 +26,6 @@ public class SinglePassConnectionSolver extends BaseSolver implements Solver {
 
 	public SinglePassConnectionSolver(List<ConnectionOptimizer> connectionOptimizers) {
 		super(connectionOptimizers);
-	}
-
-	public SinglePassConnectionSolver(List<ConnectionOptimizer> connectionOptimizers, SetOptimizer setOptimizer) {
-		super(connectionOptimizers, setOptimizer);
 	}
 
 	public ComponentSet solveConnection(ComponentSet set) {

@@ -8,7 +8,6 @@ import org.apache.commons.logging.LogFactory;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
-import com.neodem.componentConnector.solver.optimizers.set.SetOptimizer;
 
 /**
  * @author vfumo
@@ -30,10 +29,6 @@ public class MutiplePathMultiplePassConnectionSolver extends BaseSolver {
 		super(connectionOptimizers);
 	}
 	
-	public MutiplePathMultiplePassConnectionSolver(List<ConnectionOptimizer> connectionOptimizers, SetOptimizer setOptimizer) {
-		super(connectionOptimizers, setOptimizer);
-	}
-
 	/**
 	 * this version will run on all connections in the set over and over again
 	 * until we make no more progress

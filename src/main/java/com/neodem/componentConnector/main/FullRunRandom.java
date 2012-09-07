@@ -16,22 +16,23 @@ import com.neodem.componentConnector.solver.optimizers.connection.ConectionInver
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionAlternatePinTrier;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionMover;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
-import com.neodem.componentConnector.solver.optimizers.set.RandomizingSetOptimizer;
+import com.neodem.componentConnector.solver.optimizers.set.FullShiftingSetOptimizer;
 import com.neodem.componentConnector.solver.optimizers.set.SetOptimizer;
+import com.neodem.componentConnector.solver.optimizers.set.RandomizingSetOptimizer;
 
 /**
  * @author vfumo
  * 
  */
 public class FullRunRandom {
-	
+
 	protected static final Log log = LogFactory.getLog(FullRunRandom.class);
-	
+
 	private FileConnector c = new DefaultFileConnector();
 
-	private ComponentSet makeSet() {	
+	private ComponentSet makeSet() {
 		ClassLoader classLoader = FullRunRandom.class.getClassLoader();
-		
+
 		URL url = classLoader.getResource("Full-components.xml");
 		File componentsFile = new File(url.getPath());
 
@@ -48,16 +49,16 @@ public class FullRunRandom {
 
 	public FullRunRandom() {
 		initSolver();
-		
+
 		File out = new File("best.xml");
-		
+
 		// run continuously, printing out each 'best' solution
 		int best = 1000;
 		ComponentSet startingSet = makeSet();
-		
-		SetOptimizer so = new RandomizingSetOptimizer(20000);
+
+		SetOptimizer so = new FullShiftingSetOptimizer();
 		ComponentSet solvedSet = so.optimize(startingSet);
-		
+
 		while (true) {
 			log.info("Starting Size = " + solvedSet.getTotalSize());
 			solvedSet = s.solve(solvedSet);

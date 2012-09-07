@@ -32,13 +32,9 @@ public class ComponentSet {
 	private Map<String, Component> components = new HashMap<String, Component>();
 	private Set<Endpoint> endpoints = new HashSet<Endpoint>();
 
-	public Set<Endpoint> getEndpoints() {
-		return endpoints;
-	}
+	private Collection<Connection> connections = new HashSet<Connection>();
 
 	private Map<Location, Component> componentPositions = new HashMap<Location, Component>();
-
-	private Collection<Connection> connections = new HashSet<Connection>();
 
 	private static Calculator calc = new DefaultCalculator();
 
@@ -47,8 +43,43 @@ public class ComponentSet {
 		this.sizeY = sizeY;
 	}
 
+	/**
+	 * copy a set
+	 * 
+	 * @param input
+	 * @return
+	 */
+	public static ComponentSet copy(ComponentSet input) {
+		ComponentSet setCopy = new ComponentSet(input);
+
+		for (Component component : input.components.values()) {
+			setCopy.addComponent(new Component(component));
+		}
+		
+		for(Endpoint endpoint : input.endpoints) {
+			setCopy.addEndpoint(new Endpoint(endpoint));
+		}
+		
+		for(Connection con : input.connections) {
+			String fromName = con.getFrom().getName();
+			String toName = con.getTo().getName();
+			
+			Component from = setCopy.getComponent(fromName);
+			Component to = setCopy.getComponent(toName);
+			setCopy.addConnection(new Connection(from, con.getFromPins(), to, con.getToPins()));
+		}
+		
+		setCopy.recalculate();
+
+		return setCopy;
+	}
+
 	public void addEndpoint(Endpoint endpoint) {
 		endpoints.add(endpoint);
+	}
+
+	public Set<Endpoint> getEndpoints() {
+		return endpoints;
 	}
 
 	/**
@@ -60,78 +91,6 @@ public class ComponentSet {
 	public ComponentSet(ComponentSet set) {
 		this.sizeX = set.sizeX;
 		this.sizeY = set.sizeY;
-	}
-
-	public Component getComponent(String id) {
-		return components.get(id);
-	}
-
-	public List<List<Component>> getAllRows() {
-		List<List<Component>> rows = new ArrayList<List<Component>>(sizeY);
-		for (int rowIndex = 0; rowIndex < sizeY; rowIndex++) {
-			rows.add(getRow(rowIndex));
-		}
-
-		return rows;
-	}
-
-	public Collection<Connection> getConnectionsForComponent(Component c) {
-		Collection<Connection> result = new HashSet<Connection>();
-
-		for (Connection con : connections) {
-			if (con.uses(c)) {
-				result.add(con);
-			}
-		}
-
-		return result;
-	}
-
-	// /**
-	// * a very strange operation.. this assumes that 'other' has the same # of
-	// * relays with the same names. It will copy the location and rotation of
-	// the
-	// * relays from 'other' into this one
-	// *
-	// * @param other
-	// */
-	// public void copyFrom(ComponentSet other) {
-	// if (other != this) {
-	// // throw new UnsupportedOperationException("not working right");
-	// Map<String, Component> otherComponents = other.getComponents();
-	// for (Component otherComponent : otherComponents.values()) {
-	// Component ourComponent = components.get(otherComponent.getName());
-	// ourComponent.setLocation(otherComponent.getLocation());
-	// ourComponent.setInverted(otherComponent.isInverted());
-	// }
-	// recalculate();
-	// }
-	// }
-
-	/**
-	 * return a row of the relay set, ordered
-	 * 
-	 * @param rowNum
-	 * @return
-	 */
-	public List<Component> getRow(int rowNum) {
-		List<Component> row = new ArrayList<Component>(sizeX);
-
-		if (rowNum >= 0 && rowNum < sizeY) {
-			for (Location l : componentPositions.keySet()) {
-				if (l.getY() == rowNum) {
-					row.add(componentPositions.get(l));
-				}
-			}
-
-			Collections.sort(row, new Comparator<Component>() {
-				public int compare(Component r1, Component r2) {
-					return r1.getxLoc() - r2.getxLoc();
-				}
-			});
-		}
-
-		return row;
 	}
 
 	public void addComponent(Component c) {
@@ -171,6 +130,57 @@ public class ComponentSet {
 			recalculate();
 		}
 		return c;
+	}
+
+	public Component getComponent(String id) {
+		return components.get(id);
+	}
+
+	public List<List<Component>> getAllRows() {
+		List<List<Component>> rows = new ArrayList<List<Component>>(sizeY);
+		for (int rowIndex = 0; rowIndex < sizeY; rowIndex++) {
+			rows.add(getRow(rowIndex));
+		}
+
+		return rows;
+	}
+
+	public Collection<Connection> getConnectionsForComponent(Component c) {
+		Collection<Connection> result = new HashSet<Connection>();
+
+		for (Connection con : connections) {
+			if (con.uses(c)) {
+				result.add(con);
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * return a row of the relay set, ordered
+	 * 
+	 * @param rowNum
+	 * @return
+	 */
+	protected List<Component> getRow(int rowNum) {
+		List<Component> row = new ArrayList<Component>(sizeX);
+
+		if (rowNum >= 0 && rowNum < sizeY) {
+			for (Location l : componentPositions.keySet()) {
+				if (l.getY() == rowNum) {
+					row.add(componentPositions.get(l));
+				}
+			}
+
+			Collections.sort(row, new Comparator<Component>() {
+				public int compare(Component r1, Component r2) {
+					return r1.getxLoc() - r2.getxLoc();
+				}
+			});
+		}
+
+		return row;
 	}
 
 	public String displayAll() {
@@ -293,6 +303,32 @@ public class ComponentSet {
 		int yLocNew = yLoc - 1;
 		moveComponentY(target, yLoc, yLocNew);
 	}
+	
+	/**
+	 * move the target component to the spot given. If the spot is 
+	 * occupied, we swap them.
+	 * 
+	 * @param target
+	 * @param toX
+	 * @param toY
+	 */
+	public void moveTo(Locatable target, int toX, int toY) {
+		int fromX = target.getxLoc();
+		int fromY = target.getyLoc();
+		
+		Locatable other = componentPositions.get(new Location(toX, toY));
+		if(other != null) {
+			other.setxLoc(fromX);
+			other.setyLoc(fromY);
+		}
+		
+		target.setxLoc(toX);
+		target.setyLoc(toY);
+		
+		resetComponentPositions();
+		recalculate();
+	}
+	
 
 	/**
 	 * move the target component on the Y axis from one spot to another and if
@@ -477,5 +513,4 @@ public class ComponentSet {
 	public Map<String, Component> getComponents() {
 		return components;
 	}
-
 }

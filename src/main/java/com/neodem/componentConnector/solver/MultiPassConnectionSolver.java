@@ -8,7 +8,6 @@ import org.apache.commons.logging.LogFactory;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
-import com.neodem.componentConnector.solver.optimizers.set.SetOptimizer;
 
 /**
  * Will find the largest connection and try to optimize it. If it succeeds,
@@ -30,10 +29,6 @@ public class MultiPassConnectionSolver extends BaseSolver implements Solver {
 		super(connectionOptimizers);
 	}
 	
-	public MultiPassConnectionSolver(List<ConnectionOptimizer> connectionOptimizers, SetOptimizer setOptimizer) {
-		super(connectionOptimizers, setOptimizer);
-	}
-
 	/**
 	 * this version will keep trying new largest connections until no progress
 	 * is made

@@ -2,6 +2,13 @@ package com.neodem.componentConnector.solver.optimizers.set;
 
 import com.neodem.componentConnector.model.sets.ComponentSet;
 
+/**
+ * for code that takes a ComponentSet and attempts to make it
+ * more suitable to solving.
+ * 
+ * @author vfumo
+ *
+ */
 public interface SetOptimizer {
 	
 	/**
@@ -11,5 +18,5 @@ public interface SetOptimizer {
 	 * @param input
 	 * @return
 	 */
-	public ComponentSet optimize(ComponentSet input);
+	public ComponentSet optimize(final ComponentSet input);
 }
