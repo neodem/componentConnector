@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.neodem.common.utility.Flip;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
@@ -34,21 +35,23 @@ public class MutiplePathMultiplePassConnectionSolver extends BaseSolver {
 	 * until we make no more progress
 	 */
 	public boolean solveConnection(ComponentSet set) {
-		return false;
-//		int best = set.getTotalSize();
-//		while (true) {
-//			List<Connection> largestList = ComponentSet.getAllConnectionsSortedByLargest(set);
-//
-//			for (Connection c : largestList) {
-//				optimizeConnection(c, set, best);
-//			}
-//
-//			int current = set.recalculate();
-//			if (current < best) {
-//				best = current;
-//			} else {
-//				return set;
-//			}
-//		}
+		boolean changeHappened = false;
+		while (true) {
+			
+			List<Connection> largestList = ComponentSet.getAllConnectionsSortedByLargest(set);
+
+			Flip changed = new Flip(true);
+			
+			for (Connection c : largestList) {
+				changed.accept(optimizeConnection(c, set));
+			}
+			
+			if(changed.activated()) {
+				changeHappened = true;
+			} else {
+				return changeHappened;
+			}
+		}
 	}
+	
 }

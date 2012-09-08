@@ -10,7 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import com.neodem.componentConnector.io.DefaultFileConnector;
 import com.neodem.componentConnector.io.FileConnector;
 import com.neodem.componentConnector.model.sets.ComponentSet;
-import com.neodem.componentConnector.solver.MultiPassConnectionSolver;
+import com.neodem.componentConnector.solver.MutiplePathMultiplePassConnectionSolver;
 import com.neodem.componentConnector.solver.Solver;
 import com.neodem.componentConnector.solver.optimizers.connection.ConectionInverter;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionAlternatePinTrier;
@@ -29,6 +29,8 @@ public class FullRunRandom {
 
 	private FileConnector c = new DefaultFileConnector();
 
+	private Solver s;
+	
 	private ComponentSet makeSet() {
 		ClassLoader classLoader = FullRunRandom.class.getClassLoader();
 
@@ -43,8 +45,6 @@ public class FullRunRandom {
 
 		return c.read(componentsFile, connectablesFile, connectionsFile);
 	}
-
-	private Solver s;
 
 	public FullRunRandom() {
 		initSolver();
@@ -70,7 +70,7 @@ public class FullRunRandom {
 		ConnectionOptimizer r = new ConectionInverter();
 		ConnectionOptimizer m = new ConnectionMover();
 		ConnectionOptimizer pt = new ConnectionAlternatePinTrier();
-		s = new MultiPassConnectionSolver(Arrays.asList(m, r, pt));
+		s = new MutiplePathMultiplePassConnectionSolver(Arrays.asList(m, r, pt));
 	}
 
 	public static void main(String[] args) {
