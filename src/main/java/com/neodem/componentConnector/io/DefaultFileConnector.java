@@ -18,8 +18,6 @@ import nu.xom.Elements;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
-import org.apache.commons.io.FileUtils;
-
 import com.neodem.componentConnector.model.Component;
 import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;

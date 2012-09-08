@@ -14,15 +14,20 @@ import com.neodem.graphics.text.model.GraphicsRow;
 /**
  * will simply print the set, not caring for anything like file width, etc.
  * 
+ * TODO : does not work yet.. 
+ * 
  * @author vfumo
  * 
  */
-public class CrudeConsoleDisplay implements Display {
+public class WidthConsiderateConsoleDisplay extends CrudeConsoleDisplay implements Display {
+	
+	private int width;
 
-	public void displaySet(ComponentSet set) {
-		System.out.println(asString(set));
+	public WidthConsiderateConsoleDisplay(int width) {
+		this.width = width;
 	}
 
+	@Override
 	protected String drawPanel(ComponentSet set) {
 		GraphicsPanel p = new DefaultGraphicsPanel();
 		p.setVSpacing(1);
@@ -41,12 +46,4 @@ public class CrudeConsoleDisplay implements Display {
 
 		return p.asString();
 	}
-
-	public String asString(ComponentSet set) {
-		StringBuffer b = new StringBuffer();
-		b.append(drawPanel(set));
-		b.append(set.displayConnections());
-		return b.toString();
-	}
-
 }

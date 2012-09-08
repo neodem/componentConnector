@@ -3,6 +3,7 @@ package com.neodem.componentConnector.graphics;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 
 /**
+ * Wil display a set
  * @author vfumo
  * 
  */
