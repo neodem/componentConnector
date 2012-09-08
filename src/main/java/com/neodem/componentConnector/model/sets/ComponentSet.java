@@ -136,15 +136,6 @@ public class ComponentSet {
 		return components.get(id);
 	}
 
-	public List<List<Component>> getAllRows() {
-		List<List<Component>> rows = new ArrayList<List<Component>>(sizeY);
-		for (int rowIndex = 0; rowIndex < sizeY; rowIndex++) {
-			rows.add(getRow(rowIndex));
-		}
-
-		return rows;
-	}
-
 	public Collection<Connection> getConnectionsForComponent(Component c) {
 		Collection<Connection> result = new HashSet<Connection>();
 
@@ -163,7 +154,7 @@ public class ComponentSet {
 	 * @param rowNum
 	 * @return
 	 */
-	protected List<Component> getRow(int rowNum) {
+	public List<Component> getRow(int rowNum) {
 		List<Component> row = new ArrayList<Component>(sizeX);
 
 		if (rowNum >= 0 && rowNum < sizeY) {

@@ -31,9 +31,12 @@ public class WidthConsiderateConsoleDisplay extends CrudeConsoleDisplay implemen
 	protected String drawPanel(ComponentSet set) {
 		GraphicsPanel p = new DefaultGraphicsPanel();
 		p.setVSpacing(1);
+		
+		int sizeY = set.getSizeY();
+		
+		List<List<Component>> comps = getAllRows(set, sizeY);
 
-		List<List<Component>> relays = set.getAllRows();
-		for (List<Component> row : relays) {
+		for (List<Component> row : comps) {
 			GraphicsRow gRow = new DefaultGraphicsRow();
 			for (Component c : row) {
 				Collection<Connection> cons = set.getConnectionsForComponent(c);
