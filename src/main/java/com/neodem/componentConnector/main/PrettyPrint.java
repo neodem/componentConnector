@@ -16,7 +16,7 @@ public class PrettyPrint {
 	public PrettyPrint() {
 		ClassLoader classLoader = FullRunRandom.class.getClassLoader();
 		
-		URL url = classLoader.getResource("Full-Located-components.xml");
+		URL url = classLoader.getResource("Full-components.xml");
 		File componentsFile = new File(url.getPath());
 
 		url = classLoader.getResource("Full-connectables.xml");

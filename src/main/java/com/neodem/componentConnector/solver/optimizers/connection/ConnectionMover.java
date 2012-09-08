@@ -93,7 +93,7 @@ public class ConnectionMover implements ConnectionOptimizer {
 
 				// did we improve?
 				int newTotalDistance = set.getTotalSize();
-				if (newTotalDistance <= initialTotalDistance) {
+				if (newTotalDistance < initialTotalDistance) {
 					// yes!
 					log.debug("moved horizontal " + mov +  " size was " + initialTotalDistance + " now is " + newTotalDistance);
 					return true;
@@ -129,7 +129,7 @@ public class ConnectionMover implements ConnectionOptimizer {
 
 				// did we improve?
 				int newTotalDistance = set.getTotalSize();
-				if (newTotalDistance <= initialTotalDistance) {
+				if (newTotalDistance < initialTotalDistance) {
 					// yes!
 					log.debug("moved vertical " + mov +  " size was " + initialTotalDistance + " now is " + newTotalDistance);
 					return true;

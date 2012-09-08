@@ -34,7 +34,7 @@ public class FullRunRandom {
 	private ComponentSet makeSet() {
 		ClassLoader classLoader = FullRunRandom.class.getClassLoader();
 
-		URL url = classLoader.getResource("Full-components.xml");
+		URL url = classLoader.getResource("Full-components-unLocated.xml");
 		File componentsFile = new File(url.getPath());
 
 		url = classLoader.getResource("Full-connectables.xml");
