@@ -149,7 +149,7 @@ public class ComponentSet {
 	}
 
 	/**
-	 * return a row of the relay set, ordered
+	 * return a row of the set, ordered
 	 * 
 	 * @param rowNum
 	 * @return
@@ -172,6 +172,32 @@ public class ComponentSet {
 		}
 
 		return row;
+	}
+	
+	/**
+	 * return a column of the set, ordered
+	 * 
+	 * @param colNum
+	 * @return
+	 */
+	public List<Component> getCol(int colNum) {
+		List<Component> col = new ArrayList<Component>(sizeY);
+		
+		if (colNum >= 0 && colNum < sizeX) {
+			for (Location l : componentPositions.keySet()) {
+				if (l.getX() == colNum) {
+					col.add(componentPositions.get(l));
+				}
+			}
+			
+			Collections.sort(col, new Comparator<Component>() {
+				public int compare(Component r1, Component r2) {
+					return r1.getxLoc() - r2.getxLoc();
+				}
+			});
+		}
+		
+		return col;
 	}
 
 	public String displayAll() {
