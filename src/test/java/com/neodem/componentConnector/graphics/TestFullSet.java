@@ -39,7 +39,7 @@ public class TestFullSet {
 
 	@Test
 	public void test() {
-		d.displaySet(set);
+		System.out.println(d.asString(set));
 	}
 
 }

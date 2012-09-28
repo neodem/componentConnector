@@ -1,26 +1,21 @@
 package com.neodem.componentConnector.graphics;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.neodem.componentConnector.model.Component;
-import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
-import com.neodem.graphics.text.model.DefaultGraphicsPanel;
-import com.neodem.graphics.text.model.DefaultGraphicsRow;
-import com.neodem.graphics.text.model.GraphicsPanel;
-import com.neodem.graphics.text.model.GraphicsRow;
 
 /**
- * will simply print the set, not caring for anything like file width, etc.
  * 
- * TODO : does not work yet.. 
+ * 
+ * TODO : does not work yet..
  * 
  * @author vfumo
  * 
  */
 public class WidthConsiderateConsoleDisplay extends CrudeConsoleDisplay implements Display {
-	
+
 	private int width;
 
 	public WidthConsiderateConsoleDisplay(int width) {
@@ -28,25 +23,63 @@ public class WidthConsiderateConsoleDisplay extends CrudeConsoleDisplay implemen
 	}
 
 	@Override
-	protected String drawPanel(ComponentSet set) {
-		GraphicsPanel p = new DefaultGraphicsPanel();
-		p.setVSpacing(1);
-		
-		int sizeY = set.getSizeY();
-		
-		List<List<Component>> comps = getAllRows(set, sizeY);
+	protected String drawSetAsString(ComponentSet set) {
 
-		for (List<Component> row : comps) {
-			GraphicsRow gRow = new DefaultGraphicsRow();
-			for (Component c : row) {
-				Collection<Connection> cons = set.getConnectionsForComponent(c);
-					GraphicalComponent gComp = new GraphicalComponent(c);
-					gComp.addRelatedConnections(cons);
-					gRow.add(gComp);
-				}
-			p.addRow(gRow);
+		int totalCols = set.getNumColumns();
+		int colStart = 0;
+
+		StringBuffer b = new StringBuffer();
+
+		do {
+			int colEnd = colStart + width - 1;
+			List<List<Component>> pagedComponents = getPagedComponents(set, colStart, colEnd);
+			b.append(drawIntoString(pagedComponents, set));
+			colStart += width;
+			
+			b.append("--------next page\n\n");
+		} while (colStart < totalCols);
+
+		return b.toString();
+	}
+
+	protected List<List<Component>> getPagedComponents(ComponentSet set, int colStart, int colEnd) {
+		int rows = set.getSizeY();
+		List<List<Component>> comps = new ArrayList<List<Component>>(rows);
+		for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
+			List<Component> row = set.getRow(rowIndex);
+			List<Component> windowedRow = windowRow(colStart, colEnd, row);
+			if (windowedRow != null) {
+				comps.add(windowedRow);
+			}
+		}
+		return comps;
+	}
+
+	/**
+	 * for a given row, return a new list of just the cols we specify (if they
+	 * exist in the row)
+	 * 
+	 * @param colStart
+	 * @param colEnd
+	 * @param row
+	 * @return
+	 */
+	protected List<Component> windowRow(int colStart, int colEnd, List<Component> row) {
+		if (row == null) {
+			return null;
 		}
 
-		return p.asString();
+		List<Component> windowedRow = new ArrayList<Component>();
+		for (int i = colStart; i < colEnd+1; i++) {
+			Component c = null;
+			try {
+				c = row.get(i);
+				windowedRow.add(c);
+			} catch (IndexOutOfBoundsException e) {
+				windowedRow.add(null);
+			}
+		}
+
+		return windowedRow;
 	}
 }

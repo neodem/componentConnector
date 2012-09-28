@@ -149,7 +149,9 @@ public class ComponentSet {
 	}
 
 	/**
-	 * return a row of the set, ordered
+	 * return a row of the set, ordered so that the first 
+	 * element of the list is the leftmost component
+	 * and the last is the rightmost
 	 * 
 	 * @param rowNum
 	 * @return
@@ -529,5 +531,9 @@ public class ComponentSet {
 
 	public Map<String, Component> getComponents() {
 		return components;
+	}
+
+	public int getNumColumns() {
+		return sizeX;
 	}
 }

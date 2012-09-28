@@ -20,33 +20,23 @@ import com.neodem.graphics.text.model.GraphicsRow;
  */
 public class CrudeConsoleDisplay implements Display {
 
-	public void displaySet(ComponentSet set) {
-		System.out.println(asString(set));
+	public String asString(ComponentSet set) {
+		StringBuffer b = new StringBuffer();
+		b.append(drawSetAsString(set));
+		b.append(set.displayConnections());
+		return b.toString();
 	}
 
-	protected String drawPanel(ComponentSet set) {
-		GraphicsPanel p = new DefaultGraphicsPanel();
-		p.setVSpacing(1);
-		
+	/**
+	 * 
+	 * @param set
+	 * @return a double list of Components with the outer list being the row and
+	 *         the inner list being the components in that row
+	 */
+	protected List<List<Component>> getComponentsToDraw(ComponentSet set) {
 		int sizeY = set.getSizeY();
-		
-		List<List<Component>> comps = getAllRows(set, sizeY);
 
-		for (List<Component> row : comps) {
-			GraphicsRow gRow = new DefaultGraphicsRow();
-			for (Component c : row) {
-				Collection<Connection> cons = set.getConnectionsForComponent(c);
-					GraphicalComponent gComp = new GraphicalComponent(c);
-					gComp.addRelatedConnections(cons);
-					gRow.add(gComp);
-				}
-			p.addRow(gRow);
-		}
-
-		return p.asString();
-	}
-
-	protected List<List<Component>> getAllRows(ComponentSet set, int sizeY) {
+		// get all rows of the set
 		List<List<Component>> comps = new ArrayList<List<Component>>(sizeY);
 		for (int rowIndex = 0; rowIndex < sizeY; rowIndex++) {
 			comps.add(set.getRow(rowIndex));
@@ -54,11 +44,35 @@ public class CrudeConsoleDisplay implements Display {
 		return comps;
 	}
 
-	public String asString(ComponentSet set) {
-		StringBuffer b = new StringBuffer();
-		b.append(drawPanel(set));
-		b.append(set.displayConnections());
-		return b.toString();
+	protected String drawSetAsString(ComponentSet set) {
+		List<List<Component>> comps = getComponentsToDraw(set);
+		return drawIntoString(comps, set);
+	}
+
+	/**
+	 * 
+	 * @param comps
+	 * @param set
+	 * @return
+	 */
+	protected String drawIntoString(List<List<Component>> comps, ComponentSet set) {
+		GraphicsPanel p = new DefaultGraphicsPanel();
+		p.setVSpacing(1);
+
+		for (List<Component> row : comps) {
+			GraphicsRow gRow = new DefaultGraphicsRow();
+			for (Component c : row) {
+				if (c != null) {
+					Collection<Connection> cons = set.getConnectionsForComponent(c);
+					GraphicalComponent gComp = new GraphicalComponent(c);
+					gComp.addRelatedConnections(cons);
+					gRow.add(gComp);
+				}
+			}
+			p.addRow(gRow);
+		}
+
+		return p.asString();
 	}
 
 }

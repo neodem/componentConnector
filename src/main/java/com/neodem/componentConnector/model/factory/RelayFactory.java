@@ -17,10 +17,10 @@ public class RelayFactory extends ConnectableFactory {
 		super(defs);
 	}
 	
-	public Component make(String name, int x, int y) {
+	public Component make(String name, int col, int row) {
 		Component c = (Component) super.make("relay", name);
-		c.setxLoc(x);
-		c.setyLoc(y);
+		c.setxLoc(col);
+		c.setyLoc(row);
 		return c;
 	}
 
