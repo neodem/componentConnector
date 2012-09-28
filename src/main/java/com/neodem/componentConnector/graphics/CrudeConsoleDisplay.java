@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.neodem.componentConnector.model.BlankComponent;
 import com.neodem.componentConnector.model.Component;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
@@ -46,7 +47,7 @@ public class CrudeConsoleDisplay implements Display {
 
 	protected String drawSetAsString(ComponentSet set) {
 		List<List<Component>> comps = getComponentsToDraw(set);
-		return drawIntoString(comps, set);
+		return drawIntoString(comps, set, 0);
 	}
 
 	/**
@@ -55,21 +56,28 @@ public class CrudeConsoleDisplay implements Display {
 	 * @param set
 	 * @return
 	 */
-	protected String drawIntoString(List<List<Component>> comps, ComponentSet set) {
+	protected String drawIntoString(List<List<Component>> comps, ComponentSet set, int colOffset) {
 		GraphicsPanel p = new DefaultGraphicsPanel();
 		p.setVSpacing(1);
-
+		
+		int rowNum = 0;
 		for (List<Component> row : comps) {
 			GraphicsRow gRow = new DefaultGraphicsRow();
+			int colNum = colOffset;
 			for (Component c : row) {
-				if (c != null) {
+				GraphicalComponent gComp;
+				if (c == null) {
+					gComp = new GraphicalComponent(new BlankComponent(colNum, rowNum));
+				} else {
+					gComp = new GraphicalComponent(c);
 					Collection<Connection> cons = set.getConnectionsForComponent(c);
-					GraphicalComponent gComp = new GraphicalComponent(c);
 					gComp.addRelatedConnections(cons);
-					gRow.add(gComp);
 				}
+				gRow.add(gComp);
+				colNum++;
 			}
 			p.addRow(gRow);
+			rowNum++;
 		}
 
 		return p.asString();

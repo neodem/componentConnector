@@ -259,23 +259,4 @@ public class ComponentSetTest extends AbstractBaseRelayLocatorTest {
 		assertThat((Component) result.get(1), equalTo(r2));
 	}
 	
-	@Test
-	public void getColShouldWorkCorrectly() {
-		ComponentSet set = new ComponentSet(3, 3);
-		Component r1 = relayFactory.make("1", 1, 2);
-		set.addComponent(r1);
-		Component r2 = relayFactory.make("2", 2, 2);
-		set.addComponent(r2);
-		Component r5 = relayFactory.make("5", 2, 1);
-		set.addComponent(r5);
-		Component r3 = relayFactory.make("3", 1, 1);
-		set.addComponent(r3);
-		Component r4 = relayFactory.make("4", 1, 0);
-		set.addComponent(r4);
-		
-		List<Component> result = set.getCol(2);
-		assertThat(result.size(), is(2));
-		assertThat((Component) result.get(0), equalTo(r5));
-		assertThat((Component) result.get(1), equalTo(r2));
-	}
 }

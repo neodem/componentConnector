@@ -149,9 +149,9 @@ public class ComponentSet {
 	}
 
 	/**
-	 * return a row of the set, ordered so that the first 
-	 * element of the list is the leftmost component
-	 * and the last is the rightmost
+	 * return a row of the set, ordered based on positions
+	 * with the left most being col = 0 and the right most
+	 * being col = sizeX-1
 	 * 
 	 * @param rowNum
 	 * @return
@@ -160,46 +160,13 @@ public class ComponentSet {
 		List<Component> row = new ArrayList<Component>(sizeX);
 
 		if (rowNum >= 0 && rowNum < sizeY) {
-			for (Location l : componentPositions.keySet()) {
-				if (l.getY() == rowNum) {
-					row.add(componentPositions.get(l));
-				}
+			for(int colIndex = 0; colIndex < sizeX; colIndex++) {
+				Location loc = new Location(colIndex, rowNum);
+				row.add(componentPositions.get(loc));
 			}
-
-			Collections.sort(row, new Comparator<Component>() {
-				public int compare(Component r1, Component r2) {
-					return r1.getxLoc() - r2.getxLoc();
-				}
-			});
 		}
 
 		return row;
-	}
-	
-	/**
-	 * return a column of the set, ordered
-	 * 
-	 * @param colNum
-	 * @return
-	 */
-	public List<Component> getCol(int colNum) {
-		List<Component> col = new ArrayList<Component>(sizeY);
-		
-		if (colNum >= 0 && colNum < sizeX) {
-			for (Location l : componentPositions.keySet()) {
-				if (l.getX() == colNum) {
-					col.add(componentPositions.get(l));
-				}
-			}
-			
-			Collections.sort(col, new Comparator<Component>() {
-				public int compare(Component r1, Component r2) {
-					return r1.getxLoc() - r2.getxLoc();
-				}
-			});
-		}
-		
-		return col;
 	}
 
 	public String displayAll() {

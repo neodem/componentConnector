@@ -33,7 +33,7 @@ public class WidthConsiderateConsoleDisplay extends CrudeConsoleDisplay implemen
 		do {
 			int colEnd = colStart + width - 1;
 			List<List<Component>> pagedComponents = getPagedComponents(set, colStart, colEnd);
-			b.append(drawIntoString(pagedComponents, set));
+			b.append(drawIntoString(pagedComponents, set, colStart));
 			colStart += width;
 			
 			b.append("--------next page\n\n");

@@ -60,11 +60,8 @@ public class GraphicalComponent implements GraphicsObject {
 		// generate lines
 		String line = "";
 		for (int lineIndex = 0; lineIndex < height; lineIndex++) {
-
 			// --- make the line
-
 			line = makeLine(lineIndex);
-
 			// add line
 			lines.add(line);
 		}
@@ -85,6 +82,8 @@ public class GraphicalComponent implements GraphicsObject {
 				middleText = parent.getName();
 			} else if (middleIndex == 2) {
 				middleText = makeInfoString(parent);
+			} else if (middleIndex == 3) {
+				middleText = parent.getLocation().toString();
 			}
 
 			String middleContent = makeMiddleContent(middleIndex, middleText);
@@ -197,7 +196,7 @@ public class GraphicalComponent implements GraphicsObject {
 		}
 		return info.toString();
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
