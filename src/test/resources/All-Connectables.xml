@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <connectableDefs>
 	<connectableDef id="relay" type="component" pins="12">
 		<pin number="1" name="IN" />
