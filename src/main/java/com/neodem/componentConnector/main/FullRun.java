@@ -22,29 +22,28 @@ import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOpti
  * 
  */
 public class FullRun {
-	
+
 	protected static final Log log = LogFactory.getLog(FullRun.class);
-	
+
 	private FileConnector c;
 
 	public FullRun() {
 		c = initFileConnector();
 		Solver s = getSolver();
 		ComponentSet set = getInitialComponentSet();
-		
+
 		File bestFile = new File("best.xml");
 		int best = set.getTotalSize();
 		while (true) {
 			s.solve(set);
 			int size = set.getTotalSize();
-			if (size < best) {
-				best = size;
-				log.info("found better solution : " + best);
-				c.writeComponentSetToFile(set, bestFile);
-				set = c.readIntoComponentSet(bestFile);
-			} else {
+			if (size >= best) {
 				break;
 			}
+			best = size;
+			log.info("found better solution : " + best);
+			c.writeComponentSetToFile(set, bestFile);
+			set = c.readIntoComponentSet(bestFile);
 		}
 	}
 
@@ -53,19 +52,19 @@ public class FullRun {
 
 		URL url = classLoader.getResource("All-Connectables.xml");
 		File defs = new File(url.getPath());
-		
+
 		return new DefaultFileConnector(defs);
 	}
 
 	private ComponentSet getInitialComponentSet() {
 		ClassLoader classLoader = FullRun.class.getClassLoader();
-		
+
 		URL url = classLoader.getResource("All.xml");
 		File componentsFile = new File(url.getPath());
-		
+
 		return c.readIntoComponentSet(componentsFile);
 	}
-	
+
 	private Solver getSolver() {
 		ConnectionOptimizer r = new ConectionInverter();
 		ConnectionOptimizer m = new ConnectionMover();

@@ -10,7 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.neodem.componentConnector.model.Component;
+import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.Endpoint;
 import com.neodem.componentConnector.model.Locatable;
@@ -31,6 +35,11 @@ public class ComponentSet {
 
 	private Map<String, Component> components = new HashMap<String, Component>();
 	private Set<Endpoint> endpoints = new HashSet<Endpoint>();
+
+	/**
+	 * <name, Connectable>
+	 */
+	private Map<String, Connectable> allConnectables = new HashMap<String, Connectable>();
 
 	private Collection<Connection> connections = new HashSet<Connection>();
 
@@ -55,27 +64,32 @@ public class ComponentSet {
 		for (Component component : input.components.values()) {
 			setCopy.addComponent(new Component(component));
 		}
-		
-		for(Endpoint endpoint : input.endpoints) {
+
+		for (Endpoint endpoint : input.endpoints) {
 			setCopy.addEndpoint(new Endpoint(endpoint));
 		}
-		
-		for(Connection con : input.connections) {
+
+		for (Connection con : input.connections) {
 			String fromName = con.getFrom().getName();
 			String toName = con.getTo().getName();
-			
-			Component from = setCopy.getComponent(fromName);
-			Component to = setCopy.getComponent(toName);
+
+			Connectable from = setCopy.getConnectable(fromName);
+			Connectable to = setCopy.getConnectable(toName);
 			setCopy.addConnection(new Connection(from, con.getFromPins(), to, con.getToPins()));
 		}
-		
+
 		setCopy.recalculate();
 
 		return setCopy;
 	}
+	
+	public Connectable getConnectable(String name) {
+		return allConnectables.get(name);
+	}
 
 	public void addEndpoint(Endpoint endpoint) {
 		endpoints.add(endpoint);
+		allConnectables.put(endpoint.getName(), endpoint);
 	}
 
 	public Set<Endpoint> getEndpoints() {
@@ -114,11 +128,12 @@ public class ComponentSet {
 			}
 
 			String id = c.getName();
-			if (components.containsKey(id)) {
+			if (allConnectables.containsKey(id)) {
 				throw new IllegalArgumentException("component has a duplicate key");
 			}
 
 			components.put(id, c);
+			allConnectables.put(id, c);
 			componentPositions.put(location, c);
 			recalculate();
 		}
@@ -149,9 +164,8 @@ public class ComponentSet {
 	}
 
 	/**
-	 * return a row of the set, ordered based on positions
-	 * with the left most being col = 0 and the right most
-	 * being col = sizeX-1
+	 * return a row of the set, ordered based on positions with the left most
+	 * being col = 0 and the right most being col = sizeX-1
 	 * 
 	 * @param rowNum
 	 * @return
@@ -160,7 +174,7 @@ public class ComponentSet {
 		List<Component> row = new ArrayList<Component>(sizeX);
 
 		if (rowNum >= 0 && rowNum < sizeY) {
-			for(int colIndex = 0; colIndex < sizeX; colIndex++) {
+			for (int colIndex = 0; colIndex < sizeX; colIndex++) {
 				Location loc = new Location(colIndex, rowNum);
 				row.add(componentPositions.get(loc));
 			}
@@ -177,7 +191,12 @@ public class ComponentSet {
 		b.append('\n');
 
 		List<Component> cList = new ArrayList<Component>(components.values());
-		Collections.sort(cList);
+		Collections.sort(cList, new Comparator<Component>() {
+
+			public int compare(Component o1, Component o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
 
 		for (Component c : cList) {
 			b.append(c.toString());
@@ -289,10 +308,10 @@ public class ComponentSet {
 		int yLocNew = yLoc - 1;
 		moveComponentY(target, yLoc, yLocNew);
 	}
-	
+
 	/**
-	 * move the target component to the spot given. If the spot is 
-	 * occupied, we swap them.
+	 * move the target component to the spot given. If the spot is occupied, we
+	 * swap them.
 	 * 
 	 * @param target
 	 * @param toX
@@ -301,20 +320,19 @@ public class ComponentSet {
 	public void moveTo(Locatable target, int toX, int toY) {
 		int fromX = target.getxLoc();
 		int fromY = target.getyLoc();
-		
+
 		Locatable other = componentPositions.get(new Location(toX, toY));
-		if(other != null) {
+		if (other != null) {
 			other.setxLoc(fromX);
 			other.setyLoc(fromY);
 		}
-		
+
 		target.setxLoc(toX);
 		target.setyLoc(toY);
-		
+
 		resetComponentPositions();
 		recalculate();
 	}
-	
 
 	/**
 	 * move the target component on the Y axis from one spot to another and if
@@ -369,6 +387,8 @@ public class ComponentSet {
 	public void clear() {
 		components.clear();
 		componentPositions.clear();
+		endpoints.clear();
+		allConnectables.clear();
 	}
 
 	private void resetComponentPositions() {
@@ -397,14 +417,8 @@ public class ComponentSet {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((connections == null) ? 0 : connections.hashCode());
-		result = prime * result + ((components == null) ? 0 : components.hashCode());
-		result = prime * result + sizeX;
-		result = prime * result + sizeY;
-		result = prime * result + totalSize;
-		return result;
+		return new HashCodeBuilder(21, 11).append(sizeX).append(sizeY).append(totalSize).append(components)
+				.append(endpoints).append(allConnectables).append(connections).append(componentPositions).toHashCode();
 	}
 
 	/*
@@ -414,40 +428,19 @@ public class ComponentSet {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof ComponentSet)) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		ComponentSet other = (ComponentSet) obj;
-		if (connections == null) {
-			if (other.connections != null) {
-				return false;
-			}
-		} else if (!connections.equals(other.connections)) {
-			return false;
-		}
-		if (components == null) {
-			if (other.components != null) {
-				return false;
-			}
-		} else if (!components.equals(other.components)) {
-			return false;
-		}
-		if (sizeX != other.sizeX) {
-			return false;
-		}
-		if (sizeY != other.sizeY) {
-			return false;
-		}
-		if (totalSize != other.totalSize) {
-			return false;
-		}
-		return true;
+		ComponentSet rhs = (ComponentSet) obj;
+		return new EqualsBuilder().append(sizeX, rhs.sizeX).append(sizeY, rhs.sizeY).append(totalSize, rhs.totalSize)
+				.append(components, rhs.components).append(endpoints, rhs.endpoints).append(allConnectables, rhs.allConnectables)
+				.append(connections, rhs.connections).append(componentPositions, rhs.componentPositions).isEquals();
 	}
 
 	/**

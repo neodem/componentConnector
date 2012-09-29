@@ -56,8 +56,8 @@ public class MultiPassWithRotatorAndMoverTest extends AbstractBaseRelayLocatorTe
 
 		solver.solve(set);
 		
-		assertThat(set.getComponent("from").isInverted(), is(false));
-		assertThat(set.getComponent("to").isInverted(), is(false));
+		assertThat(set.getConnectable("from").isInverted(), is(false));
+		assertThat(set.getConnectable("to").isInverted(), is(false));
 	}
 
 	@Test
@@ -74,8 +74,8 @@ public class MultiPassWithRotatorAndMoverTest extends AbstractBaseRelayLocatorTe
 
 		solver.solve(set);
 		
-		assertThat(set.getComponent("from").isInverted(), is(false));
-		assertThat(set.getComponent("to").isInverted(), is(true));
+		assertThat(set.getConnectable("from").isInverted(), is(false));
+		assertThat(set.getConnectable("to").isInverted(), is(true));
 	}
 
 	@Test
@@ -92,8 +92,8 @@ public class MultiPassWithRotatorAndMoverTest extends AbstractBaseRelayLocatorTe
 
 		solver.solve(set);
 		
-		assertThat(set.getComponent("from").isInverted(), is(true));
-		assertThat(set.getComponent("to").isInverted(), is(false));
+		assertThat(set.getConnectable("from").isInverted(), is(true));
+		assertThat(set.getConnectable("to").isInverted(), is(false));
 	}
 
 	@Test
@@ -110,8 +110,8 @@ public class MultiPassWithRotatorAndMoverTest extends AbstractBaseRelayLocatorTe
 
 		solver.solve(set);
 		
-		assertThat(set.getComponent("from").isInverted(), is(true));
-		assertThat(set.getComponent("to").isInverted(), is(true));
+		assertThat(set.getConnectable("from").isInverted(), is(true));
+		assertThat(set.getConnectable("to").isInverted(), is(true));
 	}
 
 	@Test
@@ -134,10 +134,10 @@ public class MultiPassWithRotatorAndMoverTest extends AbstractBaseRelayLocatorTe
 		solver.solve(set);
 		assertThat(set.getTotalSize(), is(0));
 		
-		assertThat(set.getComponent("from").isInverted(), is(false));
-		assertThat(set.getComponent("to").isInverted(), is(true));
-		assertThat(set.getComponent("r3").isInverted(), is(false));
-		assertThat(set.getComponent("r4").isInverted(), is(false));
+		assertThat(set.getConnectable("from").isInverted(), is(false));
+		assertThat(set.getConnectable("to").isInverted(), is(true));
+		assertThat(set.getConnectable("r3").isInverted(), is(false));
+		assertThat(set.getConnectable("r4").isInverted(), is(false));
 		
 		assertThat(set.getComponent("from").getLocation(), equalTo(new Location(0,0)));
 		assertThat(set.getComponent("to").getLocation(), equalTo(new Location(0,1)));

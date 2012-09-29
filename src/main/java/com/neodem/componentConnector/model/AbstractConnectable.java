@@ -3,12 +3,11 @@ package com.neodem.componentConnector.model;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+public abstract class AbstractConnectable extends AbstractNameable implements Connectable {
 
-public abstract class AbstractConnectable implements Connectable {
-
-	private String name;
-	
 	private String id;
 
 	private int pinCount;
@@ -19,9 +18,9 @@ public abstract class AbstractConnectable implements Connectable {
 	 * this means that the sides are reversed
 	 */
 	private boolean inverted = false;
-	
+
 	public AbstractConnectable(String name, String id, int pinCount) {
-		this.name = name;
+		super(name);
 		this.id = id;
 		this.pinCount = pinCount;
 		this.inverted = false;
@@ -35,7 +34,7 @@ public abstract class AbstractConnectable implements Connectable {
 	 */
 	public Collection<Pin> getPins(String pinLabel) {
 		Collection<Pin> returnPins = new HashSet<Pin>(pinCount);
-		
+
 		for (Pin p : pins) {
 			if (p.getLabel().equals(pinLabel)) {
 				returnPins.add(p);
@@ -44,10 +43,6 @@ public abstract class AbstractConnectable implements Connectable {
 		return returnPins;
 	}
 
-	public int compareTo(Component other) {
-		return name.compareTo(other.getName());
-	}
-	
 	/**
 	 * make one rotation of the relay
 	 */
@@ -58,14 +53,14 @@ public abstract class AbstractConnectable implements Connectable {
 			inverted = true;
 		}
 	}
-	
+
 	/**
 	 * @return the rotated
 	 */
 	public boolean isInverted() {
 		return inverted;
 	}
-	
+
 	public void setInverted(boolean inverted) {
 		this.inverted = inverted;
 	}
@@ -77,40 +72,25 @@ public abstract class AbstractConnectable implements Connectable {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 17;
-		int result = 1;
-		result = prime * result + (inverted ? 1231 : 1237);
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
+		return new HashCodeBuilder(19, 59).appendSuper(super.hashCode()).append(inverted).append(id).append(pinCount)
+				.append(pins).toHashCode();
 	}
 
-	/**
-	 * only checks for the same name.
-	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof Connectable)) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		Connectable other = (Connectable) obj;
-		if (name == null) {
-			if (other.getName() != null) {
-				return false;
-			}
-		} else if (!name.equals(other.getName())) {
-			return false;
-		}
-
-		return true;
+		AbstractConnectable rhs = (AbstractConnectable) obj;
+		return new EqualsBuilder().appendSuper(super.equals(obj)).append(inverted, rhs.inverted).append(id, rhs.id)
+				.append(pinCount, rhs.pinCount).append(pins, rhs.pins).isEquals();
 	}
-
 
 	/**
 	 * 
@@ -159,31 +139,8 @@ public abstract class AbstractConnectable implements Connectable {
 		this.pins = pins;
 	}
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public int getNumberofPins() {
 		return pinCount;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Connectable [name=" + name + "]";
 	}
 
 	public String getId() {

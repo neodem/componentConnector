@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.neodem.componentConnector.model.Component;
+import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.AutoAddComponentSet;
 import com.neodem.componentConnector.model.sets.ComponentSet;
@@ -83,8 +84,8 @@ public class RandomizingSetOptimizer implements SetOptimizer {
 			String fromName = c.getFrom().getName();
 			String toName = c.getTo().getName();
 			
-			Component from = newSet.getComponent(fromName);
-			Component to = newSet.getComponent(toName);
+			Connectable from = newSet.getConnectable(fromName);
+			Connectable to = newSet.getConnectable(toName);
 
 			newSet.addConnection(new Connection(from, c.getFromPins(), to, c.getToPins()));
 		}

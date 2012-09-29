@@ -156,7 +156,7 @@ public class ComponentSetTest extends AbstractBaseRelayLocatorTest {
 
 		int hashBefore = set.hashCode();
 
-		set.getComponent("from").invert();
+		set.getConnectable("from").invert();
 
 		int hashAfter = set.hashCode();
 

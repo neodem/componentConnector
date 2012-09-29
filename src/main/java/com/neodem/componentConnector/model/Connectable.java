@@ -2,9 +2,7 @@ package com.neodem.componentConnector.model;
 
 import java.util.Collection;
 
-public interface Connectable {
-
-	String getName();
+public interface Connectable extends Nameable {
 
 	int getNumberofPins();
 

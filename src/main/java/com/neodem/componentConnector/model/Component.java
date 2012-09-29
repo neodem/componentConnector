@@ -1,7 +1,5 @@
 package com.neodem.componentConnector.model;
 
-
-
 /**
  * all components are done vertically with pin numbers from the top to the
  * bottom on each side. (ie. there can be a 1R and a 1L)
@@ -9,7 +7,7 @@ package com.neodem.componentConnector.model;
  * @author vfumo
  * 
  */
-public class Component extends AbstractLocatable implements Connectable, Locatable, Comparable<Component> {
+public class Component extends AbstractLocatable implements Connectable, Locatable {
 
 	public Component(String name, String id, int pinCount) {
 		super(name, id, pinCount, 0, 0);
@@ -36,5 +34,10 @@ public class Component extends AbstractLocatable implements Connectable, Locatab
 	public String toString() {
 		return "Component [name=" + getName() + ", inverted=" + isInverted() + ", moveable=" + isMoveable() + ", location="
 				+ getLocation() + "]";
+	}
+
+	public int compareTo(Component o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
