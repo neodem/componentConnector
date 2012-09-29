@@ -375,6 +375,10 @@ public class ComponentSet {
 		resetComponentPositions();
 		recalculate();
 	}
+	
+	public void invertConnectable(Connectable c) {
+		
+	}
 
 	public Collection<Connection> getAllConnections() {
 		return connections;
@@ -496,4 +500,6 @@ public class ComponentSet {
 	public int getNumColumns() {
 		return sizeX;
 	}
+
+
 }

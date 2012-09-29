@@ -7,8 +7,4 @@ public interface Connectable extends Nameable {
 	int getNumberofPins();
 
 	Collection<Pin> getPins(String pinLabel);
-
-	boolean isInverted();
-
-	void invert();
 }

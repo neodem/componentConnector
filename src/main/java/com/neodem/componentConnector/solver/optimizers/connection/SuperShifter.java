@@ -30,7 +30,6 @@ public class SuperShifter implements ConnectionOptimizer {
 	 * com.neodem.componentConnector.model.sets.ComponentSet)
 	 */
 	public boolean optimize(Connection c, ComponentSet set) {
-		int initialTotalDistance = set.getTotalSize();
 
 		// -- check adjacency
 		if (ConnectionTools.onSameRow(c) && ConnectionTools.nextToEachOtherHorizontally(c)) {

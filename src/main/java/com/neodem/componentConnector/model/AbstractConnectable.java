@@ -43,28 +43,6 @@ public abstract class AbstractConnectable extends AbstractNameable implements Co
 		return returnPins;
 	}
 
-	/**
-	 * make one rotation of the relay
-	 */
-	public void invert() {
-		if (inverted) {
-			inverted = false;
-		} else {
-			inverted = true;
-		}
-	}
-
-	/**
-	 * @return the rotated
-	 */
-	public boolean isInverted() {
-		return inverted;
-	}
-
-	public void setInverted(boolean inverted) {
-		this.inverted = inverted;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
