@@ -25,9 +25,12 @@ public class FullRun {
 
 	protected static final Log log = LogFactory.getLog(FullRun.class);
 
-	private FileConnector c;
+	private FileConnector fc;
+	
+	private Calculator c;
 
 	public FullRun() {
+		c = new 
 		c = initFileConnector();
 		Solver s = getSolver();
 		ComponentSet set = getInitialComponentSet();

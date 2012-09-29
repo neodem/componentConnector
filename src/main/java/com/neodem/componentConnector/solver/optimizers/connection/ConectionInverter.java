@@ -7,7 +7,7 @@ import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.tools.Calculator;
-import com.neodem.componentConnector.tools.DefaultCalculator;
+import com.neodem.componentConnector.tools.Calculator;
 
 /**
  * Will try to rotate the 'to' Connectable and see if that improved the world, else
@@ -19,7 +19,7 @@ import com.neodem.componentConnector.tools.DefaultCalculator;
 public class ConectionInverter implements ConnectionOptimizer {
 	private static final Log log = LogFactory.getLog(ConectionInverter.class);
 	
-	protected Calculator calculator = new DefaultCalculator();
+	protected Calculator calculator = new Calculator();
 
 	/**
 	 * will try to rotate From, To and then Both. Will modify and return once we

@@ -5,9 +5,9 @@ package com.neodem.componentConnector.model;
  * 
  */
 public class Location {
-	public Location(int xLoc, int yLoc) {
-		x = xLoc;
-		y = yLoc;
+	public Location(int row, int col) {
+		x = col;
+		y = row;
 	}
 
 	private int x;
@@ -61,14 +61,14 @@ public class Location {
 	/**
 	 * @return the x
 	 */
-	public int getX() {
+	public int getCol() {
 		return x;
 	}
 
 	/**
 	 * @return the y
 	 */
-	public int getY() {
+	public int getRow() {
 		return y;
 	}
 }

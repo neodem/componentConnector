@@ -8,7 +8,7 @@ import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
 import com.neodem.componentConnector.tools.Calculator;
-import com.neodem.componentConnector.tools.DefaultCalculator;
+import com.neodem.componentConnector.tools.Calculator;
 
 /**
  * @author vfumo
@@ -20,7 +20,7 @@ public abstract class BaseSolver implements Solver {
 
 	protected List<ConnectionOptimizer> connectionOptimizers;
 	
-	private static final Calculator calc = new DefaultCalculator();
+	private static final Calculator calc = new Calculator();
 
 	public BaseSolver(List<ConnectionOptimizer> connectionOptimizers) {
 		this.connectionOptimizers = connectionOptimizers;

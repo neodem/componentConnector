@@ -2,11 +2,17 @@ package com.neodem.componentConnector.model;
 
 public class Endpoint extends AbstractConnectable {
 	
-	public Endpoint(String name, String id, int pinCount) {
-		super(name, id, pinCount);
+	public Endpoint(String name, int pinCount) {
+		super(name, pinCount);
 	}
 
 	public Endpoint(Endpoint e) {
-		super(e.getName(), e.getId(), e.getPinCount());
+		super(e.getName(), e.getPinCount());
+	}
+
+	@Override
+	public boolean isValid() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }

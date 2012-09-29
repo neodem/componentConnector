@@ -7,8 +7,8 @@ public class Item extends AbstractConnectable {
 
 	private Collection<Connection> connectsTo;
 	
-	public Item(String name) {
-		super(name);
+	public Item(String name, int pinCount) {
+		super(name, pinCount);
 		connectsTo = new HashSet<Connection>();
 	}
 	
@@ -19,5 +19,14 @@ public class Item extends AbstractConnectable {
 	public Collection<Connection> addConnection(Connection c) {
 		connectsTo.add(c);
 		return connectsTo;
+	}
+
+	@Override
+	public boolean isValid() {
+		return true;
+	}
+
+	public Collection<Connection> getConnections() {
+		return new HashSet<Connection>(connectsTo);
 	}
 }

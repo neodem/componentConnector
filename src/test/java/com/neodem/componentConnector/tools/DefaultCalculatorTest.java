@@ -12,7 +12,7 @@ import org.junit.Test;
 import com.neodem.componentConnector.AbstractBaseRelayLocatorTest;
 import com.neodem.componentConnector.model.Component;
 import com.neodem.componentConnector.model.Connection;
-import com.neodem.componentConnector.tools.DefaultCalculator;
+import com.neodem.componentConnector.tools.Calculator;
 
 /**
  * @author vfumo
@@ -20,11 +20,11 @@ import com.neodem.componentConnector.tools.DefaultCalculator;
  */
 public class DefaultCalculatorTest extends AbstractBaseRelayLocatorTest {
 
-	DefaultCalculator calculator;
+	Calculator calculator;
 
 	@Before
 	public void setUp() throws Exception {
-		calculator = new DefaultCalculator();
+		calculator = new Calculator();
 	}
 
 	@After

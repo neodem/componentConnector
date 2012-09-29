@@ -3,13 +3,15 @@ package com.neodem.componentConnector.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class AbstractNameable implements Nameable {
+public abstract class AbstractNameable implements Nameable {
 
 	private String name;
 
 	public AbstractNameable(String name) {
 		this.name = name;
 	}
+	
+	public abstract boolean isValid();
 
 	@Override
 	public int hashCode() {

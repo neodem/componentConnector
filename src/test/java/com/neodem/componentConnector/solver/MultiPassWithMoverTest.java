@@ -56,7 +56,7 @@ public class MultiPassWithMoverTest extends AbstractBaseRelayLocatorTest  {
 		solver.solve(set);
 		
 		assertThat(from.getLocation(), equalTo(new Location(0,0)));
-		assertThat(to.getLocation(), equalTo(new Location(1,0)));
+		assertThat(to.getLocation(), equalTo(new Location(0,1)));
 	}
 	
 	@Test

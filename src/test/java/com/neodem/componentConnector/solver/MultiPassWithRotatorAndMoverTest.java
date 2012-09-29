@@ -140,9 +140,9 @@ public class MultiPassWithRotatorAndMoverTest extends AbstractBaseRelayLocatorTe
 		assertThat(set.getConnectable("r4").isInverted(), is(false));
 		
 		assertThat(set.getComponent("from").getLocation(), equalTo(new Location(0,0)));
-		assertThat(set.getComponent("to").getLocation(), equalTo(new Location(0,1)));
+		assertThat(set.getComponent("to").getLocation(), equalTo(new Location(1,0)));
 		assertThat(set.getComponent("r3").getLocation(), equalTo(new Location(1,1)));
-		assertThat(set.getComponent("r4").getLocation(), equalTo(new Location(1,0)));
+		assertThat(set.getComponent("r4").getLocation(), equalTo(new Location(0,1)));
 	}
 
 	@Test

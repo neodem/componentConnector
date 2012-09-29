@@ -4,16 +4,19 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
- * Connection between two relay objects
+ * Connection to another Item
  * 
  * @author vfumo
  * 
  */
 public class Connection {
 
-	protected Connectable to;
-	protected Connectable from;
+	protected String toName;
 	
 	// pins we can connect to (sometimes there are dup pins on a component (sometimes on diff sides!))
 	private Set<Pin> toPins;
@@ -23,9 +26,8 @@ public class Connection {
 	protected Pin toPin;
 	protected Pin fromPin;
 	
-	public Connection(Connectable fromComp, Collection<Pin> fromPins, Connectable toComp, Collection<Pin> toPins) {
-		this.from = fromComp;
-		this.to = toComp;
+	public Connection(Collection<Pin> fromPins, String toName, Collection<Pin> toPins) {
+		this.toName = toName;
 		
 		// assign the connection to the first pin found in the collection and init our new set
 		fromPin = fromPins.iterator().next();
@@ -43,7 +45,7 @@ public class Connection {
 	}
 	
 	public boolean isValid() {
-		return to != null && from != null && toPin != null && fromPin != null;
+		return StringUtils.isNotBlank(toName) && toPin != null && fromPin != null;
 	}
 
 	/**
@@ -52,53 +54,15 @@ public class Connection {
 	 * @param c
 	 * @return
 	 */
-	public boolean uses(Connectable c) {
-		if (to.equals(c) || from.equals(c)) {
-			return true;
-		}
+	public boolean uses(Item item) {
+		if(toName.equals(item.getName())) return true;
 		return false;
-	}
-
-	/**
-	 * return the pin for the given component. If the component is not part of the
-	 * connection return null
-	 */
-	public Pin getPin(Connectable other) {
-		if (to.equals(other)) {
-			return toPin;
-		}
-
-		if (from.equals(other)) {
-			return fromPin;
-		}
-
-		return null;
-	}
-
-	/**
-	 * get the other component in the connection
-	 * 
-	 * @param c
-	 * @return
-	 */
-	public Connectable getOther(Connectable c) {
-		if (to.equals(c)) {
-			return from;
-		}
-
-		if (from.equals(c)) {
-			return to;
-		}
-
-		return null;
 	}
 	
 	@Override
 	public String toString() {
 		StringBuffer b = new StringBuffer();
 		b.append("Connection [");
-		b.append(from.getName());
-		b.append(':');
 		b.append(fromPin);
 		if(fromPins.size() > 1) {
 			b.append("(alt:");
@@ -116,7 +80,7 @@ public class Connection {
 			b.append(')');
 		}
 		b.append(" -> ");
-		b.append(to.getName());
+		b.append(toName);
 		b.append(':');
 		b.append(toPin);
 		if(toPins.size() > 1) {
@@ -138,50 +102,36 @@ public class Connection {
 		
 		return b.toString();
 	}
-
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((from == null) ? 0 : from.hashCode());
-		result = prime * result + ((fromPin == null) ? 0 : fromPin.hashCode());
-		result = prime * result + ((to == null) ? 0 : to.hashCode());
-		result = prime * result + ((toPin == null) ? 0 : toPin.hashCode());
-		return result;
+		return new HashCodeBuilder(55, 87).append(toName)
+				.append(fromPin).append(toPin).toHashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
 			return true;
-		if (obj == null)
+		}
+		if (obj.getClass() != getClass()) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Connection other = (Connection) obj;
-		if (from == null) {
-			if (other.from != null)
-				return false;
-		} else if (!from.equals(other.from))
-			return false;
-		if (fromPin != other.fromPin)
-			return false;
-		if (to == null) {
-			if (other.to != null)
-				return false;
-		} else if (!to.equals(other.to))
-			return false;
-		if (toPin != other.toPin)
-			return false;
-		return true;
+		}
+		Connection rhs = (Connection) obj;
+		return new EqualsBuilder().append(toName, rhs.toName).append(fromPin, rhs.fromPin).append(toPin, rhs.toPin).isEquals();
 	}
+	
 
-	public Connectable getTo() {
-		return to;
-	}
-
-	public Connectable getFrom() {
-		return from;
+	public String getToName() {
+		return toName;
 	}
 
 	public Pin getToPin() {
@@ -218,24 +168,5 @@ public class Connection {
 	 */
 	public void setFromPin(Pin fromPin) {
 		this.fromPin = fromPin;
-	}
-
-	public void setPin(String id, Pin pin) {
-		if("from".equalsIgnoreCase(id)) {
-			setFromPin(pin);
-		}
-		if("to".equalsIgnoreCase(id)) {
-			setToPin(pin);
-		}
-	}
-	
-	public Pin getPin(String id) {
-		if("from".equalsIgnoreCase(id)) {
-			return fromPin;
-		}
-		if("to".equalsIgnoreCase(id)) {
-			return toPin;
-		}
-		return null;
 	}
 }

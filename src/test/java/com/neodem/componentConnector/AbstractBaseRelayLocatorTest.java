@@ -12,13 +12,13 @@ import com.neodem.componentConnector.model.Pin;
 import com.neodem.componentConnector.model.Side;
 import com.neodem.componentConnector.model.factory.RelayFactory;
 import com.neodem.componentConnector.tools.Calculator;
-import com.neodem.componentConnector.tools.DefaultCalculator;
+import com.neodem.componentConnector.tools.Calculator;
 
 public abstract class AbstractBaseRelayLocatorTest {
 	
 	protected RelayFactory relayFactory = new RelayFactory();
 	
-	protected static final Calculator calc = new DefaultCalculator();
+	protected static final Calculator calc = new Calculator();
 	
 	protected Connection makeConnection(Component from, Side fromSide, Component to, Side toSide) {
 		Pin fromPin = getPinOnSide(from, fromSide);

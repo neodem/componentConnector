@@ -8,22 +8,18 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public abstract class AbstractConnectable extends AbstractNameable implements Connectable {
 
-	private String id;
-
 	private int pinCount;
 
 	private Collection<Pin> pins = new HashSet<Pin>();
-
+	
 	/**
-	 * this means that the sides are reversed
+	 * flag for movability.
 	 */
-	private boolean inverted = false;
+	private boolean moveable = true;
 
-	public AbstractConnectable(String name, String id, int pinCount) {
+	public AbstractConnectable(String name, int pinCount) {
 		super(name);
-		this.id = id;
 		this.pinCount = pinCount;
-		this.inverted = false;
 	}
 
 	/**
@@ -50,7 +46,7 @@ public abstract class AbstractConnectable extends AbstractNameable implements Co
 	 */
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(19, 59).appendSuper(super.hashCode()).append(inverted).append(id).append(pinCount)
+		return new HashCodeBuilder(19, 59).appendSuper(super.hashCode()).append(pinCount)
 				.append(pins).toHashCode();
 	}
 
@@ -66,8 +62,7 @@ public abstract class AbstractConnectable extends AbstractNameable implements Co
 			return false;
 		}
 		AbstractConnectable rhs = (AbstractConnectable) obj;
-		return new EqualsBuilder().appendSuper(super.equals(obj)).append(inverted, rhs.inverted).append(id, rhs.id)
-				.append(pinCount, rhs.pinCount).append(pins, rhs.pins).isEquals();
+		return new EqualsBuilder().appendSuper(super.equals(obj)).append(pinCount, rhs.pinCount).append(pins, rhs.pins).isEquals();
 	}
 
 	/**
@@ -121,11 +116,15 @@ public abstract class AbstractConnectable extends AbstractNameable implements Co
 		return pinCount;
 	}
 
-	public String getId() {
-		return id;
-	}
-
 	public int getPinCount() {
 		return pinCount;
+	}
+
+	public boolean isMoveable() {
+		return moveable;
+	}
+
+	public void setMoveable(boolean moveable) {
+		this.moveable = moveable;
 	}
 }

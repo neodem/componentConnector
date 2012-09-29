@@ -39,7 +39,7 @@ public class DefaultFileConnector implements FileConnector {
 	public void writeComponentSetToFile(ComponentSet set, File file) {
 
 		Element root = new Element("ComponentConnectorDef");
-		root.appendChild(makeComponentElement(set));
+		root.appendChild(makeComponentsElement(set));
 		root.appendChild(makeConnectionsElement(set));
 
 		Document doc = new Document(root);
@@ -66,7 +66,7 @@ public class DefaultFileConnector implements FileConnector {
 		return connectionRoot;
 	}
 
-	private Element makeComponentElement(ComponentSet set) {
+	private Element makeComponentsElement(ComponentSet set) {
 		Element componentRoot = new Element("components");
 		componentRoot.addAttribute(new Attribute("autoLocate", "false"));
 		componentRoot.addAttribute(new Attribute("rows", Integer.toString(set.getSizeY())));
