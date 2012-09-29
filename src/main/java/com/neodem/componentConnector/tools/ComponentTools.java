@@ -55,18 +55,4 @@ public class ComponentTools {
 		return pinNumber - pinsPerSide - 1;
 		
 	}
-
-	/**
-	 * return some pin on the given side of the component
-	 * 
-	 * @param c
-	 * @param side
-	 * @return
-	 */
-	public static Pin getPinOnSide(Connectable c, Side side) {
-		if (side == Right) {
-			return new Pin(1, "");
-		}
-		return new Pin(c.getNumberofPins(), "");
-	}
 }
