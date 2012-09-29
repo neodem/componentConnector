@@ -27,26 +27,21 @@ public class FullRunRandom {
 
 	protected static final Log log = LogFactory.getLog(FullRunRandom.class);
 
-	private FileConnector c = new DefaultFileConnector();
+	private FileConnector c;
 
 	private Solver s;
 	
 	private ComponentSet makeSet() {
 		ClassLoader classLoader = FullRunRandom.class.getClassLoader();
 
-		URL url = classLoader.getResource("Full-components-unLocated.xml");
+		URL url = classLoader.getResource("All-unLocated.xml");
 		File componentsFile = new File(url.getPath());
 
-		url = classLoader.getResource("Full-connectables.xml");
-		File connectablesFile = new File(url.getPath());
-
-		url = classLoader.getResource("Full-connections.xml");
-		File connectionsFile = new File(url.getPath());
-
-		return c.read(componentsFile, connectablesFile, connectionsFile);
+		return c.readIntoComponentSet(componentsFile);
 	}
 
 	public FullRunRandom() {
+		c = initFileConnector();
 		initSolver();
 
 		File out = new File("best.xml");
@@ -62,10 +57,19 @@ public class FullRunRandom {
 
 		while (s.solve(set)) {
 			log.info("found better solution : " + set.getTotalSize());
-			c.writeToFile(out, set);
+			c.writeComponentSetToFile(set, out);
 		}
 	}
 
+	private FileConnector initFileConnector() {
+		ClassLoader classLoader = FullRunRandom.class.getClassLoader();
+
+		URL url = classLoader.getResource("All-Connectables.xml");
+		File defs = new File(url.getPath());
+		
+		return new DefaultFileConnector(defs);
+	}
+	
 	private void initSolver() {
 		ConnectionOptimizer r = new ConectionInverter();
 		ConnectionOptimizer m = new ConnectionMover();

@@ -13,18 +13,15 @@ import com.neodem.componentConnector.model.sets.ComponentSet;
 public interface FileConnector {
 	/**
 	 * 
-	 * @param componentsDef
-	 * @param connectablesDef
-	 * @param connectionsDef
-	 * 
+	 * @param setDef
 	 * @return a filed ComponentSet
 	 */
-	public ComponentSet read(File componentsDef, File connectablesDef, File connectionsDef);
+	public ComponentSet readIntoComponentSet(File setDef);
 	
 	/**
 	 * 
-	 * @param file
 	 * @param set
+	 * @param file
 	 */
-	public void writeToFile(File file, ComponentSet set);
+	public void writeComponentSetToFile(ComponentSet set, File file);
 }

@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import com.neodem.componentConnector.io.FileConnector;
 import com.neodem.componentConnector.io.PrettyPrintOutputFileConnector;
+import com.neodem.componentConnector.main.FullRunRandom;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 
 public class TestFullSet {
@@ -18,19 +19,16 @@ public class TestFullSet {
 
 	@Before
 	public void setUp() throws Exception {
-		ClassLoader classLoader = TestFullSet.class.getClassLoader();
+		ClassLoader classLoader = FullRunRandom.class.getClassLoader();
 		
-		URL url = classLoader.getResource("Full-components.xml");
-		File componentsFile = new File(url.getPath());
+		URL url = classLoader.getResource("All-Connectables.xml");
+		File defs = new File(url.getPath());
 
-		url = classLoader.getResource("Full-connectables.xml");
-		File connectablesFile = new File(url.getPath());
+		url = classLoader.getResource("All.xml");
+		File file = new File(url.getPath());
 
-		url = classLoader.getResource("Full-connections.xml");
-		File connectionsFile = new File(url.getPath());
-
-		FileConnector c = new PrettyPrintOutputFileConnector();
-		set = c.read(componentsFile, connectablesFile, connectionsFile);
+		FileConnector c = new PrettyPrintOutputFileConnector(defs);
+		set = c.readIntoComponentSet(file);
 	}
 
 	@After

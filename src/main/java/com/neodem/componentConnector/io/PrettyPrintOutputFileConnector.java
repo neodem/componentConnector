@@ -11,8 +11,12 @@ import com.neodem.componentConnector.model.sets.ComponentSet;
 
 public class PrettyPrintOutputFileConnector extends DefaultFileConnector implements FileConnector {
 
+	public PrettyPrintOutputFileConnector(File factoryDef) {
+		super(factoryDef);
+	}
+
 	@Override
-	public void writeToFile(File file, ComponentSet set) {
+	public void writeComponentSetToFile(ComponentSet set, File file) {
 		Display d = new WidthConsiderateConsoleDisplay(2);
 		BufferedWriter out = null;
 		try {

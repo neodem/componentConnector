@@ -25,51 +25,52 @@ public class FullRun {
 	
 	protected static final Log log = LogFactory.getLog(FullRun.class);
 	
-	private FileConnector c = new DefaultFileConnector();
-
-	private ComponentSet makeSet(File componentsFile) {
-		ClassLoader classLoader = FullRun.class.getClassLoader();
-		
-		URL url = classLoader.getResource("Full-connectables.xml");
-		File connectablesFile = new File(url.getPath());
-
-		url = classLoader.getResource("Full-connections.xml");
-		File connectionsFile = new File(url.getPath());
-
-		return c.read(componentsFile, connectablesFile, connectionsFile);
-	}
-
-	private Solver s;
+	private FileConnector c;
 
 	public FullRun() {
-		initSolver();
+		c = initFileConnector();
+		Solver s = getSolver();
+		ComponentSet set = getInitialComponentSet();
 		
-		ClassLoader classLoader = FullRun.class.getClassLoader();
-		
-		URL url = classLoader.getResource("Full-components.xml");
-		File componentsFile = new File(url.getPath());
-		
-		ComponentSet set = makeSet(componentsFile);
-		
-		componentsFile = new File("best.xml");
-		int best = 1000;
+		File bestFile = new File("best.xml");
+		int best = set.getTotalSize();
 		while (true) {
 			s.solve(set);
 			int size = set.getTotalSize();
 			if (size < best) {
 				best = size;
 				log.info("found better solution : " + best);
-				c.writeToFile(componentsFile, set);
-				set = makeSet(componentsFile);
+				c.writeComponentSetToFile(set, bestFile);
+				set = c.readIntoComponentSet(bestFile);
+			} else {
+				break;
 			}
 		}
 	}
 
-	private void initSolver() {
+	private FileConnector initFileConnector() {
+		ClassLoader classLoader = FullRunRandom.class.getClassLoader();
+
+		URL url = classLoader.getResource("All-Connectables.xml");
+		File defs = new File(url.getPath());
+		
+		return new DefaultFileConnector(defs);
+	}
+
+	private ComponentSet getInitialComponentSet() {
+		ClassLoader classLoader = FullRun.class.getClassLoader();
+		
+		URL url = classLoader.getResource("All.xml");
+		File componentsFile = new File(url.getPath());
+		
+		return c.readIntoComponentSet(componentsFile);
+	}
+	
+	private Solver getSolver() {
 		ConnectionOptimizer r = new ConectionInverter();
 		ConnectionOptimizer m = new ConnectionMover();
 		ConnectionOptimizer pt = new ConnectionAlternatePinTrier();
-		s = new MutiplePathMultiplePassConnectionSolver(Arrays.asList(r, m, pt));
+		return new MutiplePathMultiplePassConnectionSolver(Arrays.asList(r, m, pt));
 	}
 
 	public static void main(String[] args) {

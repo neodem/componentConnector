@@ -19,6 +19,7 @@ public abstract class BaseSolver implements Solver {
 	protected abstract Log getLog();
 
 	protected List<ConnectionOptimizer> connectionOptimizers;
+	
 	private static final Calculator calc = new DefaultCalculator();
 
 	public BaseSolver(List<ConnectionOptimizer> connectionOptimizers) {

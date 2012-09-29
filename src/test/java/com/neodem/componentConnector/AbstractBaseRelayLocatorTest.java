@@ -24,7 +24,6 @@ public abstract class AbstractBaseRelayLocatorTest {
 		return new Connection(from, Arrays.asList(fromPin), to, Arrays.asList(toPin));
 	}
 
-	
 	protected Connection makeConnection(Component from, String fromPinLabel, Component to, String toPinLabel) {
 		Collection<Pin> fromPins = from.getPins(fromPinLabel);
 		Collection<Pin> toPins = to.getPins(toPinLabel);

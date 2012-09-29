@@ -16,20 +16,16 @@ public class PrettyPrint {
 	public PrettyPrint() {
 		ClassLoader classLoader = FullRunRandom.class.getClassLoader();
 		
-		URL url = classLoader.getResource("Full-components.xml");
-		File componentsFile = new File(url.getPath());
+		URL url = classLoader.getResource("All-Connectables.xml");
+		File defs = new File(url.getPath());
 
-		url = classLoader.getResource("Full-connectables.xml");
-		File connectablesFile = new File(url.getPath());
+		File connectablesFile = new File("best.xml");
 
-		url = classLoader.getResource("Full-connections.xml");
-		File connectionsFile = new File(url.getPath());
-
-		FileConnector c = new PrettyPrintOutputFileConnector();
-		ComponentSet set = c.read(componentsFile, connectablesFile, connectionsFile);
+		FileConnector c = new PrettyPrintOutputFileConnector(defs);
+		ComponentSet set = c.readIntoComponentSet(connectablesFile);
 
 		File out = new File("pretty.out");
-		c.writeToFile(out, set);
+		c.writeComponentSetToFile(set, out);
 	}
 
 	public static void main(String[] args) {
