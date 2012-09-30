@@ -21,7 +21,7 @@ import com.neodem.componentConnector.solver.MultiPassConnectionSolver;
 import com.neodem.componentConnector.solver.Solver;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionMover;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
-import com.neodem.componentConnector.tools.ConnectionTools;
+import com.neodem.componentConnector.tools.LocationTools;
 
 /**
  * @author vfumo
@@ -77,7 +77,7 @@ public class MultiPassWithMoverTest extends AbstractBaseRelayLocatorTest  {
 		
 		solver.solve(set);
 		
-		assertThat(ConnectionTools.adjacent(c1), is(true));
-		assertThat(ConnectionTools.adjacent(c2), is(true));
+		assertThat(LocationTools.adjacent(c1), is(true));
+		assertThat(LocationTools.adjacent(c2), is(true));
 	}
 }

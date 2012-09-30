@@ -406,7 +406,7 @@ public class ComponentSetOld {
 	}
 
 	public int recalculate() {
-		totalSize = calc.calculateSetSize(this);
+		totalSize = calc.calculateSetScore(this);
 		return totalSize;
 	}
 

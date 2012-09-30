@@ -1,15 +1,11 @@
 package com.neodem.componentConnector.tools;
 
-import static com.neodem.componentConnector.model.Side.Left;
-import static com.neodem.componentConnector.model.Side.Right;
-
 import java.util.Collection;
 import java.util.Map;
 
 import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.Item;
-import com.neodem.componentConnector.model.Locatable;
 import com.neodem.componentConnector.model.Location;
 import com.neodem.componentConnector.model.Pin;
 import com.neodem.componentConnector.model.Side;
@@ -17,52 +13,76 @@ import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.model.sets.SetItem;
 
 /**
- * TODO add strategy pattern to plug in diff calc strategies
  * 
  * @author vfumo
  * 
  */
 public class Calculator {
 
-	// public static int calculateDistance(Connection c) {
-	// int absDistance = calculateAbsoluteDistance(c);
-	// int rotateDistance = calculateRotationalDistance(c);
-	//
-	// return absDistance + rotateDistance;
-	// }
+	private CalculationStrategy s;
+
+	public Calculator() {
+		s = new DefaultCalculationStrategy();
+	}
+
+	public Calculator(CalculationStrategy s) {
+		this.s = s;
+	}
 
 	/**
-	 * for a given set, calcuate a size (non sensical metric)
+	 * for a given set, calcuate a score
 	 * 
 	 * @param set
 	 * @return
 	 */
-	public static int calculateSetSize(ComponentSet set) {
+	public int calculateSetScore(ComponentSet set) {
 		Map<String, SetItem> items = set.getItems();
 
-		int size = 0;
+		int score = 0;
 		for (SetItem item : items.values()) {
-			size += calculateItemSize(item, set);
+			score += calculateItemScore(item, set);
 		}
 
-		return size;
+		return score;
 	}
 
-	public static int calculateItemSize(SetItem setItem, ComponentSet set) {
+	/**
+	 * for a given setItem, we calculate its score (of all of its connections)
+	 * 
+	 * @param setItem
+	 * @param set
+	 * @return
+	 */
+	public int calculateItemScore(SetItem setItem, ComponentSet set) {
 		Item item = setItem.getItem();
 		Location itemLocation = setItem.getItemLocation();
 		Boolean inverted = setItem.getInverted();
 		Collection<Connection> connections = item.getConnections();
 
-		int size = 0;
+		int score = 0;
 		for (Connection c : connections) {
-			size += calculateItemConnectionSize(itemLocation, inverted, c, set);
+			score += calculateItemConnectionScore(item, itemLocation, inverted, c, set);
 		}
 
-		return size;
+		return score;
 	}
 
-	private static int calculateItemConnectionSize(Location itemLocation, Boolean inverted, Connection c,
+	/**
+	 * for a given connection we calculate its score.
+	 * 
+	 * @param item
+	 *            the item this connection belongs to
+	 * 
+	 * @param location
+	 *            the lcoation of the item
+	 * @param inverted
+	 *            if the item is inverted
+	 * @param c
+	 *            the connection on the item we are scoring
+	 * @param set
+	 * @return
+	 */
+	public int calculateItemConnectionScore(Item item, Location location, Boolean inverted, Connection c,
 			ComponentSet set) {
 		Map<String, SetItem> items = set.getItems();
 
@@ -73,32 +93,10 @@ public class Calculator {
 		Location otherItemLoc = other.getItemLocation();
 		Boolean otherItemInv = other.getInverted();
 
-		int abs = calculateAbsoluteDistance(itemLocation, otherItemLoc);
-		int rot = calculateRotationalDistance(inverted, otherItemInv, c.getFromPin(), c.getToPin());
+		int abs = calculateAbsoluteScore(location, otherItemLoc);
+		int rot = calculateRotationalScore(item, null, inverted, c.getFromPin(), otherItem, null, otherItemInv, c.getToPin());
 
 		return abs + rot;
-	}
-
-	private static int calculateRotationalDistance(Boolean inverted, Boolean otherItemInv, Pin fromPin, Pin toPin) {
-
-		Side fromSide = ComponentTools.getSideForPin(from, fromPin);
-		if (inverted) {
-			fromSide = fromSide.other();
-		}
-
-		Side toSide = ComponentTools.getSideForPin(to, toPin);
-		if (otherItemInv) {
-			toSide = toSide.other();
-		}
-
-		if (ConnectionTools.toLeftOfFrom(c)) {
-			return toLeftOfFrom(fromSide, toSide);
-		} else if (ConnectionTools.toRightOfFrom(c)) {
-			return toRightOfFrom(fromSide, toSide);
-		}
-
-		// we are horizontally aligned
-		return aligned(fromSide, toSide);
 	}
 
 	/**
@@ -109,15 +107,15 @@ public class Calculator {
 	 * @param to
 	 * @return
 	 */
-	private static int calculateAbsoluteDistance(Location itemLocation, Location otherItemLoc) {
+	protected int calculateAbsoluteScore(Location itemLocation, Location otherItemLoc) {
 		int fromY = itemLocation.getRow();
 		int toY = otherItemLoc.getRow();
 
 		int fromX = itemLocation.getCol();
 		int toX = otherItemLoc.getCol();
 
-		int absoluteHDistance = distance(toX, fromX);
-		int absoluteVDistance = distance(toY, fromY);
+		int absoluteHDistance = s.relativeDistance(toX, fromX);
+		int absoluteVDistance = s.relativeDistance(toY, fromY);
 
 		int offset = 0;
 
@@ -130,63 +128,29 @@ public class Calculator {
 		}
 
 		return absoluteHDistance + absoluteVDistance + offset;
-
 	}
 
-	private static int distance(int loc1, int loc2) {
+	protected int calculateRotationalScore(Connectable from, Location fromLoc, Boolean fromInverted, Pin fromPin,
+			Connectable to, Location toLoc, Boolean toInverted, Pin toPin) {
 
-		if (loc1 == loc2) {
-			return 0;
+		Side fromSide = from.getSideForPin(fromInverted, fromPin);
+//		if (inverted) {
+//			fromSide = fromSide.other();
+//		}
+
+		Side toSide = to.getSideForPin(toInverted, toPin);
+//		if (otherItemInv) {
+//			toSide = toSide.other();
+//		}
+
+		if (LocationTools.toLeftOf(fromLoc, toLoc)) {
+			return s.toLeftOfFrom(fromSide, toSide);
+		} else if (LocationTools.toRightOf(fromLoc, toLoc)) {
+			return s.toRightOfFrom(fromSide, toSide);
 		}
 
-		if (loc1 > loc2) {
-			return loc1 - loc2;
-		}
-
-		return loc2 - loc1;
+		// we are horizontally aligned
+		return s.aligned(fromSide, toSide);
 	}
 
-	/**
-	 * if we are aligned on top of each other, a connection on the same side is
-	 * ideal so that gets a 0. On opposite sides we have a 1
-	 * 
-	 * @param fromSide
-	 * @param toSide
-	 * @return
-	 */
-	private int aligned(Side fromSide, Side toSide) {
-		if ((fromSide == Right && toSide == Right) || (fromSide == Left && toSide == Left))
-			return 0;
-		return 1;
-	}
-
-	private int toRightOfFrom(Side fromSide, Side toSide) {
-		if (fromSide == Right) {
-			if (toSide == Left)
-				return 0;
-			if (toSide == Right)
-				return 1;
-		}
-
-		// from side is left
-		if (toSide == Left)
-			return 1;
-
-		return 2;
-	}
-
-	private int toLeftOfFrom(Side fromSide, Side toSide) {
-		if (fromSide == Left) {
-			if (toSide == Left)
-				return 1;
-			if (toSide == Right)
-				return 0;
-		}
-
-		// from side is right
-		if (toSide == Right)
-			return 1;
-
-		return 2;
-	}
 }

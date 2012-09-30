@@ -1,10 +1,11 @@
 package com.neodem.componentConnector.model.sets;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import com.neodem.common.utility.Collections;
 import com.neodem.componentConnector.model.Item;
 import com.neodem.componentConnector.model.Location;
 
@@ -23,6 +24,8 @@ public class ComponentSet {
 	/**
 	 */
 	private Map<String, SetItem> items = new HashMap<String, SetItem>();
+	
+	private Set<Location> usedLocations = new HashSet<Location>();
 
 	public ComponentSet(int rows, int cols) {
 		this.rows = rows;
@@ -37,12 +40,38 @@ public class ComponentSet {
 		this.rows = set.rows;
 		this.cols = set.cols;
 	}
-
+	
 	public void addItem(Item i, Location loc, Boolean inverted) {
-		SetItem si = new SetItem(i, loc, inverted);
-		items.put(i.getName(), si);
-	}
+		if (i.isValid()) {
 
+			int col = loc.getCol();
+			if (col >= cols) {
+				throw new IllegalArgumentException("Item Column is out of bounds");
+			}
+
+			int row = loc.getRow();
+			if (row >= row) {
+				throw new IllegalArgumentException("Item Row is out of bounds");
+			}
+			
+			if(usedLocations.contains(loc)) {
+				throw new IllegalArgumentException("There is an item already in that location");
+			}
+			usedLocations.add(loc);
+
+			String id = i.getName();
+			if (items.containsKey(id)) {
+				throw new IllegalArgumentException("Item has a duplicate key");
+			}
+			
+			SetItem si = new SetItem(i, loc, inverted);
+			items.put(i.getName(), si);
+		}
+		else {
+			// TODO log
+		}
+	}
+	
 	public void moveItem(Item i, Location newLocation) {
 		SetItem si = items.get(i.getName());
 		if (si != null) {
@@ -78,11 +107,7 @@ public class ComponentSet {
 	}
 
 	public Map<String, SetItem> getItems() {
-		Map<String, SetItem> copy = new HashMap<String, SetItem>(items.size());
-		for(String key : copy.keySet()) {
-			copy.put(key, items.get(key));
-		}
-		return copy;
+		return Collections.copyMap(items);
 	}
 
 }

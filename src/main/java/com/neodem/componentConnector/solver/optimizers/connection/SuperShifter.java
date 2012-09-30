@@ -7,7 +7,7 @@ import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.Locatable;
 import com.neodem.componentConnector.model.sets.ComponentSet;
-import com.neodem.componentConnector.tools.ConnectionTools;
+import com.neodem.componentConnector.tools.LocationTools;
 
 /**
  * for a given connection, choose one side and move that comp. to every other
@@ -32,11 +32,11 @@ public class SuperShifter implements ConnectionOptimizer {
 	public boolean optimize(Connection c, ComponentSet set) {
 
 		// -- check adjacency
-		if (ConnectionTools.onSameRow(c) && ConnectionTools.nextToEachOtherHorizontally(c)) {
+		if (LocationTools.onSameRow(c) && LocationTools.nextToEachOtherHorizontally(c)) {
 			// they are already adjacent horizontally so we can do nothing
 			return false;
 		}
-		if (ConnectionTools.inSameColumn(c) && ConnectionTools.nextToEachOtherVeritcally(c)) {
+		if (LocationTools.inSameColumn(c) && LocationTools.nextToEachOtherVeritcally(c)) {
 			// they are already adjacent vertically so we can do nothing
 			return false;
 		}

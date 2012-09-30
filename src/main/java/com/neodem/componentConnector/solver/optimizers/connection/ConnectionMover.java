@@ -7,7 +7,7 @@ import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.Locatable;
 import com.neodem.componentConnector.model.sets.ComponentSet;
-import com.neodem.componentConnector.tools.ConnectionTools;
+import com.neodem.componentConnector.tools.LocationTools;
 
 /**
  * 
@@ -25,11 +25,11 @@ public class ConnectionMover implements ConnectionOptimizer {
 		int initialTotalDistance = set.getTotalSize();
 
 		// -- check adjacency
-		if (ConnectionTools.onSameRow(c) && ConnectionTools.nextToEachOtherHorizontally(c)) {
+		if (LocationTools.onSameRow(c) && LocationTools.nextToEachOtherHorizontally(c)) {
 			// they are already adjacent horizontally so we can do nothing
 			return false;
 		}
-		if (ConnectionTools.inSameColumn(c) && ConnectionTools.nextToEachOtherVeritcally(c)) {
+		if (LocationTools.inSameColumn(c) && LocationTools.nextToEachOtherVeritcally(c)) {
 			// they are already adjacent vertically so we can do nothing
 			return false;
 		}
@@ -73,7 +73,7 @@ public class ConnectionMover implements ConnectionOptimizer {
 
 			// check to see if we are not aligned already (can happen in diff
 			// rows)
-			if (!ConnectionTools.inSameColumn(c)) {
+			if (!LocationTools.inSameColumn(c)) {
 
 				// Move 'mov' one closer horizontally
 				// to 'fix' and see what happens. If we succeed, we return. If
@@ -111,7 +111,7 @@ public class ConnectionMover implements ConnectionOptimizer {
 			// ------------------ vertical shifting
 
 			// make sure we can benefit from vertical shift (ie. on diff rows)
-			if (!ConnectionTools.onSameRow(c)) {
+			if (!LocationTools.onSameRow(c)) {
 
 				// Lets move 'mov' one closer vertically
 				// to 'fix' and see what happens. If we succeed, we return. If

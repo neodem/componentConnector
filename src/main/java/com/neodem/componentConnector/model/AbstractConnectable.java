@@ -1,5 +1,8 @@
 package com.neodem.componentConnector.model;
 
+import static com.neodem.componentConnector.model.Side.Left;
+import static com.neodem.componentConnector.model.Side.Right;
+
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -95,6 +98,54 @@ public abstract class AbstractConnectable extends AbstractNameable implements Co
 	public Collection<Pin> addPin(Pin pin) {
 		pins.add(pin);
 		return pins;
+	}
+	
+	
+	/**
+	 * for a given pin number determine the side it is on
+	 * 
+	 * @param fromPin
+	 * @return
+	 */
+	public  Side getSideForPin(Boolean inverted, Pin fromPin) {
+		if(inverted) {
+			if (fromPin.getPinNumber() <= (getNumberofPins() / 2)) {
+				return Left;
+			}
+			return Right;
+		}
+		
+		if (fromPin.getPinNumber() <= (getNumberofPins() / 2)) {
+			return Right;
+		}
+		return Left;
+	}
+
+	/**
+	 * for a given pin, determine the 'index' (From top to bottom)
+	 * where the pin connects
+	 * 
+	 * @param fromPin
+	 * @return
+	 */
+	public int determineSideIndex(Boolean inverted, Pin fromPin) {
+		int pinsPerSide = getNumberofPins() / 2;
+		int pinNumber = fromPin.getPinNumber();
+		
+		if(inverted) {
+			// inverted puts pin one at top left
+			if (pinNumber > pinsPerSide) {
+				return pinNumber - (2 * (pinNumber-pinsPerSide));
+			}
+			return pinNumber - 1;
+		} 
+		
+		// regular puts pin one at bottom right
+		if (pinNumber <= pinsPerSide) {
+			return pinsPerSide - pinNumber;
+		}
+		return pinNumber - pinsPerSide - 1;
+		
 	}
 
 	/**
