@@ -8,6 +8,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.neodem.componentConnector.model.components.Item;
+
 /**
  * Connection to another Item
  * 
@@ -16,7 +18,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public class Connection {
 
-	protected String toName;
+	protected String toId;
 	
 	// pins we can connect to (sometimes there are dup pins on a component (sometimes on diff sides!))
 	private Set<Pin> toPins;
@@ -26,8 +28,8 @@ public class Connection {
 	protected Pin toPin;
 	protected Pin fromPin;
 	
-	public Connection(Collection<Pin> fromPins, String toName, Collection<Pin> toPins) {
-		this.toName = toName;
+	public Connection(Collection<Pin> fromPins, String toId, Collection<Pin> toPins) {
+		this.toId = toId;
 		
 		// assign the connection to the first pin found in the collection and init our new set
 		fromPin = fromPins.iterator().next();
@@ -45,7 +47,7 @@ public class Connection {
 	}
 	
 	public boolean isValid() {
-		return StringUtils.isNotBlank(toName) && toPin != null && fromPin != null;
+		return StringUtils.isNotBlank(toId) && toPin != null && fromPin != null;
 	}
 
 	/**
@@ -55,7 +57,7 @@ public class Connection {
 	 * @return
 	 */
 	public boolean uses(Item item) {
-		if(toName.equals(item.getName())) return true;
+		if(toId.equals(item.getId())) return true;
 		return false;
 	}
 	
@@ -80,7 +82,7 @@ public class Connection {
 			b.append(')');
 		}
 		b.append(" -> ");
-		b.append(toName);
+		b.append(toId);
 		b.append(':');
 		b.append(toPin);
 		if(toPins.size() > 1) {
@@ -110,7 +112,7 @@ public class Connection {
 	 */
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(55, 87).append(toName)
+		return new HashCodeBuilder(55, 87).append(toId)
 				.append(fromPin).append(toPin).toHashCode();
 	}
 
@@ -126,12 +128,12 @@ public class Connection {
 			return false;
 		}
 		Connection rhs = (Connection) obj;
-		return new EqualsBuilder().append(toName, rhs.toName).append(fromPin, rhs.fromPin).append(toPin, rhs.toPin).isEquals();
+		return new EqualsBuilder().append(toId, rhs.toId).append(fromPin, rhs.fromPin).append(toPin, rhs.toPin).isEquals();
 	}
 	
 
-	public String getToName() {
-		return toName;
+	public String getToId() {
+		return toId;
 	}
 
 	public Pin getToPin() {

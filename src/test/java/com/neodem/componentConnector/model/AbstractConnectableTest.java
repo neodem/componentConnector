@@ -9,6 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.neodem.componentConnector.model.components.AbstractConnectable;
+
 public class AbstractConnectableTest {
 
 	private class AC extends AbstractConnectable {

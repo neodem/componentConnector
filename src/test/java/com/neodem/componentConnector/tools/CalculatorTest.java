@@ -7,9 +7,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.neodem.componentConnector.model.Item;
 import com.neodem.componentConnector.model.Location;
 import com.neodem.componentConnector.model.Pin;
+import com.neodem.componentConnector.model.components.Item;
 
 /**
  * @author vfumo

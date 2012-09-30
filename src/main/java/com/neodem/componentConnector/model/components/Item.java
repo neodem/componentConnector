@@ -1,14 +1,16 @@
-package com.neodem.componentConnector.model;
+package com.neodem.componentConnector.model.components;
 
 import java.util.Collection;
 import java.util.HashSet;
+
+import com.neodem.componentConnector.model.Connection;
 
 public class Item extends AbstractConnectable {
 
 	private Collection<Connection> connectsTo;
 	
-	public Item(String name, int pinCount) {
-		super(name, pinCount);
+	public Item(String id, String type, int pinCount) {
+		super(id, type, pinCount);
 		connectsTo = new HashSet<Connection>();
 	}
 	

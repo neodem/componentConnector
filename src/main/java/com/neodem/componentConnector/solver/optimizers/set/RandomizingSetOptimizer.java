@@ -10,8 +10,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.neodem.componentConnector.model.Component;
-import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
+import com.neodem.componentConnector.model.components.Connectable;
 import com.neodem.componentConnector.model.sets.AutoAddComponentSet;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 

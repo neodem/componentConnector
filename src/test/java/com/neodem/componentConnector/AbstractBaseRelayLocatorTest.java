@@ -6,10 +6,10 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.neodem.componentConnector.model.Component;
-import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.Pin;
 import com.neodem.componentConnector.model.Side;
+import com.neodem.componentConnector.model.components.Connectable;
 import com.neodem.componentConnector.model.factory.RelayFactory;
 import com.neodem.componentConnector.tools.Calculator;
 import com.neodem.componentConnector.tools.Calculator;

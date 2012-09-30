@@ -8,7 +8,7 @@ import com.neodem.componentConnector.model.Pin;
 
 public class ConnectableDefinition {
 
-	private String id;
+	private String defId;
 	
 	/**
 	 * the number of pins on the component
@@ -22,8 +22,8 @@ public class ConnectableDefinition {
 	 */
 	private Collection<Pin> pins;
 
-	public ConnectableDefinition(String id, String type, int size) {
-		this.id = id;
+	public ConnectableDefinition(String defId, String type, int size) {
+		this.defId = defId;
 		this.type = type;
 		this.pinSize = size;
 		pins = new HashSet<Pin>(size);
@@ -37,8 +37,8 @@ public class ConnectableDefinition {
 	/**
 	 * @return the id
 	 */
-	public String getId() {
-		return id;
+	public String getDefId() {
+		return defId;
 	}
 
 	/**

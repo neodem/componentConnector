@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.neodem.common.utility.Collections;
-import com.neodem.componentConnector.model.Item;
 import com.neodem.componentConnector.model.Location;
+import com.neodem.componentConnector.model.components.Item;
 
 /**
  * holds a collection of Items and keeps track of their locations and if they
@@ -59,13 +59,13 @@ public class ComponentSet {
 			}
 			usedLocations.add(loc);
 
-			String id = i.getName();
+			String id = i.getId();
 			if (items.containsKey(id)) {
 				throw new IllegalArgumentException("Item has a duplicate key");
 			}
 			
 			SetItem si = new SetItem(i, loc, inverted);
-			items.put(i.getName(), si);
+			items.put(i.getId(), si);
 		}
 		else {
 			// TODO log
@@ -73,28 +73,28 @@ public class ComponentSet {
 	}
 	
 	public void moveItem(Item i, Location newLocation) {
-		SetItem si = items.get(i.getName());
+		SetItem si = items.get(i.getId());
 		if (si != null) {
-			items.put(i.getName(), new SetItem(si.getItem(), newLocation, si.getInverted()));
+			items.put(i.getId(), new SetItem(si.getItem(), newLocation, si.getInverted()));
 		}
 	}
 
 	public void invertItem(Item i) {
-		SetItem si = items.get(i.getName());
+		SetItem si = items.get(i.getId());
 		if (si != null) {
-			items.put(i.getName(), new SetItem(si.getItem(), si.getItemLocation(), true));
+			items.put(i.getId(), new SetItem(si.getItem(), si.getItemLocation(), true));
 		}
 	}
 
 	public void unInvertItem(Item i) {
-		SetItem si = items.get(i.getName());
+		SetItem si = items.get(i.getId());
 		if (si != null) {
-			items.put(i.getName(), new SetItem(si.getItem(), si.getItemLocation(), false));
+			items.put(i.getId(), new SetItem(si.getItem(), si.getItemLocation(), false));
 		}
 	}
 
 	public boolean isInverted(Item i) {
-		SetItem si = items.get(i.getName());
+		SetItem si = items.get(i.getId());
 		return si.getInverted();
 	}
 	

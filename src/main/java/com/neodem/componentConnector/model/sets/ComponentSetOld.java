@@ -14,11 +14,11 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.neodem.componentConnector.model.Component;
-import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
-import com.neodem.componentConnector.model.Endpoint;
 import com.neodem.componentConnector.model.Locatable;
 import com.neodem.componentConnector.model.Location;
+import com.neodem.componentConnector.model.components.Connectable;
+import com.neodem.componentConnector.model.components.Endpoint;
 import com.neodem.componentConnector.tools.Calculator;
 import com.neodem.componentConnector.tools.Calculator;
 

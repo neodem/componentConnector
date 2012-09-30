@@ -1,4 +1,4 @@
-package com.neodem.componentConnector.model;
+package com.neodem.componentConnector.model.components;
 
 import static com.neodem.componentConnector.model.Side.Left;
 import static com.neodem.componentConnector.model.Side.Right;
@@ -9,19 +9,22 @@ import java.util.HashSet;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public abstract class AbstractConnectable extends AbstractNameable implements Connectable {
+import com.neodem.componentConnector.model.Pin;
+import com.neodem.componentConnector.model.Side;
+
+public abstract class AbstractConnectable extends BaseComponent {
 
 	private int pinCount;
 
 	private Collection<Pin> pins = new HashSet<Pin>();
-	
+
 	/**
 	 * flag for movability.
 	 */
 	private boolean moveable = true;
 
-	public AbstractConnectable(String name, int pinCount) {
-		super(name);
+	public AbstractConnectable(String id, String type, int pinCount) {
+		super(id, type);
 		this.pinCount = pinCount;
 	}
 
@@ -49,8 +52,7 @@ public abstract class AbstractConnectable extends AbstractNameable implements Co
 	 */
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(19, 59).appendSuper(super.hashCode()).append(pinCount)
-				.append(pins).toHashCode();
+		return new HashCodeBuilder(19, 59).appendSuper(super.hashCode()).append(pinCount).append(pins).toHashCode();
 	}
 
 	@Override
@@ -65,7 +67,8 @@ public abstract class AbstractConnectable extends AbstractNameable implements Co
 			return false;
 		}
 		AbstractConnectable rhs = (AbstractConnectable) obj;
-		return new EqualsBuilder().appendSuper(super.equals(obj)).append(pinCount, rhs.pinCount).append(pins, rhs.pins).isEquals();
+		return new EqualsBuilder().appendSuper(super.equals(obj)).append(pinCount, rhs.pinCount).append(pins, rhs.pins)
+				.isEquals();
 	}
 
 	/**
@@ -99,22 +102,21 @@ public abstract class AbstractConnectable extends AbstractNameable implements Co
 		pins.add(pin);
 		return pins;
 	}
-	
-	
+
 	/**
 	 * for a given pin number determine the side it is on
 	 * 
 	 * @param fromPin
 	 * @return
 	 */
-	public  Side getSideForPin(Boolean inverted, Pin fromPin) {
-		if(inverted) {
+	public Side getSideForPin(Boolean inverted, Pin fromPin) {
+		if (inverted) {
 			if (fromPin.getPinNumber() <= (getNumberofPins() / 2)) {
 				return Left;
 			}
 			return Right;
 		}
-		
+
 		if (fromPin.getPinNumber() <= (getNumberofPins() / 2)) {
 			return Right;
 		}
@@ -122,8 +124,8 @@ public abstract class AbstractConnectable extends AbstractNameable implements Co
 	}
 
 	/**
-	 * for a given pin, determine the 'index' (From top to bottom)
-	 * where the pin connects
+	 * for a given pin, determine the 'index' (From top to bottom) where the pin
+	 * connects
 	 * 
 	 * @param fromPin
 	 * @return
@@ -131,21 +133,21 @@ public abstract class AbstractConnectable extends AbstractNameable implements Co
 	public int determineSideIndex(Boolean inverted, Pin fromPin) {
 		int pinsPerSide = getNumberofPins() / 2;
 		int pinNumber = fromPin.getPinNumber();
-		
-		if(inverted) {
+
+		if (inverted) {
 			// inverted puts pin one at top left
 			if (pinNumber > pinsPerSide) {
-				return pinNumber - (2 * (pinNumber-pinsPerSide));
+				return pinNumber - (2 * (pinNumber - pinsPerSide));
 			}
 			return pinNumber - 1;
-		} 
-		
+		}
+
 		// regular puts pin one at bottom right
 		if (pinNumber <= pinsPerSide) {
 			return pinsPerSide - pinNumber;
 		}
 		return pinNumber - pinsPerSide - 1;
-		
+
 	}
 
 	/**

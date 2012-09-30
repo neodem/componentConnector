@@ -3,8 +3,8 @@ package com.neodem.componentConnector.solver.optimizers.connection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
+import com.neodem.componentConnector.model.components.Connectable;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.tools.Calculator;
 import com.neodem.componentConnector.tools.Calculator;

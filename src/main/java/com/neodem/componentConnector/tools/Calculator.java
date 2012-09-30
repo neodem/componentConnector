@@ -3,12 +3,12 @@ package com.neodem.componentConnector.tools;
 import java.util.Collection;
 import java.util.Map;
 
-import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
-import com.neodem.componentConnector.model.Item;
 import com.neodem.componentConnector.model.Location;
 import com.neodem.componentConnector.model.Pin;
 import com.neodem.componentConnector.model.Side;
+import com.neodem.componentConnector.model.components.Connectable;
+import com.neodem.componentConnector.model.components.Item;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.model.sets.SetItem;
 

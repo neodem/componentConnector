@@ -1,8 +1,8 @@
 package com.neodem.componentConnector.graphics;
 
-import com.neodem.componentConnector.model.Connectable;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.Pin;
+import com.neodem.componentConnector.model.components.Connectable;
 import com.neodem.graphics.text.model.GraphicsObject;
 import com.neodem.graphics.text.model.SingleLineGraphicsObject;
 

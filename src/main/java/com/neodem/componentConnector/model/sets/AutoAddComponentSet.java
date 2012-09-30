@@ -1,7 +1,7 @@
 package com.neodem.componentConnector.model.sets;
 
-import com.neodem.componentConnector.model.Item;
 import com.neodem.componentConnector.model.Location;
+import com.neodem.componentConnector.model.components.Item;
 
 
 /**
