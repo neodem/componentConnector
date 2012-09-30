@@ -8,7 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.neodem.componentConnector.model.components.Item;
+import com.neodem.componentConnector.model.components.BaseComponent;
 
 /**
  * Connection to another Item
@@ -56,7 +56,7 @@ public class Connection {
 	 * @param c
 	 * @return
 	 */
-	public boolean uses(Item item) {
+	public boolean uses(BaseComponent item) {
 		if(toId.equals(item.getId())) return true;
 		return false;
 	}

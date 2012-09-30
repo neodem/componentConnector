@@ -1,8 +1,7 @@
 package com.neodem.componentConnector.model.sets;
 
 import com.neodem.componentConnector.model.Location;
-import com.neodem.componentConnector.model.components.Item;
-
+import com.neodem.componentConnector.model.components.BaseComponent;
 
 /**
  * gives the ability to add components at random locations
@@ -25,7 +24,7 @@ public class AutoAddComponentSet extends ComponentSet {
 		super(set);
 	}
 
-	public void addItem(Item c) {
+	public void addItem(BaseComponent c) {
 		advance();
 		if (full) {
 			throw new IndexOutOfBoundsException("you are full!");

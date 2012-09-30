@@ -1,15 +1,15 @@
 package com.neodem.componentConnector.model.sets;
 
 import com.neodem.componentConnector.model.Location;
-import com.neodem.componentConnector.model.components.Item;
+import com.neodem.componentConnector.model.components.BaseComponent;
 
 public class SetItem {
 	
-	private Item item;
+	private BaseComponent item;
 	private Location itemLocation;
 	private Boolean Inverted;
 	
-	public SetItem(Item item, Location itemLocation, Boolean inverted) {
+	public SetItem(BaseComponent item, Location itemLocation, Boolean inverted) {
 		super();
 		this.item = item;
 		this.itemLocation = itemLocation;
@@ -53,7 +53,7 @@ public class SetItem {
 		return true;
 	}
 
-	public Item getItem() {
+	public BaseComponent getItem() {
 		return item;
 	}
 

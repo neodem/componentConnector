@@ -3,9 +3,6 @@ package com.neodem.componentConnector.io;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -14,9 +11,9 @@ import nu.xom.Elements;
 import nu.xom.ParsingException;
 
 import com.neodem.componentConnector.model.Connection;
+import com.neodem.componentConnector.model.Location;
 import com.neodem.componentConnector.model.Pin;
-import com.neodem.componentConnector.model.components.Connectable;
-import com.neodem.componentConnector.model.factory.ConnectableDefinition;
+import com.neodem.componentConnector.model.components.BaseComponent;
 import com.neodem.componentConnector.model.factory.ComponentFactory;
 import com.neodem.componentConnector.model.sets.AutoAddComponentSet;
 import com.neodem.componentConnector.model.sets.ComponentSet;
@@ -25,48 +22,25 @@ public class SetReader {
 
 	public static ComponentSet readSetFromFile(File setDef, ComponentFactory factory) {
 		ComponentSet set = null;
-		// for collecting all connectables
-		Map<String, Connectable> connectables = new HashMap<String, Connectable>();
 
 		try {
 			// open the file
 			Builder builder = new Builder();
 			Document doc = builder.build(setDef);
 			Element fileRoot = doc.getRootElement();
-			Element componentsRoot = fileRoot.getFirstChildElement("components");
+			Element setRoot = fileRoot.getFirstChildElement("set");
 
-			int rows = Integer.parseInt(componentsRoot.getAttributeValue("rows"));
-			int cols = Integer.parseInt(componentsRoot.getAttributeValue("cols"));
-			boolean autoLocate = Boolean.parseBoolean(componentsRoot.getAttributeValue("autoLocate"));
+			int rows = Integer.parseInt(setRoot.getAttributeValue("rows"));
+			int cols = Integer.parseInt(setRoot.getAttributeValue("cols"));
+			boolean autoLocate = Boolean.parseBoolean(setRoot.getAttributeValue("autoLocate"));
 
 			// add connectables (components need to be located in the set,
 			// endpoints are not so they are just added to the connectables map
-			Elements componentElements = componentsRoot.getChildElements();
+			Elements componentElements = setRoot.getChildElements();
 			if (autoLocate) {
-				set = addComponentsWithAutoLocate(connectables, rows, cols, componentElements);
+				set = addComponentsWithAutoLocate(rows, cols, componentElements, factory);
 			} else {
-				set = addComponents(connectables, rows, cols, componentElements);
-			}
-
-			Element connectionsRoot = fileRoot.getFirstChildElement("connections");
-
-			// add connections
-			Elements connections = connectionsRoot.getChildElements();
-			for (int i = 0; i < connections.size(); i++) {
-				Element c = connections.get(i);
-				String from = c.getAttributeValue("from");
-				String to = c.getAttributeValue("to");
-				String fromPinLabel = c.getAttributeValue("fromPin");
-				String toPinLabel = c.getAttributeValue("toPin");
-
-				Connectable fromComp = connectables.get(from);
-				Connectable toComp = connectables.get(to);
-
-				Collection<Pin> fromPins = fromComp.getPins(fromPinLabel);
-				Collection<Pin> toPins = toComp.getPins(toPinLabel);
-
-				Connection con = new Connection(fromComp, fromPins, toComp, toPins);
-				set.addConnection(con);
+				set = addComponents(rows, cols, componentElements, factory);
 			}
 
 		} catch (ParsingException ex) {
@@ -77,54 +51,64 @@ public class SetReader {
 		return set;
 	}
 
-	private ComponentSet addComponents(Map<String, Connectable> connectables, int rows, int cols,
-			Elements componentElements) {
+	// <component type="relay" id="xor2a" row="2" col="2" inv="false">
+	private static ComponentSet addComponents(int rows, int cols, Elements componentElements, ComponentFactory factory) {
 		ComponentSet set;
 		set = new ComponentSet(cols, rows);
 		for (int i = 0; i < componentElements.size(); i++) {
 			Element componentElement = componentElements.get(i);
 			String type = componentElement.getAttributeValue("type");
-			String name = componentElement.getAttributeValue("name");
+			String id = componentElement.getAttributeValue("id");
+			String row = componentElement.getAttributeValue("row");
+			String col = componentElement.getAttributeValue("col");
+			String inv = componentElement.getAttributeValue("inv");
 
-			Connectable connectable = factory.make(type, name);
-			if (connectable != null) {
-				connectables.put(name, connectable);
-				if (connectable instanceof Component) {
-					Component component = (Component) connectable;
-					component.setxLoc(Integer.parseInt(componentElement.getAttributeValue("col")));
-					component.setyLoc(Integer.parseInt(componentElement.getAttributeValue("row")));
-					component.setInverted(Boolean.parseBoolean(componentElement.getAttributeValue("inv")));
-					set.addComponent(component);
-				} else if (connectable instanceof Endpoint) {
-					set.addEndpoint((Endpoint) connectable);
-				}
+			BaseComponent component = factory.make(type, id);
+			if (component != null) {
+				Elements connections = componentElement.getChildElements();
+				addConnectionsToComponent(connections, component, factory);
+				Location loc = new Location(Integer.valueOf(row), Integer.valueOf(col));
+				set.addItem(component, loc, Boolean.valueOf(inv));
 			}
 		}
 		return set;
 	}
 
-	private ComponentSet addComponentsWithAutoLocate(Map<String, Connectable> connectables, int rows, int cols,
-			Elements componentElements) {
-		ComponentSet set;
+	// // <component type="relay" id="xor2a">
+	private static ComponentSet addComponentsWithAutoLocate(int rows, int cols, Elements componentElements,
+			ComponentFactory factory) {
+		AutoAddComponentSet set;
 		set = new AutoAddComponentSet(cols, rows);
 		for (int i = 0; i < componentElements.size(); i++) {
 			Element componentElement = componentElements.get(i);
 			String type = componentElement.getAttributeValue("type");
-			String name = componentElement.getAttributeValue("name");
+			String id = componentElement.getAttributeValue("id");
 
-			Connectable connectable = factory.make(type, name);
-			if (connectable != null) {
-				connectables.put(name, connectable);
-				if (connectable instanceof Component) {
-					((AutoAddComponentSet) set).addComponent((Component) connectable);
-				} else if (connectable instanceof Endpoint) {
-					set.addEndpoint((Endpoint) connectable);
-				}
+			BaseComponent component = factory.make(type, id);
+			if (component != null) {
+				Elements connections = componentElement.getChildElements();
+				addConnectionsToComponent(connections, component, factory);
+				set.addItem(component);
 			}
 		}
 		return set;
 	}
 
+	// <connection fromPin="ON" to="xor2b" toType="relay" toPin="OFF" />
+	private static void addConnectionsToComponent(Elements connections, BaseComponent component,
+			ComponentFactory factory) {
+		for (int i = 0; i < connections.size(); i++) {
+			Element connectionElement = connections.get(i);
+			String fromPinLabel = connectionElement.getAttributeValue("fromPin");
+			String toId = connectionElement.getAttributeValue("to");
+			String toType = connectionElement.getAttributeValue("toType");
+			String toPinLabel = connectionElement.getAttributeValue("toPin");
 
+			Collection<Pin> fromPins = factory.getPinsForTypeAndLabel(component.getType(), fromPinLabel);
+			Collection<Pin> toPins = factory.getPinsForTypeAndLabel(toType, toPinLabel);
 
+			Connection connection = new Connection(fromPins, toId, toPins);
+			component.addConnection(connection);
+		}
+	}
 }

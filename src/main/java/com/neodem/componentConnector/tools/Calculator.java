@@ -7,8 +7,7 @@ import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.Location;
 import com.neodem.componentConnector.model.Pin;
 import com.neodem.componentConnector.model.Side;
-import com.neodem.componentConnector.model.components.Connectable;
-import com.neodem.componentConnector.model.components.Item;
+import com.neodem.componentConnector.model.components.BaseComponent;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.model.sets.SetItem;
 
@@ -54,7 +53,7 @@ public class Calculator {
 	 * @return
 	 */
 	public int calculateItemScore(SetItem setItem, ComponentSet set) {
-		Item item = setItem.getItem();
+		BaseComponent item = setItem.getItem();
 		Location itemLocation = setItem.getItemLocation();
 		Boolean inverted = setItem.getInverted();
 		Collection<Connection> connections = item.getConnections();
@@ -82,14 +81,14 @@ public class Calculator {
 	 * @param set
 	 * @return
 	 */
-	public int calculateItemConnectionScore(Item item, Location location, Boolean inverted, Connection c,
+	public int calculateItemConnectionScore(BaseComponent item, Location location, Boolean inverted, Connection c,
 			ComponentSet set) {
 		Map<String, SetItem> items = set.getItems();
 
-		String toName = c.getToName();
+		String toName = c.getToId();
 		SetItem other = items.get(toName);
 
-		Item otherItem = other.getItem();
+		BaseComponent otherItem = other.getItem();
 		Location otherItemLoc = other.getItemLocation();
 		Boolean otherItemInv = other.getInverted();
 
@@ -130,18 +129,11 @@ public class Calculator {
 		return absoluteHDistance + absoluteVDistance + offset;
 	}
 
-	protected int calculateRotationalScore(Connectable from, Location fromLoc, Boolean fromInverted, Pin fromPin,
-			Connectable to, Location toLoc, Boolean toInverted, Pin toPin) {
+	protected int calculateRotationalScore(BaseComponent from, Location fromLoc, Boolean fromInverted, Pin fromPin,
+			BaseComponent to, Location toLoc, Boolean toInverted, Pin toPin) {
 
 		Side fromSide = from.getSideForPin(fromInverted, fromPin);
-//		if (inverted) {
-//			fromSide = fromSide.other();
-//		}
-
 		Side toSide = to.getSideForPin(toInverted, toPin);
-//		if (otherItemInv) {
-//			toSide = toSide.other();
-//		}
 
 		if (LocationTools.toLeftOf(fromLoc, toLoc)) {
 			return s.toLeftOfFrom(fromSide, toSide);

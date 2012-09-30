@@ -8,7 +8,7 @@ import nu.xom.Element;
 
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.Location;
-import com.neodem.componentConnector.model.components.Item;
+import com.neodem.componentConnector.model.components.BaseComponent;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.model.sets.SetItem;
 
@@ -32,7 +32,7 @@ public class SetBuilder {
 	private static Element makeItemElement(SetItem setItem) {
 		Element component = new Element("component");
 
-		Item item = setItem.getItem();
+		BaseComponent item = setItem.getItem();
 		Location itemLocation = setItem.getItemLocation();
 		
 		component.addAttribute(new Attribute("type", item.getType()));

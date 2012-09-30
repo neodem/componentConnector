@@ -20,6 +20,8 @@ public class RelayDefinition extends ConnectableDefinition {
 	
 	public RelayDefinition() {
 		super("relay", "component", 12);
-		setPins(pins);
+		for(Pin p : pins) {
+			addPin(p);
+		}
 	}
 }

@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.neodem.common.utility.Collections;
 import com.neodem.componentConnector.model.Location;
-import com.neodem.componentConnector.model.components.Item;
+import com.neodem.componentConnector.model.components.BaseComponent;
 
 /**
  * holds a collection of Items and keeps track of their locations and if they
@@ -24,7 +24,7 @@ public class ComponentSet {
 	/**
 	 */
 	private Map<String, SetItem> items = new HashMap<String, SetItem>();
-	
+
 	private Set<Location> usedLocations = new HashSet<Location>();
 
 	public ComponentSet(int rows, int cols) {
@@ -40,8 +40,8 @@ public class ComponentSet {
 		this.rows = set.rows;
 		this.cols = set.cols;
 	}
-	
-	public void addItem(Item i, Location loc, Boolean inverted) {
+
+	public void addItem(BaseComponent i, Location loc, Boolean inverted) {
 		if (i.isValid()) {
 
 			int col = loc.getCol();
@@ -53,8 +53,8 @@ public class ComponentSet {
 			if (row >= row) {
 				throw new IllegalArgumentException("Item Row is out of bounds");
 			}
-			
-			if(usedLocations.contains(loc)) {
+
+			if (usedLocations.contains(loc)) {
 				throw new IllegalArgumentException("There is an item already in that location");
 			}
 			usedLocations.add(loc);
@@ -63,41 +63,40 @@ public class ComponentSet {
 			if (items.containsKey(id)) {
 				throw new IllegalArgumentException("Item has a duplicate key");
 			}
-			
+
 			SetItem si = new SetItem(i, loc, inverted);
 			items.put(i.getId(), si);
-		}
-		else {
+		} else {
 			// TODO log
 		}
 	}
-	
-	public void moveItem(Item i, Location newLocation) {
+
+	public void moveItem(BaseComponent i, Location newLocation) {
 		SetItem si = items.get(i.getId());
 		if (si != null) {
 			items.put(i.getId(), new SetItem(si.getItem(), newLocation, si.getInverted()));
 		}
 	}
 
-	public void invertItem(Item i) {
+	public void invertItem(BaseComponent i) {
 		SetItem si = items.get(i.getId());
 		if (si != null) {
 			items.put(i.getId(), new SetItem(si.getItem(), si.getItemLocation(), true));
 		}
 	}
 
-	public void unInvertItem(Item i) {
+	public void unInvertItem(BaseComponent i) {
 		SetItem si = items.get(i.getId());
 		if (si != null) {
 			items.put(i.getId(), new SetItem(si.getItem(), si.getItemLocation(), false));
 		}
 	}
 
-	public boolean isInverted(Item i) {
+	public boolean isInverted(BaseComponent i) {
 		SetItem si = items.get(i.getId());
 		return si.getInverted();
 	}
-	
+
 	public int getRows() {
 		return rows;
 	}
