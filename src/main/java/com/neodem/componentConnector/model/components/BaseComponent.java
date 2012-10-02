@@ -35,6 +35,23 @@ public class BaseComponent {
 		this.type = type;
 		connectsTo = new HashSet<Connection>();
 	}
+	
+	/**
+	 * copy constructor
+	 * @param s
+	 */
+	public BaseComponent(BaseComponent s) {
+		this.id = new String(s.id);
+		this.type = new String(s.type);
+		this.pinCount = s.pinCount;
+		this.moveable = s.moveable;
+		this.connectsTo = new HashSet<Connection>(s.connectsTo.size());
+		
+		for(Connection sc : s.connectsTo) {
+			Connection c = new Connection(sc);
+			this.connectsTo.add(c);
+		}
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -43,7 +60,7 @@ public class BaseComponent {
 	 */
 	@Override
 	public String toString() {
-		return "Component [id=" + id + ", type=" + type + "]";
+		return "[" + id + ",(" + type + ")]";
 	}
 
 	/*

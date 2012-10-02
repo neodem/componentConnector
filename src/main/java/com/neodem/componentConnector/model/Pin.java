@@ -8,13 +8,21 @@ package com.neodem.componentConnector.model;
  */
 public class Pin {
 	private int pinNumber;
-
 	private String label;
 
 	public Pin(int pinNumber, String label) {
 		super();
 		this.pinNumber = pinNumber;
 		this.label = label;
+	}
+
+	/**
+	 * 
+	 * @param s
+	 */
+	public Pin(Pin s) {
+		this.pinNumber = s.pinNumber;
+		this.label = new String(s.label);
 	}
 
 	@Override

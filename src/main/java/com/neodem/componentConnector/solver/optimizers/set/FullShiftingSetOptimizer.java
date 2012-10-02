@@ -9,6 +9,8 @@ import org.apache.commons.logging.LogFactory;
 import com.neodem.componentConnector.model.Component;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
+import com.neodem.componentConnector.optimizer.BaseSetOptimizer;
+import com.neodem.componentConnector.optimizer.SetOptimizer;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
 import com.neodem.componentConnector.solver.optimizers.connection.SuperShifter;
 

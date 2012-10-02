@@ -10,12 +10,15 @@ import org.apache.commons.logging.LogFactory;
 import com.neodem.componentConnector.io.DefaultFileConnector;
 import com.neodem.componentConnector.io.FileConnector;
 import com.neodem.componentConnector.model.sets.ComponentSet;
+import com.neodem.componentConnector.optimizer.RandomizingSetOptimizer;
 import com.neodem.componentConnector.solver.MutiplePathMultiplePassConnectionSolver;
-import com.neodem.componentConnector.solver.Solver;
 import com.neodem.componentConnector.solver.optimizers.connection.ConectionInverter;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionAlternatePinTrier;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionMover;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
+import com.neodem.componentConnector.solver2.JustOneOptimizerSolver;
+import com.neodem.componentConnector.solver2.Solver;
+import com.neodem.componentConnector.tools.Calculator;
 
 /**
  * @author vfumo
@@ -27,26 +30,25 @@ public class FullRun {
 
 	private FileConnector fc;
 	
-	private Calculator c;
+	private Calculator c = new Calculator();
 
 	public FullRun() {
-		c = new 
-		c = initFileConnector();
+		fc = initFileConnector();
 		Solver s = getSolver();
 		ComponentSet set = getInitialComponentSet();
 
 		File bestFile = new File("best.xml");
-		int best = set.getTotalSize();
+		int best = c.calculateSetScore(set);
 		while (true) {
 			s.solve(set);
-			int size = set.getTotalSize();
+			int size = c.calculateSetScore(set);
 			if (size >= best) {
 				break;
 			}
 			best = size;
 			log.info("found better solution : " + best);
-			c.writeComponentSetToFile(set, bestFile);
-			set = c.readIntoComponentSet(bestFile);
+			fc.writeComponentSetToFile(set, bestFile);
+			set = fc.readIntoComponentSet(bestFile);
 		}
 	}
 
@@ -63,16 +65,18 @@ public class FullRun {
 		ClassLoader classLoader = FullRun.class.getClassLoader();
 
 		URL url = classLoader.getResource("All.xml");
-		File componentsFile = new File(url.getPath());
+		File componentSetFile = new File(url.getPath());
 
-		return c.readIntoComponentSet(componentsFile);
+		return fc.readIntoComponentSet(componentSetFile);
 	}
 
 	private Solver getSolver() {
-		ConnectionOptimizer r = new ConectionInverter();
-		ConnectionOptimizer m = new ConnectionMover();
-		ConnectionOptimizer pt = new ConnectionAlternatePinTrier();
-		return new MutiplePathMultiplePassConnectionSolver(Arrays.asList(r, m, pt));
+		return new JustOneOptimizerSolver(new RandomizingSetOptimizer(10000));
+		
+//		ConnectionOptimizer r = new ConectionInverter();
+//		ConnectionOptimizer m = new ConnectionMover();
+//		ConnectionOptimizer pt = new ConnectionAlternatePinTrier();
+//		return new MutiplePathMultiplePassConnectionSolver(Arrays.asList(r, m, pt));
 	}
 
 	public static void main(String[] args) {

@@ -18,6 +18,12 @@ public class ComponentFactory {
 		}
 	}
 	
+	/**
+	 * get the collection of pins for the given connectable type
+	 * @param type
+	 * @param label
+	 * @return
+	 */
 	public Collection<Pin> getPinsForTypeAndLabel(String type, String label) {
 		final ConnectableDefinition cd = defMap.get(type);
 		if (cd != null) {
@@ -37,7 +43,7 @@ public class ComponentFactory {
 		final ConnectableDefinition cd = defMap.get(type);
 
 		if (cd != null) {
-			BaseComponent e = new BaseComponent(itemId, cd.getType(), cd.getPinSize());
+			BaseComponent e = new BaseComponent(itemId, type, cd.getPinSize());
 			e.setPins(cd.getAllPins());
 			return e;
 		}

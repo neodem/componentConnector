@@ -7,20 +7,29 @@ public class SetItem {
 	
 	private BaseComponent item;
 	private Location itemLocation;
-	private Boolean Inverted;
+	private Boolean inverted;
 	
 	public SetItem(BaseComponent item, Location itemLocation, Boolean inverted) {
 		super();
 		this.item = item;
 		this.itemLocation = itemLocation;
-		Inverted = inverted;
+		this.inverted = inverted;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append(item);
+		b.append(itemLocation);
+		if(inverted) b.append("[INV]");
+		return b.toString();
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 91;
 		int result = 1;
-		result = prime * result + ((Inverted == null) ? 0 : Inverted.hashCode());
+		result = prime * result + ((inverted == null) ? 0 : inverted.hashCode());
 		result = prime * result + ((item == null) ? 0 : item.hashCode());
 		result = prime * result + ((itemLocation == null) ? 0 : itemLocation.hashCode());
 		return result;
@@ -35,10 +44,10 @@ public class SetItem {
 		if (getClass() != obj.getClass())
 			return false;
 		SetItem other = (SetItem) obj;
-		if (Inverted == null) {
-			if (other.Inverted != null)
+		if (inverted == null) {
+			if (other.inverted != null)
 				return false;
-		} else if (!Inverted.equals(other.Inverted))
+		} else if (!inverted.equals(other.inverted))
 			return false;
 		if (item == null) {
 			if (other.item != null)
@@ -62,6 +71,6 @@ public class SetItem {
 	}
 
 	public Boolean getInverted() {
-		return Inverted;
+		return inverted;
 	}
 }

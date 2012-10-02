@@ -1,5 +1,6 @@
 package com.neodem.componentConnector.model.sets;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -40,6 +41,14 @@ public class ComponentSet {
 		this.rows = set.rows;
 		this.cols = set.cols;
 	}
+	
+	public static ComponentSet copy(final ComponentSet input) {
+		ComponentSet copy = new ComponentSet(input);
+		copy.items = Collections.copyMap(input.items);
+		copy.usedLocations = new HashSet<Location>(input.usedLocations.size());
+		copy.usedLocations.addAll(input.usedLocations);
+		return copy;
+	}
 
 	public void addItem(BaseComponent i, Location loc, Boolean inverted) {
 		if (i.isValid()) {
@@ -50,7 +59,7 @@ public class ComponentSet {
 			}
 
 			int row = loc.getRow();
-			if (row >= row) {
+			if (row >= rows) {
 				throw new IllegalArgumentException("Item Row is out of bounds");
 			}
 
@@ -108,5 +117,16 @@ public class ComponentSet {
 	public Map<String, SetItem> getItems() {
 		return Collections.copyMap(items);
 	}
-
+	
+	/**
+	 * get a collection of all the source items
+	 * @return
+	 */
+	public Collection<BaseComponent> getAllComponents() {
+		Collection<BaseComponent> comps = new HashSet<BaseComponent>(items.size());
+		for(SetItem i : items.values()) {
+			comps.add(i.getItem());
+		}
+		return comps;
+	}
 }

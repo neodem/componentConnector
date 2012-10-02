@@ -1,16 +1,18 @@
-package com.neodem.componentConnector.solver.optimizers.set;
+package com.neodem.componentConnector.optimizer;
 
 import org.apache.commons.logging.Log;
 
 import com.neodem.componentConnector.model.sets.ComponentSet;
+import com.neodem.componentConnector.tools.Calculator;
 
 /**
  * @author vfumo
  * 
  */
 public abstract class BaseSetOptimizer implements SetOptimizer {
-
 	protected abstract Log getLog();
+	
+	protected static Calculator calc = new Calculator();
 
 	/**
 	 * 
@@ -19,8 +21,8 @@ public abstract class BaseSetOptimizer implements SetOptimizer {
 		ComponentSet testSet = ComponentSet.copy(input);
 
 		ComponentSet optimized = optimizeSet(testSet);
-		int oSize = optimized.getTotalSize();
-		int iSize = input.getTotalSize();
+		int oSize = calc.calculateSetScore(optimized);
+		int iSize = calc.calculateSetScore(input);
 
 		if (oSize < iSize) {
 			getLog().debug("improved from : " + iSize + "  to : " + oSize);

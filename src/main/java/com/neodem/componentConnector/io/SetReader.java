@@ -34,8 +34,6 @@ public class SetReader {
 			int cols = Integer.parseInt(setRoot.getAttributeValue("cols"));
 			boolean autoLocate = Boolean.parseBoolean(setRoot.getAttributeValue("autoLocate"));
 
-			// add connectables (components need to be located in the set,
-			// endpoints are not so they are just added to the connectables map
 			Elements componentElements = setRoot.getChildElements();
 			if (autoLocate) {
 				set = addComponentsWithAutoLocate(rows, cols, componentElements, factory);
@@ -54,7 +52,7 @@ public class SetReader {
 	// <component type="relay" id="xor2a" row="2" col="2" inv="false">
 	private static ComponentSet addComponents(int rows, int cols, Elements componentElements, ComponentFactory factory) {
 		ComponentSet set;
-		set = new ComponentSet(cols, rows);
+		set = new ComponentSet(rows, cols);
 		for (int i = 0; i < componentElements.size(); i++) {
 			Element componentElement = componentElements.get(i);
 			String type = componentElement.getAttributeValue("type");
@@ -66,7 +64,9 @@ public class SetReader {
 			BaseComponent component = factory.make(type, id);
 			if (component != null) {
 				Elements connections = componentElement.getChildElements();
-				addConnectionsToComponent(connections, component, factory);
+				if (connections != null) {
+					addConnectionsToComponent(connections, component, factory);
+				}
 				Location loc = new Location(Integer.valueOf(row), Integer.valueOf(col));
 				set.addItem(component, loc, Boolean.valueOf(inv));
 			}
@@ -78,7 +78,7 @@ public class SetReader {
 	private static ComponentSet addComponentsWithAutoLocate(int rows, int cols, Elements componentElements,
 			ComponentFactory factory) {
 		AutoAddComponentSet set;
-		set = new AutoAddComponentSet(cols, rows);
+		set = new AutoAddComponentSet(rows, cols);
 		for (int i = 0; i < componentElements.size(); i++) {
 			Element componentElement = componentElements.get(i);
 			String type = componentElement.getAttributeValue("type");

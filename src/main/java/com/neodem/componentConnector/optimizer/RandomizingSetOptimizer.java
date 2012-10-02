@@ -1,4 +1,4 @@
-package com.neodem.componentConnector.solver.optimizers.set;
+package com.neodem.componentConnector.optimizer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,11 +9,10 @@ import java.util.Random;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.neodem.componentConnector.model.Component;
-import com.neodem.componentConnector.model.Connection;
-import com.neodem.componentConnector.model.components.Connectable;
+import com.neodem.componentConnector.model.components.BaseComponent;
 import com.neodem.componentConnector.model.sets.AutoAddComponentSet;
 import com.neodem.componentConnector.model.sets.ComponentSet;
+import com.neodem.componentConnector.tools.Calculator;
 
 /**
  * Will attempt use purely random location changes of the components (and
@@ -28,6 +27,8 @@ import com.neodem.componentConnector.model.sets.ComponentSet;
 public class RandomizingSetOptimizer implements SetOptimizer {
 	private static final Log log = LogFactory.getLog(RandomizingSetOptimizer.class);
 	
+	protected static final Calculator calc = new Calculator();
+	
 	private Random random = new Random();
 	private int numRuns;
 
@@ -41,12 +42,12 @@ public class RandomizingSetOptimizer implements SetOptimizer {
 	 * better than the given one, that one is returned
 	 */
 	public ComponentSet optimize(final ComponentSet input) {
+		int bestSize = calc.calculateSetScore(input);
 		ComponentSet best = input;
-		int bestSize = best.getTotalSize();
 		log.debug("start : " + bestSize);
 		for (int i = 0; i < numRuns; i++) {
 			ComponentSet randomSet = createNewRandomSet(input);
-			int randomSize = randomSet.getTotalSize();
+			int randomSize = calc.calculateSetScore(randomSet);
 			
 			if (randomSize < bestSize) {
 				best = randomSet;
@@ -58,38 +59,26 @@ public class RandomizingSetOptimizer implements SetOptimizer {
 	}
 
 	private ComponentSet createNewRandomSet(final ComponentSet set) {
-		Collection<Component> originalComponents = set.getAllComponents();
-		Collection<Connection> originalConnections = set.getAllConnections();
+		Collection<BaseComponent> allComponents = set.getAllComponents();
 
-		List<Component> sources = new ArrayList<Component>();
-		sources.addAll(originalComponents);
+		List<BaseComponent> sourceItems = new ArrayList<BaseComponent>(allComponents.size());
+		sourceItems.addAll(allComponents);
 
 		// create a new AACS with the same dimensions
 		AutoAddComponentSet newSet = new AutoAddComponentSet(set);
 		
 		// add components with the same names to the new set
-		Collections.shuffle(sources);
-		for (Component r : sources) {
-			Component component = new Component(r);
+		Collections.shuffle(sourceItems);
+		for (BaseComponent r : sourceItems) {
+			BaseComponent component = new BaseComponent(r);
+			
+			newSet.addItem(component);
 			
 			if (random.nextBoolean()) {
-				component.invert();
+				newSet.invertItem(component);
 			}
-			
-			newSet.addComponent(component);
 		}
 		
-		// add connections to the new set
-		for (Connection c : originalConnections) {
-			String fromName = c.getFrom().getName();
-			String toName = c.getTo().getName();
-			
-			Connectable from = newSet.getConnectable(fromName);
-			Connectable to = newSet.getConnectable(toName);
-
-			newSet.addConnection(new Connection(from, c.getFromPins(), to, c.getToPins()));
-		}
-
 		return newSet;
 	}
 

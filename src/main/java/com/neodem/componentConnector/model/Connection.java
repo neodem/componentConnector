@@ -46,6 +46,27 @@ public class Connection {
 		}
 	}
 	
+	/**
+	 * copy constructor
+	 * 
+	 * @param s
+	 */
+	public Connection(Connection s) {
+		this.toId = new String(s.toId);
+		this.toPin = new Pin(s.toPin);
+		this.fromPin = new Pin(s.fromPin);
+		
+		this.toPins = new HashSet<Pin>(s.toPins.size());
+		for(Pin p : s.toPins) {
+			this.toPins.add(new Pin(p));
+		}
+		
+		this.fromPins = new HashSet<Pin>(s.toPins.size());
+		for(Pin p : s.fromPins) {
+			this.fromPins.add(new Pin(p));
+		}
+	}
+
 	public boolean isValid() {
 		return StringUtils.isNotBlank(toId) && toPin != null && fromPin != null;
 	}

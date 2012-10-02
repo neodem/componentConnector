@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
+import com.neodem.componentConnector.solver2.Solver;
 
 /**
  * Will find the single largest connection and optimize it

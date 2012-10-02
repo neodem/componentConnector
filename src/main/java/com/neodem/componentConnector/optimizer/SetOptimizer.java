@@ -1,4 +1,4 @@
-package com.neodem.componentConnector.solver.optimizers.set;
+package com.neodem.componentConnector.optimizer;
 
 import com.neodem.componentConnector.model.sets.ComponentSet;
 

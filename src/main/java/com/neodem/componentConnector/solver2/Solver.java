@@ -1,4 +1,4 @@
-package com.neodem.componentConnector.solver;
+package com.neodem.componentConnector.solver2;
 
 import com.neodem.componentConnector.model.sets.ComponentSet;
 

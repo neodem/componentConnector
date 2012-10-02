@@ -6,16 +6,16 @@ package com.neodem.componentConnector.model;
  */
 public class Location {
 	public Location(int row, int col) {
-		x = col;
-		y = row;
+		this.col = col;
+		this.row = row;
 	}
 
-	private int x;
-	private int y;
+	private int col;
+	private int row;
 
 	@Override
 	public String toString() {
-		return "[" + x + "," + y + "]";
+		return "[" + row + "," + col + "]";
 	}
 
 	/*
@@ -27,8 +27,8 @@ public class Location {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + x;
-		result = prime * result + y;
+		result = prime * result + row;
+		result = prime * result + col;
 		return result;
 	}
 
@@ -49,26 +49,26 @@ public class Location {
 			return false;
 		}
 		Location other = (Location) obj;
-		if (x != other.x) {
+		if (row != other.row) {
 			return false;
 		}
-		if (y != other.y) {
+		if (col != other.col) {
 			return false;
 		}
 		return true;
 	}
 
 	/**
-	 * @return the x
+	 * @return the col
 	 */
 	public int getCol() {
-		return x;
+		return col;
 	}
 
 	/**
-	 * @return the y
+	 * @return the row
 	 */
 	public int getRow() {
-		return y;
+		return row;
 	}
 }
