@@ -5,13 +5,20 @@ package com.neodem.componentConnector.model;
  * 
  */
 public class Location {
+
+	private int col;
+	private int row;
+	
 	public Location(int row, int col) {
 		this.col = col;
 		this.row = row;
 	}
 
-	private int col;
-	private int row;
+	public Location(Location loc) {
+		this.col = loc.col;
+		this.row = loc.row;
+	}
+
 
 	@Override
 	public String toString() {

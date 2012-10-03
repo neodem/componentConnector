@@ -23,6 +23,7 @@ public class ComponentSet {
 	int cols;
 
 	/**
+	 * <id, item>
 	 */
 	private Map<String, SetItem> items = new HashMap<String, SetItem>();
 
@@ -128,5 +129,18 @@ public class ComponentSet {
 			comps.add(i.getItem());
 		}
 		return comps;
+	}
+
+	/**
+	 * if it exists, get a copy of a SetItem for a given id
+	 * @param toId
+	 * @return
+	 */
+	public SetItem getItemFromId(String toId) {
+		SetItem i = items.get(toId);
+		if(i != null) {
+			return new SetItem(i);
+		}
+		return null;
 	}
 }

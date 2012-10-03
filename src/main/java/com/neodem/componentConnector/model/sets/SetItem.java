@@ -16,6 +16,12 @@ public class SetItem {
 		this.inverted = inverted;
 	}
 	
+	public SetItem(SetItem i) {
+		item = new BaseComponent(i.item);
+		itemLocation = new Location(i.itemLocation);
+		inverted = new Boolean(i.inverted);
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();

@@ -54,13 +54,14 @@ public class Calculator {
 	 */
 	public int calculateItemScore(SetItem setItem, ComponentSet set) {
 		BaseComponent item = setItem.getItem();
-		Location itemLocation = setItem.getItemLocation();
-		Boolean inverted = setItem.getInverted();
 		Collection<Connection> connections = item.getConnections();
 
 		int score = 0;
 		for (Connection c : connections) {
-			score += calculateItemConnectionScore(item, itemLocation, inverted, c, set);
+			SetItem toItem = set.getItemFromId(c.getToId());
+			if (toItem != null) {
+				score += calculateItemConnectionScore(setItem, toItem, c);
+			}
 		}
 
 		return score;
@@ -69,31 +70,26 @@ public class Calculator {
 	/**
 	 * for a given connection we calculate its score.
 	 * 
-	 * @param item
-	 *            the item this connection belongs to
-	 * 
-	 * @param location
-	 *            the lcoation of the item
-	 * @param inverted
-	 *            if the item is inverted
+	 * @param from
+	 *            the item we're connecting from
+	 * @param to
+	 *            the item we're connecting to
 	 * @param c
 	 *            the connection on the item we are scoring
-	 * @param set
-	 * @return
+	 * @return the score
 	 */
-	public int calculateItemConnectionScore(BaseComponent item, Location location, Boolean inverted, Connection c,
-			ComponentSet set) {
-		Map<String, SetItem> items = set.getItems();
+	public int calculateItemConnectionScore(SetItem from, SetItem to, Connection c) {
+		BaseComponent fromItem = from.getItem();
+		Location fromLoc = from.getItemLocation();
+		Boolean fromInv = from.getInverted();
 
-		String toName = c.getToId();
-		SetItem other = items.get(toName);
+		BaseComponent toItem = to.getItem();
+		Location toLoc = to.getItemLocation();
+		Boolean toInv = to.getInverted();
 
-		BaseComponent otherItem = other.getItem();
-		Location otherItemLoc = other.getItemLocation();
-		Boolean otherItemInv = other.getInverted();
-
-		int abs = calculateAbsoluteScore(location, otherItemLoc);
-		int rot = calculateRotationalScore(item, null, inverted, c.getFromPin(), otherItem, null, otherItemInv, c.getToPin());
+		int abs = calculateAbsoluteScore(fromLoc, toLoc);
+		int rot = calculateRotationalScore(fromItem, fromLoc, fromInv, c.getFromPin(), toItem, toLoc, toInv,
+				c.getToPin());
 
 		return abs + rot;
 	}
