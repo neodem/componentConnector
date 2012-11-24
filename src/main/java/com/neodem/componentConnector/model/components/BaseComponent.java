@@ -9,6 +9,7 @@ import java.util.HashSet;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.neodem.common.utility.text.Chars;
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.Pin;
 import com.neodem.componentConnector.model.Side;
@@ -35,9 +36,10 @@ public class BaseComponent {
 		this.type = type;
 		connectsTo = new HashSet<Connection>();
 	}
-	
+
 	/**
 	 * copy constructor
+	 * 
 	 * @param s
 	 */
 	public BaseComponent(BaseComponent s) {
@@ -46,8 +48,8 @@ public class BaseComponent {
 		this.pinCount = s.pinCount;
 		this.moveable = s.moveable;
 		this.connectsTo = new HashSet<Connection>(s.connectsTo.size());
-		
-		for(Connection sc : s.connectsTo) {
+
+		for (Connection sc : s.connectsTo) {
 			Connection c = new Connection(sc);
 			this.connectsTo.add(c);
 		}
@@ -61,6 +63,25 @@ public class BaseComponent {
 	@Override
 	public String toString() {
 		return "[" + id + ",(" + type + ")]";
+	}
+
+	/**
+	 * give a full display of the component and its connections
+	 * 
+	 * @return
+	 */
+	public String display() {
+		StringBuffer b = new StringBuffer();
+
+		b.append(this);
+		b.append(Chars.NEWLINE);
+		for (Connection c : connectsTo) {
+			b.append("  ");
+			b.append(c);
+			b.append(Chars.NEWLINE);
+		}
+
+		return b.toString();
 	}
 
 	/*

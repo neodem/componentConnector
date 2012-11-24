@@ -2,16 +2,10 @@ package com.neodem.componentConnector.graphics;
 
 import com.neodem.componentConnector.model.Connection;
 import com.neodem.componentConnector.model.Pin;
-import com.neodem.componentConnector.model.components.Connectable;
 import com.neodem.graphics.text.model.GraphicsObject;
 import com.neodem.graphics.text.model.SingleLineGraphicsObject;
 
 public abstract class GraphicalConnection extends SingleLineGraphicsObject implements GraphicsObject, Comparable<GraphicalConnection> {
-
-	/**
-	 * this is where the connection is going to (or coming from)
-	 */
-	protected Connectable other;
 
 	/**
 	 * this is the Pin where the connection is coming from (or going to)
@@ -22,7 +16,9 @@ public abstract class GraphicalConnection extends SingleLineGraphicsObject imple
 	 * set to true if we are coming into this component from someowhere else
 	 * (eg. inbound connection)
 	 */
-	protected boolean from = true;
+	protected boolean inBoundConnection = false;
+
+	protected String otherId;
 	
 	/**
 	 * 
@@ -31,12 +27,10 @@ public abstract class GraphicalConnection extends SingleLineGraphicsObject imple
 	 * @param parent
 	 *            the parent component we are attaching this item to
 	 */
-	public GraphicalConnection(Connection c, Connectable parent) {
-		other = c.getOther(parent);
-		otherPin = c.getPin(other);
-		if (parent.equals(c.getTo())) {
-			from = false;
-		}
+	public GraphicalConnection(Connection c, boolean inBoundConnection) {
+		otherId = c.getToId();
+		otherPin = c.getToPin();
+		this.inBoundConnection = inBoundConnection;
 		setLine("");
 	}
 	
@@ -52,10 +46,10 @@ public abstract class GraphicalConnection extends SingleLineGraphicsObject imple
 	 * invert the 'polarity' of the connection.. ie. if it was a from, make it to, etc.
 	 */
 	public void invert() {
-		if (from == true) {
-			from = false;
+		if (inBoundConnection == true) {
+			inBoundConnection = false;
 		} else {
-			from = true;
+			inBoundConnection = true;
 		}
 
 	}

@@ -1,4 +1,4 @@
-package com.neodem.componentConnector.optimizer;
+package com.neodem.componentConnector.optimizer.set;
 
 import java.util.ArrayList;
 import java.util.Collection;

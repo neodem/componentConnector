@@ -1,4 +1,4 @@
-package com.neodem.componentConnector.optimizer;
+package com.neodem.componentConnector.optimizer.set;
 
 import org.apache.commons.logging.Log;
 
@@ -21,6 +21,7 @@ public abstract class BaseSetOptimizer implements SetOptimizer {
 		ComponentSet testSet = ComponentSet.copy(input);
 
 		ComponentSet optimized = optimizeSet(testSet);
+		
 		int oSize = calc.calculateSetScore(optimized);
 		int iSize = calc.calculateSetScore(input);
 

@@ -4,7 +4,7 @@
 package com.neodem.componentConnector.solver2;
 
 import com.neodem.componentConnector.model.sets.ComponentSet;
-import com.neodem.componentConnector.optimizer.SetOptimizer;
+import com.neodem.componentConnector.optimizer.set.SetOptimizer;
 
 /**
  * @author vfumo

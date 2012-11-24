@@ -2,7 +2,6 @@ package com.neodem.componentConnector.main;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,12 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import com.neodem.componentConnector.io.DefaultFileConnector;
 import com.neodem.componentConnector.io.FileConnector;
 import com.neodem.componentConnector.model.sets.ComponentSet;
-import com.neodem.componentConnector.optimizer.RandomizingSetOptimizer;
-import com.neodem.componentConnector.solver.MutiplePathMultiplePassConnectionSolver;
-import com.neodem.componentConnector.solver.optimizers.connection.ConectionInverter;
-import com.neodem.componentConnector.solver.optimizers.connection.ConnectionAlternatePinTrier;
-import com.neodem.componentConnector.solver.optimizers.connection.ConnectionMover;
-import com.neodem.componentConnector.solver.optimizers.connection.ConnectionOptimizer;
+import com.neodem.componentConnector.optimizer.set.RandomizingSetOptimizer;
 import com.neodem.componentConnector.solver2.JustOneOptimizerSolver;
 import com.neodem.componentConnector.solver2.Solver;
 import com.neodem.componentConnector.tools.Calculator;
@@ -30,7 +24,7 @@ public class FullRun {
 
 	private FileConnector fc;
 	
-	private Calculator c = new Calculator();
+	private static final Calculator c = new Calculator();
 
 	public FullRun() {
 		fc = initFileConnector();
@@ -53,7 +47,7 @@ public class FullRun {
 	}
 
 	private FileConnector initFileConnector() {
-		ClassLoader classLoader = FullRunRandom.class.getClassLoader();
+		ClassLoader classLoader = FullRun.class.getClassLoader();
 
 		URL url = classLoader.getResource("All-Connectables.xml");
 		File defs = new File(url.getPath());

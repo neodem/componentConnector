@@ -7,15 +7,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.neodem.componentConnector.AbstractBaseRelayLocatorTest;
 import com.neodem.componentConnector.model.Location;
 import com.neodem.componentConnector.model.Pin;
-import com.neodem.componentConnector.model.components.Item;
+import com.neodem.componentConnector.model.components.BaseComponent;
 
 /**
  * @author vfumo
  * 
  */
-public class CalculatorTest  {
+public class CalculatorTest extends AbstractBaseRelayLocatorTest {
 
 	Calculator calculator;
 
@@ -86,8 +87,8 @@ public class CalculatorTest  {
 		Location fromLoc = new Location(0,0);
 		Location toLoc = new Location(0,1);
 		
-		Item from = new Item("from", 12);
-		Item to = new Item("to", 12);
+		BaseComponent from = relayFactory.make("relay","from");
+		BaseComponent to = relayFactory.make("relay","to");
 		
 		Pin leftSidePin =  new Pin(7, "");
 		Pin rightSidePin =  new Pin(6, "");
@@ -103,8 +104,8 @@ public class CalculatorTest  {
 		Location fromLoc = new Location(0,0);
 		Location toLoc = new Location(1,0);
 		
-		Item from = new Item("from", 12);
-		Item to = new Item("to", 12);
+		BaseComponent from = relayFactory.make("relay","from");
+		BaseComponent to = relayFactory.make("relay","to");
 		
 		Pin leftSidePin =  new Pin(7, "");
 		Pin rightSidePin =  new Pin(6, "");

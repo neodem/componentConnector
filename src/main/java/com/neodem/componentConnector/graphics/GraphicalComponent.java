@@ -8,11 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.neodem.componentConnector.model.Component;
+import com.neodem.common.utility.text.Chars;
 import com.neodem.componentConnector.model.Connection;
+import com.neodem.componentConnector.model.Location;
 import com.neodem.componentConnector.model.Pin;
 import com.neodem.componentConnector.model.Side;
-import com.neodem.componentConnector.tools.ComponentTools;
+import com.neodem.componentConnector.model.components.BaseComponent;
 import com.neodem.graphics.text.model.ConsoleTools;
 import com.neodem.graphics.text.model.GraphicsObject;
 import com.neodem.graphics.text.util.DisplayHelper;
@@ -30,22 +31,97 @@ public class GraphicalComponent implements GraphicsObject {
 	private static final int COMPONENT_WIDTH = 14;
 	private static final int SIDE_WIDTH = 15;
 
-	private int height = DEFAULT_HEIGHT;
-	private int width = COMPONENT_WIDTH;
+	protected int height = DEFAULT_HEIGHT;
+	protected int width = COMPONENT_WIDTH;
 
-	private int pinsPerSide = 0;
-	boolean inverted = false;
+	protected int pinsPerSide = 0;
+	protected boolean inverted = false;
 
 	private List<String> lines = new ArrayList<String>(height);
-	private Component parent;
+	protected BaseComponent parent;
 	private Map<Integer, GraphicalConnection> leftConnections = new HashMap<Integer, GraphicalConnection>();
 	private Map<Integer, GraphicalConnection> rightConnections = new HashMap<Integer, GraphicalConnection>();
+	private String componentName;
+	private Location componentLocation;
 
-	public GraphicalComponent(Component c) {
-		parent = c;
-		pinsPerSide = c.getNumberofPins() / 2;
-		height = pinsPerSide + 2;
-		inverted = c.isInverted();
+	protected GraphicalComponent(String name, Location location, BaseComponent parent, int pinsPerSide, int height,
+			boolean inverted, Collection<Connection> toCons) {
+		this.componentName = name;
+		this.componentLocation = location;
+		this.parent = parent;
+		this.pinsPerSide = pinsPerSide;
+		this.height = height;
+		this.inverted = inverted;
+		addRelatedConnections(toCons);
+		computeLines();
+	}
+
+	public GraphicalComponent(String name, Location location, BaseComponent c, boolean inverted,
+			Collection<Connection> cons) {
+		this(name, location, c, c.getNumberofPins() / 2, (c.getNumberofPins() / 2) + 2, inverted, cons);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.neodem.graphics.model.GraphicsObject#getLine(int)
+	 */
+	public String getLine(int lineIndex) {
+		return lines.get(lineIndex);
+	}
+
+	public String getAsString() {
+		StringBuffer b = new StringBuffer();
+		for (int i = 0; i < height; i++) {
+			b.append(getLine(i));
+			b.append(Chars.NEWLINE);
+		}
+		return b.toString();
+	}
+
+	public boolean isValid() {
+		return true;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+	
+	protected void addRelatedConnections(Collection<Connection> cons) {
+		if (cons != null) {
+			for (Connection c : cons) {
+				addRelatedConnection(c);
+			}
+		}
+	}
+	
+	protected void addRelatedConnection(Connection c) {
+		Pin fromPin = c.getFromPin();
+
+		// determine connection index
+		int index = parent.determineSideIndex(inverted, fromPin);
+
+		// determine connection side
+		Side connectionSide = parent.getSideForPin(inverted, fromPin);
+
+		GraphicalConnection con = null;
+		if (connectionSide == Left) {
+			con = new GraphicalLeftSideConnection(c, false);
+			if (inverted) {
+				con.invert();
+			}
+			leftConnections.put(index, con);
+		} else {
+			con = new GraphicalRightSideConnection(c, false);
+			if (inverted) {
+				con.invert();
+			}
+			rightConnections.put(index, con);
+		}
 	}
 
 	/**
@@ -77,14 +153,8 @@ public class GraphicalComponent implements GraphicsObject {
 			// this is a middle line
 			int middleIndex = lineIndex - 1;
 
-			String middleText = null;
-			if (middleIndex == 1) {
-				middleText = parent.getName();
-			} else if (middleIndex == 2) {
-				middleText = makeInfoString(parent);
-			} else if (middleIndex == 3) {
-				middleText = parent.getLocation().toString();
-			}
+			// make the text to display (if any)
+			String middleText = makeMiddleText(middleIndex);
 
 			String middleContent = makeMiddleContent(middleIndex, middleText);
 			String leftContent = makeLeftContent(middleIndex);
@@ -95,26 +165,16 @@ public class GraphicalComponent implements GraphicsObject {
 		return line;
 	}
 
-	protected String makeRightContent(int lineIndex) {
-		String rightContent = "";
-		GraphicalConnection con = rightConnections.get(lineIndex);
-		if (con != null) {
-			// make it
-			rightContent = con.getAsString();
+	private String makeMiddleText(int middleIndex) {
+		String middleText = null;
+		if (middleIndex == 1) {
+			middleText = componentName;
+		} else if (middleIndex == 2) {
+			middleText = makeInfoString();
+		} else if (middleIndex == 3) {
+			middleText = componentLocation.toString();
 		}
-		rightContent = DisplayHelper.fitIntoLeft(rightContent, SIDE_WIDTH);
-		return rightContent;
-	}
-
-	protected String makeLeftContent(int lineIndex) {
-		String leftContent = "";
-		GraphicalConnection con = leftConnections.get(lineIndex);
-		if (con != null) {
-			// make it
-			leftContent = con.getAsString();
-		}
-		leftContent = DisplayHelper.fitIntoRight(leftContent, SIDE_WIDTH);
-		return leftContent;
+		return middleText;
 	}
 
 	/**
@@ -139,6 +199,28 @@ public class GraphicalComponent implements GraphicsObject {
 		return leftSide + middle + rightSide;
 	}
 
+	protected String makeRightContent(int lineIndex) {
+		String rightContent = "";
+		GraphicalConnection con = rightConnections.get(lineIndex);
+		if (con != null) {
+			// make it
+			rightContent = con.getAsString();
+		}
+		rightContent = DisplayHelper.fitIntoLeft(rightContent, SIDE_WIDTH);
+		return rightContent;
+	}
+
+	protected String makeLeftContent(int lineIndex) {
+		String leftContent = "";
+		GraphicalConnection con = leftConnections.get(lineIndex);
+		if (con != null) {
+			// make it
+			leftContent = con.getAsString();
+		}
+		leftContent = DisplayHelper.fitIntoRight(leftContent, SIDE_WIDTH);
+		return leftContent;
+	}
+
 	private String getRightPinNumber(int middleIndex) {
 		if (inverted) {
 			return "" + ((pinsPerSide * 2) - middleIndex);
@@ -153,90 +235,13 @@ public class GraphicalComponent implements GraphicsObject {
 		return "" + (pinsPerSide + middleIndex + 1);
 	}
 
-	public void addRelatedConnection(Connection c) {
-		Pin pin = c.getPin(parent);
-
-		// determine connection index
-		int index = ComponentTools.determineSideIndex(parent, pin);
-
-		// determine connection side
-		Side connectionSide = ComponentTools.getSideForPin(parent, pin);
-
-		GraphicalConnection con = null;
-		if (connectionSide == Left) {
-			con = new GraphicalLeftSideConnection(c, parent);
-			if (inverted) {
-				con.invert();
-			}
-			leftConnections.put(index, con);
-		} else {
-			con = new GraphicalRightSideConnection(c, parent);
-			if (inverted) {
-				con.invert();
-			}
-			rightConnections.put(index, con);
-		}
-	}
-
-	public void addRelatedConnections(Collection<Connection> cons) {
-		for (Connection c : cons) {
-			addRelatedConnection(c);
-		}
-	}
-
-	private String makeInfoString(Component c) {
+	private String makeInfoString() {
 		StringBuffer info = new StringBuffer();
-		if (c.isInverted()) {
+		if (inverted) {
 			info.append("I");
 		}
 
-		// / F == fixed (non-mobile)
-		if (!c.isMoveable()) {
-			info.append("F");
-		}
 		return info.toString();
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.neodem.graphics.model.GraphicsObject#isValid()
-	 */
-	public boolean isValid() {
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.neodem.graphics.model.GraphicsObject#getHeight()
-	 */
-	public int getHeight() {
-		return height;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.neodem.graphics.model.GraphicsObject#getLine(int)
-	 */
-	public String getLine(int lineIndex) {
-		computeLines();
-		return lines.get(lineIndex);
-	}
-
-	public String getAsString() {
-		computeLines();
-		StringBuffer b = new StringBuffer();
-		for (int i = 0; i < height; i++) {
-			b.append(getLine(i));
-			b.append('\n');
-		}
-		return b.toString();
-	}
-
-	public int getWidth() {
-		return width;
 	}
 
 }

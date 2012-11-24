@@ -1,4 +1,4 @@
-package com.neodem.componentConnector.graphics;
+package com.neodem.componentConnector.graphics.display;
 
 import com.neodem.componentConnector.model.sets.ComponentSet;
 

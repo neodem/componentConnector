@@ -9,8 +9,7 @@ import org.junit.Test;
 
 import com.neodem.componentConnector.AbstractBaseRelayLocatorTest;
 import com.neodem.componentConnector.main.FullRunRandom;
-import com.neodem.componentConnector.model.Component;
-import com.neodem.componentConnector.model.Connection;
+import com.neodem.componentConnector.model.components.BaseComponent;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 
 public class DefaultFileConnectorTest extends AbstractBaseRelayLocatorTest {
@@ -31,13 +30,8 @@ public class DefaultFileConnectorTest extends AbstractBaseRelayLocatorTest {
 	public void loadAndUnloadShouldNotChangeTheSet() {
 		ComponentSet set = new ComponentSet(5,5);
 		
-		Component from = relayFactory.make("from", 0, 0);
-		Component to = relayFactory.make("to", 4, 0);
-		set.addComponent(from);
-		set.addComponent(to);
-
-		Connection con = makeConnection(from, "IN", to, "OFF");
-		set.addConnection(con);
+		BaseComponent from = addToSet(set, "from", 0,0);
+		BaseComponent to = addToSet(set, "to", 4,0);
 		
 		File testFile = new File("test.xml");
 		
@@ -46,10 +40,7 @@ public class DefaultFileConnectorTest extends AbstractBaseRelayLocatorTest {
 		ComponentSet set2 = d.readIntoComponentSet(testFile);
 		
 		set2.getAllComponents();
-		// make sure both are there and in correct positions
-		
-		set2.getAllConnections();
-		// make sure the connection is there and correct
+		//TODO make sure both are there and in correct positions
 		
 	}
 	

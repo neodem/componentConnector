@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.neodem.componentConnector.AbstractBaseRelayLocatorTest;
 import com.neodem.componentConnector.model.Connection;
+import com.neodem.componentConnector.model.components.BaseComponent;
 
 /**
  * 
@@ -20,8 +21,8 @@ public class ConnectionTest extends AbstractBaseRelayLocatorTest {
 
 	@Test
 	public void sameRowAdjacentShouldHaveVariousValuesDependingOnRotation() {
-		Component r1 = relayFactory.make("1", 0, 0);
-		Component r2 = relayFactory.make("2", 1, 0);
+		BaseComponent r1 = relayFactory.make("1", 0, 0);
+		BaseComponent r2 = relayFactory.make("2", 1, 0);
 
 		
 		Connection c = makeConnection(r1, Left, r2, Left);
@@ -39,8 +40,8 @@ public class ConnectionTest extends AbstractBaseRelayLocatorTest {
 
 	@Test
 	public void sameColumnAdjacentShouldHaveVariousValuesDependingOnRotation() {
-		Component r1 = relayFactory.make("1", 0, 0);
-		Component r2 = relayFactory.make("2", 0, 1);
+		BaseComponent r1 = relayFactory.make("1", 0, 0);
+		BaseComponent r2 = relayFactory.make("2", 0, 1);
 		
 		Connection c = makeConnection(r1, Left, r2, Left);
 		assertThat(calc.calculateDistance(c), is(0));
@@ -57,9 +58,9 @@ public class ConnectionTest extends AbstractBaseRelayLocatorTest {
 
 	@Test
 	public void adjacentHAndAdjacentVShouldHaveTheSameValues() {
-		Component r1 = relayFactory.make("1", 0, 0);
-		Component r2 = relayFactory.make("2", 1, 0);
-		Component r3 = relayFactory.make("3", 0, 1);
+		BaseComponent r1 = relayFactory.make("1", 0, 0);
+		BaseComponent r2 = relayFactory.make("2", 1, 0);
+		BaseComponent r3 = relayFactory.make("3", 0, 1);
 
 		Connection c1 = makeConnection(r1, Right, r2, Left);
 		Connection c2 = makeConnection(r1, Right, r3, Right);

@@ -2,14 +2,14 @@
 <connectableDefs>
 	<connectableDef id="relay" type="component" pins="12">
 		<pin number="1" name="IN" />
-		<pin number="5" name="VCC" />
+		<pin number="5" name="Vcc" />
 		<pin number="6" name="ON" />
 		<pin number="7" name="OFF" />
 		<pin number="8" name="GND" />
 		<pin number="12" name="IN" />
 	</connectableDef>
 	<connectableDef id="power" type="endpoint" pins="2">
-		<pin number="1" name="VCC" />
+		<pin number="1" name="Vcc" />
 		<pin number="2" name="GND" />
 	</connectableDef>	
 	<connectableDef id="data" type="endpoint" pins="4">

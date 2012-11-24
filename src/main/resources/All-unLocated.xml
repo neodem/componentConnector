@@ -1,214 +1,191 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <ComponentConnectorDef>
-	<components autoLocate="true" rows="10" cols="4">
-		<component type="relay" name="or1a" />
-		<component type="relay" name="or1b" />
-		<component type="relay" name="or2a" />
-		<component type="relay" name="or2b" />
-		<component type="relay" name="or3a" />
-		<component type="relay" name="or3b" />
-		<component type="relay" name="or3c" />
-		<component type="relay" name="or3d" />
-		<component type="relay" name="xor1a" />
-		<component type="relay" name="xor1b" />
-		<component type="relay" name="xor2a" />
-		<component type="relay" name="xor2b" />
-		<component type="relay" name="xor3a" />
-		<component type="relay" name="xor3b" />
-		<component type="relay" name="and1a" />
-		<component type="relay" name="and1b" />
-		<component type="relay" name="and2a" />
-		<component type="relay" name="and2b" />
-		<component type="relay" name="and3a" />
-		<component type="relay" name="and3b" />
-		<component type="relay" name="and3c" />
-		<component type="relay" name="and4a" />
-		<component type="relay" name="and4b" />
-		<component type="relay" name="and4c" />
-		<component type="relay" name="and5a" />
-		<component type="relay" name="and5b" />
-		<component type="relay" name="and5c" />
-		<component type="relay" name="and6a" />
-		<component type="relay" name="and6b" />
-		<component type="relay" name="and6c" />
-		<component type="relay" name="inv3b" />
-		<component type="relay" name="inv5c" />
-		<component type="relay" name="inv6b" />
-		<component type="relay" name="inv6c" />
-		<component type="power" name="power" />
-		<component type="data" name="data" />
-		<component type="control" name="control" />
-	</components>
-	<connections>
-		<!-- NOTE on gate types -->
-		<!-- OR gates have 2 ins (A and B) and 2 outs that tie together -->
-		<!-- XOR gates have 2 ins (A and B) and 1 out, and 2 internal connections -->
-		<!-- AND gates have 2 ins (A and B) and 1 out, and one internal connection -->
-		<!-- on all relays, GND to ground -->
-
-		<!-- OR1 -->
-		<connection from="power" fromPin="VCC" to="or1a" toPin="IN" />
-		<connection from="power" fromPin="GND" to="or1a" toPin="GND" />
-		<connection from="power" fromPin="VCC" to="or1b" toPin="IN" />
-		<connection from="power" fromPin="GND" to="or1b" toPin="GND" />
-
-		<connection from="and1b" fromPin="ON" to="or1a" toPin="VCC" />
-		<connection from="and2b" fromPin="ON" to="or1b" toPin="VCC" />
-
-		<!-- OR2 -->
-		<connection from="power" fromPin="VCC" to="or2a" toPin="IN" />
-		<connection from="power" fromPin="GND" to="or2a" toPin="GND" />
-		<connection from="power" fromPin="VCC" to="or2b" toPin="IN" />
-		<connection from="power" fromPin="GND" to="or2b" toPin="GND" />
-
-		<connection from="data" fromPin="A" to="or2a" toPin="VCC" />
-		<connection from="xor3b" fromPin="IN" to="or2b" toPin="VCC" />
-
-		<!-- OR3 -->
-		<connection from="power" fromPin="VCC" to="or3a" toPin="IN" />
-		<connection from="power" fromPin="GND" to="or3a" toPin="GND" />
-		<connection from="power" fromPin="VCC" to="or3b" toPin="IN" />
-		<connection from="power" fromPin="GND" to="or3b" toPin="GND" />
-		<connection from="power" fromPin="VCC" to="or3c" toPin="IN" />
-		<connection from="power" fromPin="GND" to="or3c" toPin="GND" />
-		<connection from="power" fromPin="VCC" to="or3d" toPin="IN" />
-		<connection from="power" fromPin="GND" to="or3d" toPin="GND" />
-
-		<connection from="and3c" fromPin="ON" to="or3a" toPin="VCC" />
-		<connection from="and4c" fromPin="ON" to="or3b" toPin="VCC" />
-		<connection from="and5c" fromPin="ON" to="or3c" toPin="VCC" />
-		<connection from="and6c" fromPin="ON" to="or3d" toPin="VCC" />
-
-		<!-- XOR1 -->
-		<connection from="power" fromPin="VCC" to="xor1a" toPin="IN" />
-		<connection from="power" fromPin="GND" to="xor1a" toPin="GND" />
-		<connection from="power" fromPin="GND" to="xor1b" toPin="GND" />
-
-		<connection from="xor1a" fromPin="ON" to="xor1b" toPin="OFF" />
-		<connection from="xor1a" fromPin="OFF" to="xor1b" toPin="ON" />
-
-		<connection from="data" fromPin="A" to="xor1a" toPin="VCC" />
-		<connection from="xor3b" fromPin="IN" to="xor1b" toPin="VCC" />
-
-		<!-- XOR2 -->
-		<connection from="power" fromPin="VCC" to="xor2a" toPin="IN" />
-		<connection from="power" fromPin="GND" to="xor2a" toPin="GND" />
-		<connection from="power" fromPin="GND" to="xor2b" toPin="GND" />
-
-		<connection from="xor2a" fromPin="ON" to="xor2b" toPin="OFF" />
-		<connection from="xor2a" fromPin="OFF" to="xor2b" toPin="ON" />
-
-		<connection from="data" fromPin="Cin" to="xor2a" toPin="VCC" />
-		<connection from="xor1b" fromPin="IN" to="xor2b" toPin="VCC" />
-
-		<!-- XOR3 -->
-		<connection from="power" fromPin="VCC" to="xor3a" toPin="IN" />
-		<connection from="power" fromPin="GND" to="xor3a" toPin="GND" />
-		<connection from="power" fromPin="GND" to="xor3b" toPin="GND" />
-
-		<connection from="xor3a" fromPin="ON" to="xor3b" toPin="OFF" />
-		<connection from="xor3a" fromPin="OFF" to="xor3b" toPin="ON" />
-
-		<connection from="data" fromPin="B" to="xor3a" toPin="VCC" />
-		<connection from="data" fromPin="Binv" to="xor3b" toPin="VCC" />
-
-		<!-- AND1 -->
-		<connection from="power" fromPin="VCC" to="and1a" toPin="IN" />
-		<connection from="power" fromPin="GND" to="and1a" toPin="GND" />
-		<connection from="power" fromPin="GND" to="and1b" toPin="GND" />
-
-		<connection from="and1a" fromPin="ON" to="and1b" toPin="IN" />
-
-		<connection from="xor1b" fromPin="IN" to="and1a" toPin="VCC" />
-		<connection from="data" fromPin="Cin" to="and1b" toPin="VCC" />
-
-		<!-- AND2 -->
-		<connection from="power" fromPin="VCC" to="and2a" toPin="IN" />
-		<connection from="power" fromPin="GND" to="and2a" toPin="GND" />
-		<connection from="power" fromPin="GND" to="and2b" toPin="GND" />
-
-		<connection from="and2a" fromPin="ON" to="and2b" toPin="IN" />
-
-		<connection from="data" fromPin="A" to="and2a" toPin="VCC" />
-		<connection from="xor3b" fromPin="IN" to="and2b" toPin="VCC" />
-
-		<!-- AND3 -->
-		<connection from="power" fromPin="VCC" to="and3a" toPin="IN" />
-		<connection from="power" fromPin="GND" to="and3a" toPin="GND" />
-		<connection from="power" fromPin="GND" to="and3b" toPin="GND" />
-		<connection from="power" fromPin="GND" to="and3c" toPin="GND" />
-
-		<connection from="and3a" fromPin="ON" to="and3b" toPin="IN" />
-		<connection from="and3b" fromPin="ON" to="and3c" toPin="IN" />
-
-		<connection from="or2a" fromPin="ON" to="and3a" toPin="VCC" />
-		<connection from="inv3b" fromPin="OFF" to="and3b" toPin="VCC" />
-		<connection from="control" fromPin="S1" to="and3c" toPin="VCC" />
-
-		<!-- AND4 -->
-		<connection from="power" fromPin="VCC" to="and4a" toPin="IN" />
-		<connection from="power" fromPin="GND" to="and4a" toPin="GND" />
-		<connection from="power" fromPin="GND" to="and4b" toPin="GND" />
-		<connection from="power" fromPin="GND" to="and4c" toPin="GND" />
-
-		<connection from="and4a" fromPin="ON" to="and4b" toPin="IN" />
-		<connection from="and4b" fromPin="ON" to="and4c" toPin="IN" />
-
-		<connection from="xor1b" fromPin="IN" to="and4a" toPin="VCC" />
-		<connection from="control" fromPin="S0" to="and4b" toPin="VCC" />
-		<connection from="control" fromPin="S1" to="and4c" toPin="VCC" />
-
-		<!-- AND5 -->
-		<connection from="power" fromPin="VCC" to="and5a" toPin="IN" />
-		<connection from="power" fromPin="GND" to="and5a" toPin="GND" />
-		<connection from="power" fromPin="GND" to="and5b" toPin="GND" />
-		<connection from="power" fromPin="GND" to="and5c" toPin="GND" />
-
-		<connection from="and5a" fromPin="ON" to="and5b" toPin="IN" />
-		<connection from="and5b" fromPin="ON" to="and5c" toPin="IN" />
-
-		<connection from="and2b" fromPin="ON" to="and5a" toPin="VCC" />
-		<connection from="control" fromPin="S0" to="and5b" toPin="VCC" />
-		<connection from="inv5c" fromPin="OFF" to="and5c" toPin="VCC" />
-
-		<!-- AND6 -->
-		<connection from="power" fromPin="VCC" to="and6a" toPin="IN" />
-		<connection from="power" fromPin="GND" to="and6a" toPin="GND" />
-		<connection from="power" fromPin="GND" to="and6b" toPin="GND" />
-		<connection from="power" fromPin="GND" to="and6c" toPin="GND" />
-
-		<connection from="and6a" fromPin="ON" to="and6b" toPin="IN" />
-		<connection from="and6b" fromPin="ON" to="and6c" toPin="IN" />
-
-		<connection from="xor2b" fromPin="IN" to="and6a" toPin="VCC" />
-		<connection from="inv6b" fromPin="OFF" to="and6b" toPin="VCC" />
-		<connection from="inv6c" fromPin="OFF" to="and6c" toPin="VCC" />
-
-		<!-- INV3B -->
-		<connection from="power" fromPin="VCC" to="inv3b" toPin="IN" />
-		<connection from="power" fromPin="GND" to="inv3b" toPin="GND" />
-
-		<connection from="control" fromPin="S0" to="inv3b" toPin="VCC" />
-
-		<!-- INV5C -->
-		<connection from="power" fromPin="VCC" to="inv5c" toPin="IN" />
-		<connection from="power" fromPin="GND" to="inv5c" toPin="GND" />
-
-		<connection from="control" fromPin="S1" to="inv5c" toPin="VCC" />
-
-		<!-- INV6B -->
-		<connection from="power" fromPin="VCC" to="inv6b" toPin="IN" />
-		<connection from="power" fromPin="GND" to="inv6b" toPin="GND" />
-
-		<connection from="control" fromPin="S0" to="inv6b" toPin="VCC" />
-
-		<!-- INV6C -->
-		<connection from="power" fromPin="VCC" to="inv6c" toPin="IN" />
-		<connection from="power" fromPin="GND" to="inv6c" toPin="GND" />
-
-		<connection from="control" fromPin="S1" to="inv6c" toPin="VCC" />
-
-	</connections>
+	<set autoLocate="true" rows="10" cols="4">
+		<component type="relay" id="or2a">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="and3a" toType="relay" toPin="Vcc" />
+			<connection fromPin="Vcc" to="data" toType="data" toPin="A" />
+		</component>
+		<component type="relay" id="xor2a">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="xor2b" toType="relay" toPin="OFF" />
+			<connection fromPin="OFF" to="xor2b" toType="relay" toPin="ON" />
+			<connection fromPin="Vcc" to="data" toType="data" toPin="Cin" />
+		</component>
+		<component type="relay" id="and1a">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="and1b" toType="relay" toPin="IN" />
+		</component>
+		<component type="relay" id="or3b">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+		</component>
+		<component type="relay" id="and4b">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="and4c" toType="relay" toPin="IN" />
+			<connection fromPin="Vcc" to="control" toType="control" toPin="S0" />
+		</component>
+		<component type="relay" id="and5c">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="or3c" toType="relay" toPin="Vcc" />
+		</component>
+		<component type="relay" id="or3d">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+		</component>
+		<component type="relay" id="or3c">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+		</component>
+		<component type="relay" id="inv6c">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="OFF" to="and6c" toType="relay" toPin="Vcc" />
+			<connection fromPin="Vcc" to="control" toType="control" toPin="S1" />
+		</component>
+		<component type="relay" id="inv3b">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="OFF" to="and3b" toType="relay" toPin="Vcc" />
+			<connection fromPin="Vcc" to="control" toType="control" toPin="S0" />
+		</component>
+		<component type="relay" id="and3a">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="and3b" toType="relay" toPin="IN" />
+		</component>
+		<component type="relay" id="or2b">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+		</component>
+		<component type="relay" id="or1b">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+		</component>
+		<component type="relay" id="xor3b">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="IN" to="or2b" toType="relay" toPin="Vcc" />
+			<connection fromPin="IN" to="xor1b" toType="relay" toPin="Vcc" />
+			<connection fromPin="IN" to="and2b" toType="relay" toPin="Vcc" />
+			<connection fromPin="Vcc" to="data" toType="data" toPin="Binv" />
+		</component>
+		<component type="relay" id="xor1b">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="IN" to="xor2b" toType="relay" toPin="Vcc" />
+			<connection fromPin="IN" to="and1a" toType="relay" toPin="Vcc" />
+			<connection fromPin="IN" to="and4a" toType="relay" toPin="Vcc" />
+		</component>
+		<component type="relay" id="and4a">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="and4b" toType="relay" toPin="IN" />
+		</component>
+		<component type="relay" id="and2b">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="or1b" toType="relay" toPin="Vcc" />
+			<connection fromPin="ON" to="and5a" toType="relay" toPin="Vcc" />
+		</component>
+		<component type="relay" id="and6c">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="or3d" toType="relay" toPin="Vcc" />
+		</component>
+		<component type="relay" id="and5a">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="and5b" toType="relay" toPin="IN" />
+		</component>
+		<component type="relay" id="and3b">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="and3c" toType="relay" toPin="IN" />
+		</component>
+		<component type="relay" id="and4c">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="or3b" toType="relay" toPin="Vcc" />
+			<connection fromPin="Vcc" to="control" toType="control" toPin="S1" />
+		</component>
+		<component type="relay" id="xor2b">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="IN" to="and6a" toType="relay" toPin="Vcc" />
+		</component>
+		<component type="relay" id="and1b">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="or1a" toType="relay" toPin="Vcc" />
+			<connection fromPin="Vcc" to="data" toType="data" toPin="Cin" />
+		</component>
+		<component type="relay" id="or1a">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+		</component>
+		<component type="relay" id="inv5c">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="OFF" to="and5c" toType="relay" toPin="Vcc" />
+			<connection fromPin="Vcc" to="control" toType="control" toPin="S1" />
+		</component>
+		<component type="relay" id="and6a">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="and6b" toType="relay" toPin="IN" />
+		</component>
+		<component type="relay" id="inv6b">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="OFF" to="and6b" toType="relay" toPin="Vcc" />
+			<connection fromPin="Vcc" to="control" toType="control" toPin="S0" />
+		</component>
+		<component type="relay" id="and6b">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="and6c" toType="relay" toPin="IN" />
+		</component>
+		<component type="relay" id="xor1a">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="xor1b" toType="relay" toPin="OFF" />
+			<connection fromPin="OFF" to="xor1b" toType="relay" toPin="ON" />
+			<connection fromPin="Vcc" to="data" toType="data" toPin="A" />
+		</component>
+		<component type="relay" id="or3a">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+		</component>
+		<component type="relay" id="and5b">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="and5c" toType="relay" toPin="IN" />
+			<connection fromPin="Vcc" to="control" toType="control" toPin="S0" />
+		</component>
+		<component type="relay" id="and2a">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="and2b" toType="relay" toPin="IN" />
+			<connection fromPin="Vcc" to="data" toType="data" toPin="A" />
+		</component>
+		<component type="relay" id="and3c">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="or3a" toType="relay" toPin="Vcc" />
+			<connection fromPin="Vcc" to="control" toType="control" toPin="S1" />
+		</component>
+		<component type="relay" id="xor3a">
+			<connection fromPin="IN" to="power" toType="power" toPin="Vcc" />
+			<connection fromPin="GND" to="power" toType="power" toPin="GND" />
+			<connection fromPin="ON" to="xor3b" toType="relay" toPin="OFF" />
+			<connection fromPin="OFF" to="xor3b" toType="relay" toPin="ON" />
+			<connection fromPin="Vcc" to="data" toType="data" toPin="B" />
+		</component>
+	</set>
 </ComponentConnectorDef>
-
-

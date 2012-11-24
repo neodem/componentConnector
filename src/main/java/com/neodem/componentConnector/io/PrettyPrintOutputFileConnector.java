@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import com.neodem.componentConnector.graphics.Display;
-import com.neodem.componentConnector.graphics.WidthConsiderateConsoleDisplay;
+import com.neodem.componentConnector.graphics.display.Display;
+import com.neodem.componentConnector.graphics.display.WidthConsiderateConsoleDisplay;
 import com.neodem.componentConnector.model.sets.ComponentSet;
 
 public class PrettyPrintOutputFileConnector extends DefaultFileConnector implements FileConnector {
